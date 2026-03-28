@@ -47,6 +47,12 @@ private float prixRevt;
         this.prixRevt = prixRevt;
     }
 
+    public Revetement ( int idRevt, String typeRevt, String typeIsolt, float prixRevt){
+    this.prixRevt = prixRevt;
+    this.idRevt = idRevt;
+    this.typeRevt = typeRevt;
+    this.typeIsolt = typeIsolt;
+    }
 
 
 }

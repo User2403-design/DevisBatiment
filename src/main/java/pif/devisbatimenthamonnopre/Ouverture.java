@@ -27,7 +27,11 @@ public class Ouverture {
     public void setTypeOuverture(String typeOuverture) {
         this.typeOuverture = typeOuverture;
     }
-    
+
+public Ouverture ( int idOuverture, String typeOuverture){
+this.idOuverture = idOuverture;
+this.typeOuverture = typeOuverture; 
+}
     
     
 }
