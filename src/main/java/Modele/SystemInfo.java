@@ -1,4 +1,4 @@
-package pif.devisbatimenthamonnopre;
+package Modele;
 
 public class SystemInfo {
 
