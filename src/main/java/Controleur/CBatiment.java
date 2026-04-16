@@ -2,20 +2,14 @@
  * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
  * Click nbfs://nbhost/SystemFileSystem/Templates/Classes/Class.java to edit this template
  */
+
 package Controleur;
 
 import javafx.scene.Scene;
-import javafx.stage.Screen;
 import javafx.stage.Stage;
 import Vue.VueBatiment;
 import Modele.Batiment;
 import Modele.Stockage;
-
-
-/**
- *
- * @author chloe
- */
 
 public class CBatiment {
 
@@ -28,7 +22,14 @@ public class CBatiment {
 
         this.fenetre = fenetre;
 
+        // création de la vue
         vue = new VueBatiment();
+
+        // création de la scène + affichage
+        Scene scene = new Scene(vue.getRoot(), 600, 400);
+        fenetre.setScene(scene);
+        fenetre.setTitle("Bâtir & Co");
+        fenetre.show();
 
         // clic Maison
         vue.getMaison().setOnAction(e -> {
@@ -45,28 +46,37 @@ public class CBatiment {
         // bouton valider
         vue.getValider().setOnAction(e -> {
 
-    // on récupère ce que l'utilisateur a écrit
-    String texteSuperficie = vue.getChampSuperficie().getText();
+            try {
+                // sécurité : vérifier le type
+                if (typeBatiment == null) {
+                    System.out.println("Erreur : choisissez Maison ou Immeuble !");
+                    return;
+                }
 
-    // conversion en nombre
-    float superficie = Float.parseFloat(texteSuperficie);
+                // récupérer texte
+                String texteSuperficie = vue.getChampSuperficie().getText();
 
-    // création du bâtiment avec le type déjà choisi + superficie
-    Batiment batiment = new Batiment(typeBatiment, superficie);
+                // sécurité conversion
+                float superficie = Float.parseFloat(texteSuperficie);
 
-    // on stocke le bâtiment dans la liste globale
-    Stockage.batiments.add(batiment);
+                // création objet
+                Batiment batiment = new Batiment(typeBatiment, superficie);
 
-    // debug console (pour vérifier)
-    System.out.println("Bâtiment créé !");
-    System.out.println("Type : " + batiment.getTypeBatiment());
-    System.out.println("Superficie : " + batiment.getSuperficie());
-});
+                // stockage global
+                Stockage.batiments.add(batiment);
 
+                // debug
+                System.out.println("Bâtiment créé !");
+                System.out.println("Type : " + batiment.getTypeBatiment());
+                System.out.println("Superficie : " + batiment.getSuperficie());
+
+            } catch (NumberFormatException ex) {
+                System.out.println("Erreur : superficie invalide !");
+            }
+        });
     }
 
     private void afficherSuperficie() {
-
         vue.getLabelSuperficie().setVisible(true);
         vue.getChampSuperficie().setVisible(true);
         vue.getValider().setVisible(true);
