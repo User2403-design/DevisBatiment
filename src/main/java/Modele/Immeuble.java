@@ -11,13 +11,23 @@ import java.util.ArrayList;
  * @author seb12
  */
 
+import java.util.ArrayList;
+
 public class Immeuble extends Batiment {
-    //ArrayList pour stocker les niveaux du batiment
+
+    // Vous l'aviez déjà commencé, on le garde
     private ArrayList<Niveau> niveaux;
-    
-    public Immeuble (String typeBatiment, float longueur, float largeur){
-        super (typeBatiment, longueur, largeur);
+
+    public Immeuble(String typeBatiment, float longueur, float largeur) {
+        super(typeBatiment, longueur, largeur);
         this.niveaux = new ArrayList<>();
     }
 
+    public ArrayList<Niveau> getNiveaux() {
+        return niveaux;
+    }
+
+    public void setNiveaux(ArrayList<Niveau> niveaux) {
+        this.niveaux = niveaux;
+    }
 }

@@ -8,14 +8,29 @@ package Modele;
  *
  * @author seb12
  */
+import java.util.ArrayList;
+
 public class Batiment {
-    
+
     private int idBatiment;
     private String typeBatiment;
     private int nbreNiveaux;
     private float Xmax;
     private float Ymax;
     private float superficie;
+
+    // Liste des pièces créées dans le bâtiment
+    private ArrayList<Piece> pieces;
+
+    public Batiment(String typeBatiment, float longueur, float largeur) {
+        this.typeBatiment = typeBatiment;
+        this.Xmax = longueur;
+        this.Ymax = largeur;
+        this.superficie = longueur * largeur;
+
+        // Au départ, il n'y a aucune pièce
+        this.pieces = new ArrayList<>();
+    }
 
     public int getIdBatiment() {
         return idBatiment;
@@ -64,13 +79,28 @@ public class Batiment {
     public void setSuperficie(float superficie) {
         this.superficie = superficie;
     }
-    
-   
-    public Batiment(String typeBatiment, float longueur, float largeur) {
-        this.typeBatiment = typeBatiment;
-        this.Xmax = longueur;
-        this.Ymax = largeur;
-        this.superficie = longueur * largeur;
-    
+
+    public ArrayList<Piece> getPieces() {
+        return pieces;
+    }
+
+    public void setPieces(ArrayList<Piece> pieces) {
+        this.pieces = pieces;
+    }
+
+    // Méthode pratique pour ajouter une pièce
+    public void ajouterPiece(Piece piece) {
+        this.pieces.add(piece);
+    }
+
+    // Recalcule la surface totale du bâtiment
+    public float calculSurface() {
+        return Xmax * Ymax;
+    }
+    // Supprime la dernière pièce ajoutée si la liste n'est pas vide
+public void supprimerDernierePiece() {
+    if (!pieces.isEmpty()) {
+        pieces.remove(pieces.size() - 1);
+    }
 }
 }

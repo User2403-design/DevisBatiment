@@ -9,12 +9,33 @@ package Modele;
  * @author chloe
  */
 public class Point {
- private float x;
- private float y ;
- private float xmax;
- private float ymax ;
- private float xmin;
- private float ymin ;
+
+    private float x;
+    private float y;
+
+    private float xmax;
+    private float ymax;
+    private float xmin;
+    private float ymin;
+
+    public Point() {
+    }
+
+    // Constructeur simple utilisé dans CPlanBatiment
+    public Point(float x, float y) {
+        this.x = x;
+        this.y = y;
+    }
+
+    // Constructeur complet si vous en avez besoin ailleurs
+    public Point(float x, float y, float xmin, float xmax, float ymin, float ymax) {
+        this.x = x;
+        this.y = y;
+        this.xmin = xmin;
+        this.xmax = xmax;
+        this.ymin = ymin;
+        this.ymax = ymax;
+    }
 
     public float getX() {
         return x;
@@ -63,16 +84,4 @@ public class Point {
     public void setYmin(float ymin) {
         this.ymin = ymin;
     }
- 
- public Point ( float x, float y, float xmin, float xmax, float ymin, float ymax){
- this.x = x;
- this.y= y;
- this.ymax = ymax;
- this.ymin = ymin;
- this.xmax = xmax;
- this.xmin = xmin;
-
- }
- 
- 
 }
