@@ -66,9 +66,11 @@ public class Batiment {
     }
     
    
-    public Batiment(String typeBatiment, float superficie) {
+    public Batiment(String typeBatiment, float longueur, float largeur) {
         this.typeBatiment = typeBatiment;
-        this.superficie = superficie;
+        this.Xmax = longueur;
+        this.Ymax = largeur;
+        this.superficie = longueur * largeur;
     
 }
 }

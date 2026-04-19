@@ -8,6 +8,10 @@ package Modele;
  *
  * @author seb12
  */
-public class Maison {
+public class Maison extends Batiment {
+    
+    public Maison (String typeBatiment, float longueur, float largeur){
+        super (typeBatiment, longueur, largeur);
+    }
     
 }

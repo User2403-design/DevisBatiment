@@ -28,8 +28,11 @@ public class VueBatiment {
     private Button maison;
     private Button immeuble;
 
-    private Label labelSuperficie;
-    private TextField champSuperficie;
+    private Label labelLongueur;
+    private Label labelLargeur;
+    private TextField champLongueur;
+    private TextField champLargeur;
+    private Label labelCalcSuperficie;
     private Button valider;
 
     public VueBatiment() {
@@ -63,28 +66,45 @@ public class VueBatiment {
         // taille des boutons
         maison.setPrefSize(200, 50);
         immeuble.setPrefSize(200, 50);
+        
+        //Longueur
+        labelLongueur = new Label("Longueur du bâtiment (m) :");
+        champLongueur = new TextField();
+        champLongueur.setMaxWidth(200);
+        
+        //Largeur
+        labelLargeur = new Label("Largeur du bâtiment (m) :");
+        champLargeur = new TextField();
+        champLargeur.setMaxWidth(200);
 
-        // SUPERFICIE
-        labelSuperficie = new Label("Superficie (m²) :");
-
-        champSuperficie = new TextField();
-        champSuperficie.setMaxWidth(200); // évite qu'il soit trop large
-
-        valider = new Button("Valider");
+        // SUPERFICIE : devient le resultat du calcul avec les dimensions données, affiché uniquement
+        labelCalcSuperficie = new Label("Superficie (m²) :");
+        labelCalcSuperficie.setFont(new Font("Arial", 16));
+        labelCalcSuperficie.setStyle("-fx-text-fill: green");
+        
+        valider = new Button("Valider et Créer");
 
         // caché au démarrage
-        labelSuperficie.setVisible(false);
-        champSuperficie.setVisible(false);
+        
+        labelLongueur.setVisible(false);
+        champLongueur.setVisible(false);
+        labelLargeur.setVisible(false);
+        champLargeur.setVisible(false);
+        labelCalcSuperficie.setVisible(false);
         valider.setVisible(false);
-
+       
+        
         // AJOUT DES ÉLÉMENTS 
         root.getChildren().addAll(
                 titre,
                 question,
                 maison,
                 immeuble,
-                labelSuperficie,
-                champSuperficie,
+                labelLongueur,
+                champLongueur,
+                labelLargeur,
+                champLargeur,
+                labelCalcSuperficie,
                 valider
         );
     }
@@ -103,15 +123,35 @@ public class VueBatiment {
     public Button getImmeuble() {
         return immeuble;
     }
-
-    public Label getLabelSuperficie() {
-        return labelSuperficie;
+    
+    public Label getTitre() {
+        return titre;
     }
 
-    public TextField getChampSuperficie() {
-        return champSuperficie;
+    public Label getQuestion() {
+        return question;
     }
 
+    public Label getLabelLongueur() {
+        return labelLongueur;
+    }
+
+    public Label getLabelLargeur() {
+        return labelLargeur;
+    }
+
+    public TextField getChampLongueur() {
+        return champLongueur;
+    }
+
+    public TextField getChampLargeur() {
+        return champLargeur;
+    }
+
+    public Label getLabelCalcSuperficie() {
+        return labelCalcSuperficie;
+    }
+  
     public Button getValider() {
         return valider;
     }

@@ -3,13 +3,17 @@
  * Click nbfs://nbhost/SystemFileSystem/Templates/Classes/Class.java to edit this template
  */
 package Modele;
-
+import java.util.ArrayList;
 /**
  *
  * @author seb12
  */
-public class Niveau extends Immeuble {
+
+//supprimer le extends car relations d'heritage incoherente
+public class Niveau {
     
+    //ArrayList pour stocker les appartements du niveau
+    private ArrayList<Appartement> apparts;
     private int idNiveau;
     private int nbreAppartements;
     private float hauteurPlafond;

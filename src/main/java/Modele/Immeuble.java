@@ -3,11 +3,21 @@
  * Click nbfs://nbhost/SystemFileSystem/Templates/Classes/Class.java to edit this template
  */
 package Modele;
+import java.util.ArrayList;
+
 
 /**
  *
  * @author seb12
  */
-public class Immeuble  {
+
+public class Immeuble extends Batiment {
+    //ArrayList pour stocker les niveaux du batiment
+    private ArrayList<Niveau> niveaux;
     
+    public Immeuble (String typeBatiment, float longueur, float largeur){
+        super (typeBatiment, longueur, largeur);
+        this.niveaux = new ArrayList<>();
+    }
+
 }

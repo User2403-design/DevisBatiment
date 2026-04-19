@@ -10,6 +10,8 @@ import javafx.stage.Stage;
 import Vue.VueBatiment;
 import Modele.Batiment;
 import Modele.Stockage;
+import Modele.Maison;
+import Modele.Immeuble;
 
 public class CBatiment {
     private VueBatiment vue;
@@ -42,40 +44,52 @@ public class CBatiment {
         vue.getMaison().setOnAction(e -> {
             // on mémorise le type choisi
             typeBatiment = "Maison";
-            afficherSuperficie();
+            afficherChampsSaisie();
         });
 
         // quand on clique sur "Immeuble"
         vue.getImmeuble().setOnAction(e -> {
             // on mémorise le type choisi
             typeBatiment = "Immeuble";
-            afficherSuperficie();
+            afficherChampsSaisie();
         });
 
         vue.getValider().setOnAction(e -> {
 
             try {
-                // on récupère le texte tapé dans le champ
-                String texteSuperficie = vue.getChampSuperficie().getText();
+                
+                // 1. Récupération des valeurs depuis les deux champs + conversion en texte
+                float longueur = Float.parseFloat(vue.getChampLongueur().getText());
+                float largeur = Float.parseFloat(vue.getChampLargeur().getText());
 
-                // on transforme le texte en nombre
-                float superficie = Float.parseFloat(texteSuperficie);
+               // 2. Création de l'objet spécifique (Polymorphisme)
+                Batiment batiment;
+                if (typeBatiment.equals("Maison")) {
+                    batiment = new Maison(typeBatiment, longueur, largeur);
+                } else {
+                    batiment = new Immeuble(typeBatiment, longueur, largeur);
+                }
+                
+                // 3. Mise à jour de l'interface avec la superficie calculée par le Modèle
+                vue.getLabelCalcSuperficie().setText("Superficie calculée : " + batiment.getSuperficie() + " m²");
+                vue.getLabelCalcSuperficie().setVisible(true);
 
-                // on crée un nouvel objet Batiment
-                Batiment batiment = new Batiment(typeBatiment, superficie);
-
-                // on ajoute ce bâtiment dans la liste de stockage
+                // 4. Ajour du batiment crée dans la classe Stockage
                 Stockage.batiments.add(batiment);
-
+                
+                
                 // affichage dans la console pour vérifier
-                System.out.println("Bâtiment créé !");
+                System.out.println("Batiment cree avec succes !");
                 System.out.println("Type : " + batiment.getTypeBatiment());
                 System.out.println("Superficie : " + batiment.getSuperficie());
 
-                // on peut vider le champ après validation
-                vue.getChampSuperficie().clear();
+                // on peut vider les champs après validation
+                vue.getChampLongueur().clear();
+                vue.getChampLargeur().clear();
 
             } catch (NumberFormatException ex) {
+                // Gestion de l'erreur si l'utilisateur saisit du texte au lieu de nombres
+        System.out.println("Erreur : veuillez entrer des dimensions valides.");
                 // erreur si l'utilisateur écrit autre chose qu'un nombre
                 System.out.println("Erreur : veuillez entrer un nombre valide pour la superficie.");
             }
@@ -83,11 +97,20 @@ public class CBatiment {
     }
 
     // méthode qui affiche les éléments liés à la superficie
-    private void afficherSuperficie() {
+    private void afficherChampsSaisie() {
+        
+    // On affiche les deux champs de saisie et leurs labels respectifs
+    vue.getLabelLongueur().setVisible(true);
+    vue.getChampLongueur().setVisible(true);
+    
+    vue.getLabelLargeur().setVisible(true);
+    vue.getChampLargeur().setVisible(true);
+    
+    // On affiche le bouton de validation
+    vue.getValider().setVisible(true);
+    
+    // On s'assure que le label de résultat est caché au début
+    vue.getLabelCalcSuperficie().setVisible(false);
 
-        // on rend visibles le label, le champ de texte et le bouton valider
-        vue.getLabelSuperficie().setVisible(true);
-        vue.getChampSuperficie().setVisible(true);
-        vue.getValider().setVisible(true);
     }
 }

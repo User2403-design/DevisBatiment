@@ -3,13 +3,18 @@
  * Click nbfs://nbhost/SystemFileSystem/Templates/Classes/Class.java to edit this template
  */
 package Modele;
+import java.util.ArrayList;
+
 
 /**
  *
  * @author seb12
  */
-public class Appartement extends Niveau {
+//supprimer le extends car relations d'heritage incoherente
+public class Appartement {
     
+    //ArrayList pour stocker les pièces de l'appartement
+    private ArrayList<Piece> pieces;
     private int idAppart;
     private int nbrePieces;
 
