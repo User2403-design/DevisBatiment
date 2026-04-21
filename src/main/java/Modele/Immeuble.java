@@ -11,16 +11,19 @@ import java.util.ArrayList;
  * @author seb12
  */
 
-import java.util.ArrayList;
 
 public class Immeuble extends Batiment {
 
-    // Vous l'aviez déjà commencé, on le garde
+    // Liste des niveaux de l'immeuble
     private ArrayList<Niveau> niveaux;
 
     public Immeuble(String typeBatiment, float longueur, float largeur) {
         super(typeBatiment, longueur, largeur);
         this.niveaux = new ArrayList<>();
+
+        // On crée directement un premier étage
+        this.niveaux.add(new Niveau(1));
+        this.setNbreNiveaux(1);
     }
 
     public ArrayList<Niveau> getNiveaux() {
@@ -29,5 +32,20 @@ public class Immeuble extends Batiment {
 
     public void setNiveaux(ArrayList<Niveau> niveaux) {
         this.niveaux = niveaux;
+        this.setNbreNiveaux(niveaux.size());
+    }
+
+    public void ajouterNiveau() {
+        int nouveauNumero = niveaux.size() + 1;
+        niveaux.add(new Niveau(nouveauNumero));
+        this.setNbreNiveaux(niveaux.size());
+    }
+
+    public void supprimerDernierNiveau() {
+        // On garde toujours au moins 1 étage
+        if (niveaux.size() > 1) {
+            niveaux.remove(niveaux.size() - 1);
+            this.setNbreNiveaux(niveaux.size());
+        }
     }
 }

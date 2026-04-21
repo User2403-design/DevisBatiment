@@ -9,38 +9,51 @@ import java.util.ArrayList;
  * @author seb12
  */
 
-//supprimer le extends car relations d'heritage incoherente
+
 public class Niveau {
-    
-    //ArrayList pour stocker les appartements du niveau
-    private ArrayList<Appartement> apparts;
-    private int idNiveau;
-    private int nbreAppartements;
-    private float hauteurPlafond;
 
-    public int getIdNiveau() {
-        return idNiveau;
+    // Numéro d'étage : 1, 2, 3...
+    private int numeroNiveau;
+
+    // Liste des appartements de ce niveau
+    private ArrayList<Appartement> appartements;
+
+    public Niveau() {
+        this.appartements = new ArrayList<>();
     }
 
-    public void setIdNiveau(int idNiveau) {
-        this.idNiveau = idNiveau;
+    public Niveau(int numeroNiveau) {
+        this.numeroNiveau = numeroNiveau;
+        this.appartements = new ArrayList<>();
     }
 
-    public int getNbreAppartements() {
-        return nbreAppartements;
+    public int getNumeroNiveau() {
+        return numeroNiveau;
     }
 
-    public void setNbreAppartements(int nbreAppartements) {
-        this.nbreAppartements = nbreAppartements;
+    public void setNumeroNiveau(int numeroNiveau) {
+        this.numeroNiveau = numeroNiveau;
     }
 
-    public float getHauteurPlafond() {
-        return hauteurPlafond;
+    public ArrayList<Appartement> getAppartements() {
+        return appartements;
     }
 
-    public void setHauteurPlafond(float hauteurPlafond) {
-        this.hauteurPlafond = hauteurPlafond;
+    public void setAppartements(ArrayList<Appartement> appartements) {
+        this.appartements = appartements;
     }
-    
-    
+
+    public void ajouterAppartement(Appartement appartement) {
+        appartements.add(appartement);
+    }
+
+    public void supprimerDernierAppartement() {
+        if (!appartements.isEmpty()) {
+            appartements.remove(appartements.size() - 1);
+        }
+    }
+
+    public int getNombreAppartements() {
+        return appartements.size();
+    }
 }
