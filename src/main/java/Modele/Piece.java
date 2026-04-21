@@ -102,6 +102,11 @@ public class Piece {
     public float calculerSuperficie() {
         return getLargeur() * getHauteur();
     }
+    
+      @Override
+    public String toString() {
+        return usage + " - " + String.format("%.2f", superficie) + " m²";
+    }
 }
     
 
