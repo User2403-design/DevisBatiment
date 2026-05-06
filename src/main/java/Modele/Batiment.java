@@ -18,6 +18,8 @@ public class Batiment {
     private float Xmax;
     private float Ymax;
     private float superficie;
+    private Revetement isolantExt;
+    private Revetement revtFacade;
 
     // Liste des pièces créées dans le bâtiment
     private ArrayList<Piece> pieces;
@@ -70,6 +72,22 @@ public class Batiment {
 
     public void setYmax(float Ymax) {
         this.Ymax = Ymax;
+    }
+
+    public Revetement getIsolantExt() {
+        return isolantExt;
+    }
+
+    public void setIsolantExt(Revetement isolant) {
+        this.isolantExt = isolant;
+    }
+
+    public Revetement getRevtFacade() {
+        return revtFacade;
+    }
+
+    public void setRevtFacade(Revetement facade) {
+        this.revtFacade = facade;
     }
 
     public float getSuperficie() {

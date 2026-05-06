@@ -3,6 +3,8 @@
  * Click nbfs://nbhost/SystemFileSystem/Templates/Classes/Class.java to edit this template
  */
 package Modele;
+import java.util.ArrayList;
+import java.util.List;
 
 /**
  *
@@ -20,6 +22,10 @@ public class Piece {
 
     // Surface de la pièce
     private float superficie;
+    
+    private Revetement revetementSol;
+    private Revetement revetementPlafond;
+    private ArrayList<Mur> murs;    
 
     public Piece() {
     }
@@ -29,7 +35,11 @@ public class Piece {
         this.coin2 = coin2;
         this.usage = usage;
         this.superficie = calculerSuperficie();
+        this.murs = new ArrayList<>();
+        //Génération automatique des 4 murs du rectangle
+        genererMurs();
     }
+    
 
     public int getIdPiece() {
         return idPiece;
@@ -71,6 +81,20 @@ public class Piece {
         this.superficie = superficie;
     }
 
+    public void setRevetementSol(Revetement revetementSol) {
+        this.revetementSol = revetementSol;
+    }
+
+    public void setRevetementPlafond(Revetement revetementPlafond) {
+        this.revetementPlafond = revetementPlafond;
+    }
+
+    public ArrayList<Mur> getMurs() {
+        return murs;
+    }
+    
+    
+
     // Coordonnée minimale en x
     public float getXMin() {
         return Math.min(coin1.getX(), coin2.getX());
@@ -107,6 +131,45 @@ public class Piece {
     public String toString() {
         return usage + " - " + String.format("%.2f", superficie) + " m²";
     }
+   /**
+     * Crée les 4 objets Mur délimitant la pièce.
+     */
+    private void genererMurs() {
+        Point hautGauche = new Point(coin1.getX(), coin1.getY());
+        Point hautDroit  = new Point(coin2.getX(), coin1.getY());
+        Point basDroit   = new Point(coin2.getX(), coin2.getY());
+        Point basGauche  = new Point(coin1.getX(), coin2.getY());
+
+        // On crée les 4 segments. Par défaut, on les considère intérieurs (false).
+        // Le contrôleur pourra modifier 'estExterieur' si le mur touche le bord du bâtiment.
+        murs.add(new Mur("Nord", hautGauche, hautDroit, false)); // Mur Nord
+        murs.add(new Mur("Est", hautDroit, basDroit, false));   // Mur Est
+        murs.add(new Mur("Sud", basDroit, basGauche, false));   // Mur Sud
+        murs.add(new Mur("Ouest", basGauche, hautGauche, false)); // Mur Ouest
+    }
+
+    /**
+     * Synthèse du coût total de la pièce.
+     */
+    public double calculerPrixTotal(double hauteurPlafond) {
+        double total = 0;
+        
+        // Coût Sol
+        if (revetementSol != null) {
+            total += getSuperficie() * revetementSol.getPrixRevt();
+        }
+        
+        // Coût Plafond
+        if (revetementPlafond != null) {
+            total += getSuperficie() * revetementPlafond.getPrixRevt();
+        }
+        
+        // Coût des Murs
+        for (Mur m : murs) {
+            total += m.calculerPrix(hauteurPlafond);
+        }
+        
+        return total;
+    }
 }
     
-
