@@ -31,5 +31,3 @@ Fenetre; DoubleVitrage; 250
 Porte;Bois;150
 Porte;Metalique;150
 Porte; Verre; 200
-
-
