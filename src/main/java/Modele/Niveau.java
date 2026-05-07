@@ -17,6 +17,8 @@ public class Niveau {
 
     // Liste des appartements de ce niveau
     private ArrayList<Appartement> appartements;
+    
+    private final double hauteurPlafond = 3;
 
     public Niveau() {
         this.appartements = new ArrayList<>();
@@ -25,6 +27,10 @@ public class Niveau {
     public Niveau(int numeroNiveau) {
         this.numeroNiveau = numeroNiveau;
         this.appartements = new ArrayList<>();
+    }
+
+    public double getHauteurPlafond() {
+        return hauteurPlafond;
     }
 
     public int getNumeroNiveau() {

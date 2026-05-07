@@ -9,29 +9,54 @@ package Modele;
  * @author chloe
  */
 public class Ouverture {
-    private int idOuverture ; 
-    private String typeOuverture ;
+    private int idOuverture;
+    private float largeur;
+    private float hauteur;
+    private String type; // ex: "Porte", "Fenêtre"
+
+    public Ouverture(int id, String type, float largeur, float hauteur) {
+        this.idOuverture = id;
+        this.type = type;
+        this.largeur = largeur;
+        this.hauteur = hauteur;
+    }
+
+    // --- Getters et Setters ---
 
     public int getIdOuverture() {
         return idOuverture;
     }
 
-    public void setIdOuverture(int idOuverture) {
-        this.idOuverture = idOuverture;
+    public String getType() {
+        return type;
     }
 
-    public String getTypeOuverture() {
-        return typeOuverture;
+    /**
+     * Retourne la largeur de l'ouverture en mètres.
+     */
+    public float getLargeur() {
+        return largeur;
     }
 
-    public void setTypeOuverture(String typeOuverture) {
-        this.typeOuverture = typeOuverture;
+    public void setLargeur(float largeur) {
+        this.largeur = largeur;
     }
 
-public Ouverture ( int idOuverture, String typeOuverture){
-this.idOuverture = idOuverture;
-this.typeOuverture = typeOuverture; 
-}
+    /**
+     * Retourne la hauteur de l'ouverture en mètres.
+     */
+    public float getHauteur() {
+        return hauteur;
+    }
+
+    public void setHauteur(float hauteur) {
+        this.hauteur = hauteur;
+    }
+
+    @Override
+    public String toString() {
+        return type + " [" + idOuverture + "] (" + largeur + "x" + hauteur + "m)";
+    }
     
     
 }

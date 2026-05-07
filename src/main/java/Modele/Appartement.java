@@ -23,6 +23,10 @@ public class Appartement {
 
     // Liste des pièces de l'appartement
     private ArrayList<Piece> pieces;
+    
+    private Revetement revetementSolDefaut;
+    private Revetement revetementPlafondDefaut;
+    private Revetement revetementMurDefaut;
 
     public Appartement() {
         this.pieces = new ArrayList<>();
@@ -67,6 +71,31 @@ public class Appartement {
         this.pieces = pieces;
     }
 
+    public Revetement getRevetementSolDefaut() {
+        return revetementSolDefaut;
+    }
+
+    public void setRevetementSolDefaut(Revetement revetementSolDefaut) {
+        this.revetementSolDefaut = revetementSolDefaut;
+    }
+
+    public Revetement getRevetementPlafondDefaut() {
+        return revetementPlafondDefaut;
+    }
+
+    public void setRevetementPlafondDefaut(Revetement revetementPlafondDefaut) {
+        this.revetementPlafondDefaut = revetementPlafondDefaut;
+    }
+
+    public Revetement getRevetementMurDefaut() {
+        return revetementMurDefaut;
+    }
+
+    public void setRevetementMurDefaut(Revetement revetementMurDefaut) {
+        this.revetementMurDefaut = revetementMurDefaut;
+    }
+
+    
     // ---------- Méthodes utiles pour le rectangle ----------
 
     public float getXMin() {
