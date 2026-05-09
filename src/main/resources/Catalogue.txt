@@ -1,0 +1,33 @@
+
+# Revetement
+Revetement;Parquet;25.5
+Revetement;Carrelage;30.0
+Revetement;Moquette;15.0
+Revetement;Marbre;30.0
+Revetment;Crepi;25.0
+
+# Facade
+Facade;Enduit;65.0
+Facade;Crepi;80.0
+
+# Isolant
+Isolant;Laine de verre;10.0
+Isolant;Polystyrène;12.5
+Isolant;Chanvre;14.0
+
+# CouleurPeinture
+Couleur;Blanc;5.5
+Couleur;Bleu;6.0
+Couleur;Rouge;6.0
+Couleur;Vert;5.5
+Couleur;Rose;6.0
+Couleur;Brun;6.0
+
+# Fenetre 
+Fenetre;SimpleVitrage;150
+Fenetre; DoubleVitrage; 250
+
+# Porte 
+Porte;Bois;150
+Porte;Metalique;150
+Porte; Verre; 200

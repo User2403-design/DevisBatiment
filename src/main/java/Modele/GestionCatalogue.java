@@ -2,110 +2,120 @@
  * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
  * Click nbfs://nbhost/SystemFileSystem/Templates/Classes/Class.java to edit this template
  */
+
 package Modele;
 
 import java.io.BufferedReader;
 import java.io.InputStream;
 import java.io.InputStreamReader;
+import java.nio.charset.StandardCharsets;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
 /**
- *
- * @author seb12
+ * Classe de gestion du catalogue avec diagnostic intégré.
  */
-
-//Classe du Modèle représentant le catalogue complet des matériaux.
-//Elle charge les données depuis le fichier texte et les organise par rubriques.
 public class GestionCatalogue {
     
-    // On utilise une Map pour classer les revêtements par nom de rubrique (ex: "Sols", "Murs")
     private Map<String, List<Revetement>> rubriques;
+    // Note : Pour Maven, le fichier doit être dans src/main/resources
     private static final String CHEMIN_CATALOGUE = "/Catalogue.txt";
     
     public GestionCatalogue() {
-    this.rubriques = new HashMap<>();
-    chargerDonnees();
+        this.rubriques = new HashMap<>();
+        chargerDonnees();
     }
     
-    
-//Méthode interne pour charger le fichier Catalogue.txt situé dans les ressources
-private void chargerDonnees() {
-    try (InputStream is = getClass().getResourceAsStream(CHEMIN_CATALOGUE);
-         BufferedReader reader = new BufferedReader(new InputStreamReader(is))) {
+    private void chargerDonnees() {
+        System.out.println("Tentative de chargement du catalogue depuis : " + CHEMIN_CATALOGUE);
+        
+        try (InputStream is = getClass().getResourceAsStream(CHEMIN_CATALOGUE);
+             BufferedReader reader = (is == null) ? null : new BufferedReader(new InputStreamReader(is, StandardCharsets.UTF_8))) {
 
-        if (is == null) {
-            System.err.println("Erreur : Fichier Catalogue.txt introuvable dans les ressources.");
-            return;
-        }
+            if (is == null) {
+                System.err.println("CRITIQUE : Fichier " + CHEMIN_CATALOGUE + " introuvable dans le classpath !");
+                System.err.println("Vérifiez qu'il est bien dans src/main/resources/ et non dans un dossier ressources/ à la racine.");
+                return;
+            }
 
-        String ligne;
-        String rubriqueCourante = "Divers";
+            String ligne;
+            String rubriqueCourante = "Divers";
+            int compteurId = 1; 
+            int lignesLues = 0;
 
-        while ((ligne = reader.readLine()) != null) {
-            ligne = ligne.trim();
+            while ((ligne = reader.readLine()) != null) {
+                lignesLues++;
+                ligne = ligne.trim();
+                
+                if (ligne.isEmpty() || ligne.startsWith("//")) continue;
 
-            // On ignore les lignes vides et les commentaires
-            if (ligne.isEmpty() || ligne.startsWith("#")) continue;
+                // Détection de la rubrique (ex: # Revetement)
+                if (ligne.startsWith("#") || ligne.startsWith("Rubrique:")) {
+                    if (ligne.startsWith("#")) {
+                        rubriqueCourante = ligne.substring(1).trim();
+                    } else {
+                        rubriqueCourante = ligne.substring(9).trim();
+                    }
+                    rubriques.putIfAbsent(rubriqueCourante, new ArrayList<>());
+                    System.out.println("Rubrique trouvée : [" + rubriqueCourante + "]");
+                } 
+                else {
+                    String[] data = ligne.split(";");
+                    if (data.length >= 3) {
+                        try {
+                            String categorieData = data[0].trim();
+                            String nom = data[1].trim();
+                            float prix = Float.parseFloat(data[2].trim());
 
-            // Détection d'un changement de categorie
-            if (ligne.startsWith("Rubrique:")) {
-                rubriqueCourante = ligne.substring(9).trim();
-                rubriques.putIfAbsent(rubriqueCourante, new ArrayList<>());
-            } 
-            // Extraction d'un produit (id;nom;unité;prix) : 4 données qui le caracterisent
-            else {
-                String[] data = ligne.split(";");
-                if (data.length >= 4) {
-                    try {
-                        int id = Integer.parseInt(data[0]);
-                        String nom = data[1];
-                        String unite = data[2];
-                        float prix = Float.parseFloat(data[3]);
+                            boolean estUnIsolant = categorieData.equalsIgnoreCase("Isolant");
 
-                        Revetement rev = new Revetement(id, nom, unite, prix);
-                        rubriques.get(rubriqueCourante).add(rev);
-                    } catch (NumberFormatException e) {
-                        System.err.println("Ligne mal formée dans le catalogue : " + ligne);
+                            Revetement rev = new Revetement(compteurId++, nom,  estUnIsolant, prix);
+                            
+                            if (rubriques.containsKey(rubriqueCourante)) {
+                                rubriques.get(rubriqueCourante).add(rev);
+                            } else {
+                                // Cas où des données sont présentes avant toute rubrique
+                                rubriques.putIfAbsent("Divers", new ArrayList<>());
+                                rubriques.get("Divers").add(rev);
+                            }
+                        } catch (NumberFormatException e) {
+                            System.err.println("Ligne " + lignesLues + " : Erreur de prix -> " + ligne);
+                        }
                     }
                 }
             }
-        }
-    } catch (Exception e) {
-        e.printStackTrace();
-    }
-}
-
-/**
- * Permet de récupérer la liste des revêtements pour une rubrique donnée.
- * @param nomRubrique Le nom de la rubrique (ex: "Revetements interieurs")
- * @return La liste des produits ou une liste vide si la rubrique n'existe pas.
- */
-public List<Revetement> getProduits(String nomRubrique) {
-    return rubriques.getOrDefault(nomRubrique, new ArrayList<>());
-}
-
-/**
- * Retourne la liste de tous les noms de rubriques disponibles.
- */
-public List<String> getNomsRubriques() {
-    return new ArrayList<>(rubriques.keySet());
-}
-
-/**
- * Recherche un revêtement spécifique par son ID (utile pour la sauvegarde/chargement).
- */
-public Revetement trouverParId(int id) {
-    for (List<Revetement> liste : rubriques.values()) {
-        for (Revetement r : liste) {
-            if (r.getIdRevt() == id) return r;
+            System.out.println("Chargement terminé. " + rubriques.size() + " rubriques créées.");
+            
+        } catch (Exception e) {
+            System.err.println("Erreur lors de la lecture : " + e.getMessage());
+            e.printStackTrace();
         }
     }
-    return null;
+
+    public List<Revetement> getProduits(String nomRubrique) {
+        List<Revetement> liste = rubriques.get(nomRubrique);
+        if (liste == null || liste.isEmpty()) {
+            // C'est ici que votre message d'erreur est généré
+            System.err.println("ERREUR : La rubrique '" + nomRubrique + "' est inconnue ou vide.");
+            System.err.println("Rubriques disponibles dans le système : " + rubriques.keySet());
+            return new ArrayList<>();
+        }
+        return liste;
+    }
+
+    public List<String> getNomsRubriques() {
+        return new ArrayList<>(rubriques.keySet());
+    }
+
+    public Revetement trouverParId(int id) {
+        for (List<Revetement> liste : rubriques.values()) {
+            for (Revetement r : liste) {
+                if (r.getIdRevt() == id) return r;
+            }
+        }
+        return null;
+    }
 }
-}
-    
-    
 
