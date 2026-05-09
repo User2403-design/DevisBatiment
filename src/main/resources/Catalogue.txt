@@ -1,6 +1,3 @@
-// Pour y acceder avec javaFX : Catégorie -> Produit -> Prix 
-
-
 
 # Revetement
 Revetement;Parquet;25.5
@@ -9,11 +6,14 @@ Revetement;Moquette;15.0
 Revetement;Marbre;30.0
 Revetment;Crepi;25.0
 
+# Facade
+Facade;Enduit;65.0
+Facade;Crepi;80.0
 
 # Isolant
-TypeIsolant;Laine de verre;10.0
-TypeIsolant;Polystyrène;12.5
-TypeIsolant;Chanvre;14.0
+Isolant;Laine de verre;10.0
+Isolant;Polystyrène;12.5
+Isolant;Chanvre;14.0
 
 # CouleurPeinture
 Couleur;Blanc;5.5

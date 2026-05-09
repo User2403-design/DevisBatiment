@@ -9,10 +9,10 @@ package Modele;
  * @author chloe
  */
 public class Revetement {
-    
-private int idRevt ;
-private String typeRevt;
-private String typeIsolt;
+ 
+private int idRevt;
+private String nomRevt;
+private boolean estIsolt;
 private float prixRevt; 
 
     public int getIdRevt() {
@@ -23,20 +23,20 @@ private float prixRevt;
         this.idRevt = idRevt;
     }
 
-    public String getTypeRevt() {
-        return typeRevt;
+    public String getNomRevt() {
+        return nomRevt;
     }
 
-    public void setTypeRevt(String typeRevt) {
-        this.typeRevt = typeRevt;
+    public void setNomRevt(String nomRevt) {
+        this.nomRevt = nomRevt;
     }
 
-    public String getTypeIsolt() {
-        return typeIsolt;
+    public boolean getEstIsolt() {
+        return estIsolt;
     }
 
-    public void setTypeIsolt(String typeIsolt) {
-        this.typeIsolt = typeIsolt;
+    public void setEstIsolt(boolean estIsolt) {
+        this.estIsolt = estIsolt;
     }
 
     public float getPrixRevt() {
@@ -47,12 +47,15 @@ private float prixRevt;
         this.prixRevt = prixRevt;
     }
 
-    public Revetement ( int idRevt, String typeRevt, String typeIsolt, float prixRevt){
-    this.prixRevt = prixRevt;
+    public Revetement ( int idRevt, String nomRevt, boolean estIsolt, float prixRevt){ //refaire le constructeur avec un booléen sur l'isolement
     this.idRevt = idRevt;
-    this.typeRevt = typeRevt;
-    this.typeIsolt = typeIsolt;
+    this.prixRevt = prixRevt;
+    this.nomRevt = nomRevt;
+    this.estIsolt = estIsolt;
     }
-
+@Override
+    public String toString() {
+        return nomRevt + " (" + prixRevt + " €/m²)";
+    }
 
 }
