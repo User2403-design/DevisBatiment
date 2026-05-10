@@ -2,15 +2,16 @@
  * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
  * Click nbfs://nbhost/SystemFileSystem/Templates/Classes/Class.java to edit this template
  */
-
 package Vue;
 
+import Modele.Mur;
 import Modele.Piece;
 import javafx.geometry.Insets;
 import javafx.geometry.Pos;
 import javafx.scene.control.*;
 import javafx.scene.layout.*;
 import javafx.scene.text.Font;
+
 
 
 /**
@@ -22,7 +23,6 @@ import javafx.scene.text.Font;
 public class VuePlanAppartement {
 
     private BorderPane root;
-
     private Pane panePlan;
 
     private Label titre;
@@ -33,19 +33,19 @@ public class VuePlanAppartement {
     private Button boutonSupprimerDernierePiece;
     private Button boutonFermer;
 
-    // 👉 Nouvelle partie : liste des pièces
     private ListView<Piece> listePieces;
     private Label labelNbPieces;
 
-    public VuePlanAppartement() {
+    private Label labelDetailsPiece;
+    private ListView<Mur> listeMurs;
 
+    public VuePlanAppartement() {
         root = new BorderPane();
 
-        // ----------- HAUT -----------
         titre = new Label("Plan de l'appartement");
         titre.setFont(new Font(24));
 
-        consigne = new Label("Cliquez sur 2 points pour créer une pièce.");
+        consigne = new Label("Cliquez sur 2 points pour créer une pièce. Cliquez sur une pièce pour la sélectionner.");
         consigne.setFont(new Font(16));
 
         infoMessage = new Label("Aucune pièce créée pour le moment.");
@@ -55,7 +55,6 @@ public class VuePlanAppartement {
         blocHaut.setAlignment(Pos.CENTER);
         blocHaut.setPadding(new Insets(20));
 
-        // ----------- CENTRE -----------
         panePlan = new Pane();
         panePlan.setPrefSize(800, 600);
         panePlan.setStyle(
@@ -64,27 +63,41 @@ public class VuePlanAppartement {
                 "-fx-border-width: 2px;"
         );
 
-        // ----------- DROITE (SIDEBAR) -----------
-
         Label titreListe = new Label("Pièces de l'appartement");
         titreListe.setFont(new Font(16));
 
         listePieces = new ListView<>();
-        listePieces.setPrefHeight(200);
+        listePieces.setPrefHeight(180);
 
         labelNbPieces = new Label("Nombre de pièces : 0");
+
+        Label titreDetails = new Label("Détails de la pièce sélectionnée");
+        titreDetails.setFont(new Font(16));
+
+        labelDetailsPiece = new Label("Aucune pièce sélectionnée.");
+        labelDetailsPiece.setWrapText(true);
+
+        Label titreMurs = new Label("Murs de la pièce");
+        titreMurs.setFont(new Font(15));
+
+        listeMurs = new ListView<>();
+        listeMurs.setPrefHeight(180);
 
         VBox blocDroite = new VBox(10,
                 titreListe,
                 listePieces,
-                labelNbPieces
+                labelNbPieces,
+                new Separator(),
+                titreDetails,
+                labelDetailsPiece,
+                titreMurs,
+                listeMurs
         );
 
         blocDroite.setPadding(new Insets(20));
-        blocDroite.setPrefWidth(250);
+        blocDroite.setPrefWidth(300);
         blocDroite.setStyle("-fx-background-color: #f0f0f0;");
 
-        // ----------- BAS -----------
         boutonEffacerSelection = new Button("Effacer la sélection");
         boutonSupprimerDernierePiece = new Button("Supprimer dernière pièce");
         boutonFermer = new Button("Fermer");
@@ -98,10 +111,9 @@ public class VuePlanAppartement {
         blocBas.setAlignment(Pos.CENTER);
         blocBas.setPadding(new Insets(20));
 
-        // ----------- ASSEMBLAGE -----------
         root.setTop(blocHaut);
         root.setCenter(panePlan);
-        root.setRight(blocDroite); // 👈 LA SIDEBAR
+        root.setRight(blocDroite);
         root.setBottom(blocBas);
     }
 
@@ -135,5 +147,13 @@ public class VuePlanAppartement {
 
     public Label getLabelNbPieces() {
         return labelNbPieces;
+    }
+
+    public Label getLabelDetailsPiece() {
+        return labelDetailsPiece;
+    }
+
+    public ListView<Mur> getListeMurs() {
+        return listeMurs;
     }
 }

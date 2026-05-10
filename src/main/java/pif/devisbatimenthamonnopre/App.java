@@ -4,9 +4,7 @@ import javafx.stage.Stage;
 import Controleur.CBatiment;
 
 
-/**
- * JavaFX App
- */
+
 
 
 public class App extends Application {
