@@ -27,15 +27,12 @@ import java.util.Optional;
 
 
 public class CPlanImmeuble {
-
+    
     private VuePlanImmeuble vue;
     private Stage fenetre;
     private Immeuble immeuble;
 
-    // Indice de l'étage affiché
     private int indexNiveauCourant;
-
-    // Les 2 points pour créer un appartement
     private Point premierPoint;
     private Point deuxiemePoint;
 
@@ -72,6 +69,12 @@ public class CPlanImmeuble {
         // Clic dans le plan pour créer un appartement
         vue.getPanePlan().setOnMouseClicked(event -> {
             gererClicSouris(event.getX(), event.getY());
+        });
+
+        // Événement d'ouverture du Catalogue
+        vue.getBoutonCatalogue().setOnAction(e -> {
+            Stage fenetreCatalogue = new Stage();
+            new CCatalogue(fenetreCatalogue);
         });
 
         // Ouvrir un appartement sélectionné
@@ -154,9 +157,7 @@ public class CPlanImmeuble {
         double largeurDisponible = vue.getPanePlan().getWidth() - (margeSecurite * 2);
         double hauteurDisponible = vue.getPanePlan().getHeight() - (margeSecurite * 2);
 
-        if (largeurDisponible <= 0 || hauteurDisponible <= 0) {
-            return;
-        }
+        if (largeurDisponible <= 0 || hauteurDisponible <= 0) return;
 
         double echelleX = largeurDisponible / immeuble.getXmax();
         double echelleY = hauteurDisponible / immeuble.getYmax();
@@ -171,7 +172,6 @@ public class CPlanImmeuble {
         float xReel = (float) ((xPixel - offsetX) / echelle);
         float yReel = (float) ((yPixel - offsetY) / echelle);
 
-        // On refuse les clics hors du bâtiment
         if (xReel < 0 || xReel > immeuble.getXmax() || yReel < 0 || yReel > immeuble.getYmax()) {
             vue.getInfoMessage().setText("Clic hors de l'étage.");
             return;
@@ -188,7 +188,6 @@ public class CPlanImmeuble {
     }
 
     private void finaliserAppartement() {
-        // Si on a un rectangle plat, on refuse
         if (premierPoint.getX() == deuxiemePoint.getX() || premierPoint.getY() == deuxiemePoint.getY()) {
             vue.getInfoMessage().setText("Erreur : rectangle impossible.");
             deuxiemePoint = null;
@@ -199,19 +198,15 @@ public class CPlanImmeuble {
         String nomAppartement = demanderNomAppartement();
         Appartement nouvelAppartement = new Appartement(nomAppartement, premierPoint, deuxiemePoint);
 
-        // Vérification de chevauchement avec les autres appartements de l'étage
         if (chevaucheUnAppartement(nouvelAppartement)) {
             vue.getInfoMessage().setText("Erreur : cet appartement chevauche un autre appartement.");
         } else {
             getNiveauCourant().ajouterAppartement(nouvelAppartement);
-            vue.getInfoMessage().setText(
-                    nomAppartement + " créé (" + String.format("%.2f", nouvelAppartement.getSuperficie()) + " m²)"
-            );
+            vue.getInfoMessage().setText(nomAppartement + " créé (" + String.format("%.2f", nouvelAppartement.getSuperficie()) + " m²)");
         }
 
         premierPoint = null;
         deuxiemePoint = null;
-
         mettreAJourAffichage();
     }
 
@@ -223,11 +218,8 @@ public class CPlanImmeuble {
                     || nouvelAppartement.getYMax() <= appartementExistant.getYMin()
                     || nouvelAppartement.getYMin() >= appartementExistant.getYMax();
 
-            if (!pasDeChevauchement) {
-                return true;
-            }
+            if (!pasDeChevauchement) return true;
         }
-
         return false;
     }
 
@@ -250,20 +242,14 @@ public class CPlanImmeuble {
         double offsetX = (pane.getWidth() - (immeuble.getXmax() * echelle)) / 2;
         double offsetY = (pane.getHeight() - (immeuble.getYmax() * echelle)) / 2;
 
-        // Contour extérieur de l'étage
         Rectangle contour = new Rectangle(
-                offsetX,
-                offsetY,
-                immeuble.getXmax() * echelle,
-                immeuble.getYmax() * echelle
+                offsetX, offsetY, immeuble.getXmax() * echelle, immeuble.getYmax() * echelle
         );
         contour.setFill(Color.TRANSPARENT);
         contour.setStroke(Color.BLACK);
         contour.setStrokeWidth(3);
-
         pane.getChildren().add(contour);
 
-        // Dessin des appartements déjà créés
         for (Appartement appartement : getNiveauCourant().getAppartements()) {
             Rectangle rectangleAppartement = new Rectangle(
                     offsetX + appartement.getXMin() * echelle,
@@ -279,13 +265,11 @@ public class CPlanImmeuble {
             pane.getChildren().add(rectangleAppartement);
         }
 
-        // Premier point en rouge
         if (premierPoint != null) {
             Circle point1 = new Circle(
                     offsetX + premierPoint.getX() * echelle,
                     offsetY + premierPoint.getY() * echelle,
-                    4,
-                    Color.RED
+                    4, Color.RED
             );
             pane.getChildren().add(point1);
         }

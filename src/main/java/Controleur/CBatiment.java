@@ -50,27 +50,22 @@ public class CBatiment {
     }
 
     private void initCatalogueCombos() {
-        // 1. Récupérer la rubrique exacte du fichier Catalogue.txt
-        // Note : Le nom doit correspondre exactement au texte après "Rubrique:"
-        List<Revetement> eltsExterieurs = catalogue.getProduits("Facade");
+        // 1. On charge et on ajoute les isolants
+    // Assurez-vous que le texte "Isolant" correspond exactement à votre # dans le fichier .txt
+    List<Revetement> isolants = catalogue.getProduits("Isolant");
+    if (isolants.isEmpty()) {
+        System.out.println("Attention : Aucune donnée trouvée pour la rubrique 'Isolant'.");
+    }
+    vue.getComboIsolant().getItems().addAll(isolants);
 
-        if (eltsExterieurs.isEmpty()) {
-            System.out.println("Attention : La rubrique 'Facade' n'a renvoye aucun produit.");
-        }
+    // 2. On charge et on ajoute les revêtements de façade
+    // Utilisez le nom exact de votre rubrique (ex: "Facade" ou "Elements d'exterieur")
+    List<Revetement> facades = catalogue.getProduits("Facade");
+    if (facades.isEmpty()) {
+        System.out.println("Attention : Aucune donnée trouvée pour la rubrique 'Facade'.");
+    }
+    vue.getComboFacade().getItems().addAll(facades);        
 
-        // 2. Filtrer pour remplir les deux ComboBox distinctes
-        // On cherche les isolants pour la première
-        List<Revetement> isolants = eltsExterieurs.stream()
-                .filter(r -> r.getNomRevt().toLowerCase().contains("Isolant"))
-                .collect(Collectors.toList());
-
-        // On cherche les revêtements (enduit, bardage) pour la seconde
-        List<Revetement> facades = eltsExterieurs.stream()
-                .filter(r -> !r.getNomRevt().toLowerCase().contains("Facade"))
-                .collect(Collectors.toList());
-
-        vue.getComboIsolant().getItems().addAll(isolants);
-        vue.getComboFacade().getItems().addAll(facades);
 
         // 3. Formattage de l'affichage (éviter l'adresse mémoire de l'objet)
         StringConverter<Revetement> converter = new StringConverter<>() {
