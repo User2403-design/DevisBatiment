@@ -4,14 +4,25 @@
  */
 package Modele;
 
-/**
- *
- * @author seb12
- */
-
 public class Maison extends Batiment {
+
+    private Appartement planMaison;
 
     public Maison(String typeBatiment, float longueur, float largeur) {
         super(typeBatiment, longueur, largeur);
+
+        this.planMaison = new Appartement(
+                "Plan maison",
+                new Point(0, 0),
+                new Point(longueur, largeur)
+        );
+    }
+
+    public Appartement getPlanMaison() {
+        return planMaison;
+    }
+
+    public void setPlanMaison(Appartement planMaison) {
+        this.planMaison = planMaison;
     }
 }

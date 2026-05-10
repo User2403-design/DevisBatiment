@@ -10,14 +10,15 @@ import Modele.Mur;
 import Modele.Piece;
 import Modele.Point;
 import Vue.VuePlanAppartement;
+import javafx.geometry.Pos;
 import javafx.scene.Scene;
+import javafx.scene.control.Label;
 import javafx.scene.control.TextInputDialog;
 import javafx.scene.layout.Pane;
 import javafx.scene.paint.Color;
 import javafx.scene.shape.Circle;
 import javafx.scene.shape.Rectangle;
 import javafx.scene.text.Text;
-import javafx.scene.text.TextAlignment;
 import javafx.stage.Stage;
 
 import java.util.Optional;
@@ -42,9 +43,10 @@ public class CPlanAppartement {
 
         vue = new VuePlanAppartement();
 
-        Scene scene = new Scene(vue.getRoot(), 1150, 750);
+        Scene scene = new Scene(vue.getRoot());
         fenetre.setScene(scene);
-        fenetre.setTitle("Aménagement de " + appartement.getNom());
+        fenetre.setTitle("Plan du logement");
+        fenetre.setMaximized(true);
         fenetre.show();
 
         calculerEchelle();
@@ -148,7 +150,7 @@ public class CPlanAppartement {
 
         if (xReel < 0 || xReel > appartement.getLargeur()
                 || yReel < 0 || yReel > appartement.getHauteur()) {
-            vue.getInfoMessage().setText("Clic hors de l'appartement.");
+            vue.getInfoMessage().setText("Clic hors du logement.");
             return;
         }
 
@@ -271,18 +273,18 @@ public class CPlanAppartement {
         double offsetX = (largeurPane - (appartement.getLargeur() * echelle)) / 2;
         double offsetY = (hauteurPane - (appartement.getHauteur() * echelle)) / 2;
 
-        Rectangle contourAppartement = new Rectangle(
+        Rectangle contourLogement = new Rectangle(
                 offsetX,
                 offsetY,
                 appartement.getLargeur() * echelle,
                 appartement.getHauteur() * echelle
         );
 
-        contourAppartement.setFill(Color.TRANSPARENT);
-        contourAppartement.setStroke(Color.BLACK);
-        contourAppartement.setStrokeWidth(3);
+        contourLogement.setFill(Color.TRANSPARENT);
+        contourLogement.setStroke(Color.BLACK);
+        contourLogement.setStrokeWidth(3);
 
-        pane.getChildren().add(contourAppartement);
+        pane.getChildren().add(contourLogement);
 
         for (Piece piece : appartement.getPieces()) {
             double xMin = offsetX + piece.getXMin() * echelle;
@@ -304,12 +306,14 @@ public class CPlanAppartement {
                 rectanglePiece.setStrokeWidth(3);
             } else {
                 rectanglePiece.setFill(Color.LIGHTBLUE);
-                rectanglePiece.setOpacity(0.4);
+                rectanglePiece.setOpacity(0.35);
                 rectanglePiece.setStroke(Color.BLUE);
                 rectanglePiece.setStrokeWidth(1.5);
             }
 
             pane.getChildren().add(rectanglePiece);
+
+            afficherNomPiece(piece, xMin, yMin, largeur, hauteur);
 
             if (piece == pieceSelectionnee) {
                 afficherNomsMurs(xMin, yMin, largeur, hauteur);
@@ -328,36 +332,57 @@ public class CPlanAppartement {
         }
     }
 
+    private void afficherNomPiece(Piece piece, double xMin, double yMin, double largeur, double hauteur) {
+        Text nomPiece = new Text(piece.getUsage());
+
+        nomPiece.setX(xMin + largeur / 2 - 25);
+        nomPiece.setY(yMin + hauteur / 2);
+
+        panePlan().getChildren().add(nomPiece);
+    }
+
     private void afficherNomsMurs(double xMin, double yMin, double largeur, double hauteur) {
-        Pane pane = vue.getPanePlan();
+        Label murNord = creerLabelMur("Mur Nord");
+        murNord.setLayoutX(xMin + largeur / 2 - 35);
+        murNord.setLayoutY(yMin - 10);
 
-        Text murNord = new Text("Mur Nord");
-        murNord.setX(xMin + largeur / 2 - 30);
-        murNord.setY(yMin + 15);
+        Label murSud = creerLabelMur("Mur Sud");
+        murSud.setLayoutX(xMin + largeur / 2 - 30);
+        murSud.setLayoutY(yMin + hauteur - 12);
 
-        Text murSud = new Text("Mur Sud");
-        murSud.setX(xMin + largeur / 2 - 25);
-        murSud.setY(yMin + hauteur - 8);
+        Label murEst = creerLabelMur("Mur Est");
+        murEst.setLayoutX(xMin + largeur - 55);
+        murEst.setLayoutY(yMin + hauteur / 2 - 12);
 
-        Text murEst = new Text("Mur Est");
-        murEst.setX(xMin + largeur - 50);
-        murEst.setY(yMin + hauteur / 2);
+        Label murOuest = creerLabelMur("Mur Ouest");
+        murOuest.setLayoutX(xMin + 5);
+        murOuest.setLayoutY(yMin + hauteur / 2 - 12);
 
-        Text murOuest = new Text("Mur Ouest");
-        murOuest.setX(xMin + 8);
-        murOuest.setY(yMin + hauteur / 2);
-
-        murNord.setTextAlignment(TextAlignment.CENTER);
-        murSud.setTextAlignment(TextAlignment.CENTER);
-        murEst.setTextAlignment(TextAlignment.CENTER);
-        murOuest.setTextAlignment(TextAlignment.CENTER);
-
-        pane.getChildren().addAll(
+        panePlan().getChildren().addAll(
                 murNord,
                 murSud,
                 murEst,
                 murOuest
         );
+    }
+
+    private Label creerLabelMur(String texte) {
+        Label label = new Label(texte);
+
+        label.setAlignment(Pos.CENTER);
+        label.setStyle(
+                "-fx-background-color: white;" +
+                "-fx-border-color: black;" +
+                "-fx-border-width: 1px;" +
+                "-fx-padding: 2px 6px;" +
+                "-fx-font-size: 11px;"
+        );
+
+        return label;
+    }
+
+    private Pane panePlan() {
+        return vue.getPanePlan();
     }
 
     private String demanderUsagePiece() {

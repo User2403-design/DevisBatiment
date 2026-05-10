@@ -12,14 +12,6 @@ import javafx.scene.control.*;
 import javafx.scene.layout.*;
 import javafx.scene.text.Font;
 
-
-
-/**
- *
- * @author chloe
- */
-
-
 public class VuePlanAppartement {
 
     private BorderPane root;
@@ -42,7 +34,7 @@ public class VuePlanAppartement {
     public VuePlanAppartement() {
         root = new BorderPane();
 
-        titre = new Label("Plan de l'appartement");
+        titre = new Label("Plan du logement");
         titre.setFont(new Font(24));
 
         consigne = new Label("Cliquez sur 2 points pour créer une pièce. Cliquez sur une pièce pour la sélectionner.");
@@ -56,14 +48,14 @@ public class VuePlanAppartement {
         blocHaut.setPadding(new Insets(20));
 
         panePlan = new Pane();
-        panePlan.setPrefSize(800, 600);
+        panePlan.setPrefSize(900, 650);
         panePlan.setStyle(
                 "-fx-background-color: white;" +
                 "-fx-border-color: black;" +
                 "-fx-border-width: 2px;"
         );
 
-        Label titreListe = new Label("Pièces de l'appartement");
+        Label titreListe = new Label("Pièces du logement");
         titreListe.setFont(new Font(16));
 
         listePieces = new ListView<>();
@@ -95,7 +87,7 @@ public class VuePlanAppartement {
         );
 
         blocDroite.setPadding(new Insets(20));
-        blocDroite.setPrefWidth(300);
+        blocDroite.setPrefWidth(320);
         blocDroite.setStyle("-fx-background-color: #f0f0f0;");
 
         boutonEffacerSelection = new Button("Effacer la sélection");

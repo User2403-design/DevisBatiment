@@ -5,121 +5,223 @@
 
 package Controleur;
 
+import Modele.Appartement;
 import Modele.Batiment;
+import Modele.GestionCatalogue;
 import Modele.Immeuble;
 import Modele.Maison;
-import Modele.Stockage;
-import Modele.GestionCatalogue;
 import Modele.Revetement;
+import Modele.Stockage;
 import Vue.VueBatiment;
 import javafx.scene.Scene;
 import javafx.scene.control.Alert;
 import javafx.stage.Stage;
 import javafx.util.StringConverter;
-import java.util.List;
-import java.util.stream.Collectors;
 
-/**
- * Contrôleur gérant la création initiale du bâtiment.
- * Correction : Chargement correct des rubriques du catalogue.
- */
+import java.util.List;
+
 public class CBatiment {
 
     private VueBatiment vue;
     private Stage fenetre;
+
     private String typeBatiment;
+
     private GestionCatalogue catalogue;
 
     public CBatiment(Stage fenetre) {
+
         this.fenetre = fenetre;
+
         this.vue = new VueBatiment();
+
         this.catalogue = new GestionCatalogue();
 
         Scene scene = new Scene(vue.getRoot());
+
         fenetre.setScene(scene);
+
         fenetre.setTitle("Bâtir & Co - Configuration");
+
         fenetre.setMaximized(true);
+
         fenetre.show();
 
-        // Initialisation des données du catalogue
         initCatalogueCombos();
 
-        vue.getMaison().setOnAction(e -> { typeBatiment = "Maison"; vue.setChampsVisibles(true); });
-        vue.getImmeuble().setOnAction(e -> { typeBatiment = "Immeuble"; vue.setChampsVisibles(true); });
-        vue.getValider().setOnAction(e -> validerCreation());
+        vue.getMaison().setOnAction(e -> {
+
+            typeBatiment = "Maison";
+
+            vue.setChampsVisibles(true);
+        });
+
+        vue.getImmeuble().setOnAction(e -> {
+
+            typeBatiment = "Immeuble";
+
+            vue.setChampsVisibles(true);
+        });
+
+        vue.getValider().setOnAction(e -> {
+
+            validerCreation();
+        });
     }
 
     private void initCatalogueCombos() {
-        // 1. On charge et on ajoute les isolants
-    // Assurez-vous que le texte "Isolant" correspond exactement à votre # dans le fichier .txt
-    List<Revetement> isolants = catalogue.getProduits("Isolant");
-    if (isolants.isEmpty()) {
-        System.out.println("Attention : Aucune donnée trouvée pour la rubrique 'Isolant'.");
-    }
-    vue.getComboIsolant().getItems().addAll(isolants);
 
-    // 2. On charge et on ajoute les revêtements de façade
-    // Utilisez le nom exact de votre rubrique (ex: "Facade" ou "Elements d'exterieur")
-    List<Revetement> facades = catalogue.getProduits("Facade");
-    if (facades.isEmpty()) {
-        System.out.println("Attention : Aucune donnée trouvée pour la rubrique 'Facade'.");
-    }
-    vue.getComboFacade().getItems().addAll(facades);        
+        List isolants = catalogue.getProduits("Isolant");
 
+        vue.getComboIsolant().getItems().addAll(isolants);
 
-        // 3. Formattage de l'affichage (éviter l'adresse mémoire de l'objet)
+        List facades = catalogue.getProduits("Facade");
+
+        vue.getComboFacade().getItems().addAll(facades);
+
         StringConverter<Revetement> converter = new StringConverter<>() {
-            @Override 
-            public String toString(Revetement r) { 
-                return (r == null) ? "" : r.getNomRevt() + " (" + r.getPrixRevt() + "€/m²)"; 
+
+            @Override
+            public String toString(Revetement r) {
+
+                if (r == null) {
+                    return "";
+                }
+
+                return r.getNomRevt()
+                        + " ("
+                        + r.getPrixRevt()
+                        + "€/m²)";
             }
-            @Override 
-            public Revetement fromString(String string) { return null; }
+
+            @Override
+            public Revetement fromString(String string) {
+
+                return null;
+            }
         };
-        
+
         vue.getComboIsolant().setConverter(converter);
+
         vue.getComboFacade().setConverter(converter);
     }
 
     private void validerCreation() {
+
         try {
-            if (typeBatiment == null) { 
-                afficherErreur("Veuillez d'abord choisir entre Maison et Immeuble."); 
-                return; 
-            }
 
-            float lon = Float.parseFloat(vue.getChampLongueur().getText());
-            float lar = Float.parseFloat(vue.getChampLargeur().getText());
-            
-            Revetement isolant = vue.getComboIsolant().getValue();
-            Revetement facade = vue.getComboFacade().getValue();
+            if (typeBatiment == null) {
 
-            if (lon <= 0 || lar <= 0 || isolant == null || facade == null) {
-                afficherErreur("Veuillez remplir les dimensions et choisir les matériaux extérieurs.");
+                afficherErreur(
+                        "Veuillez d'abord choisir entre Maison et Immeuble."
+                );
+
                 return;
             }
 
-            Batiment b = typeBatiment.equals("Maison") ? new Maison(typeBatiment, lon, lar) : new Immeuble(typeBatiment, lon, lar);
-            b.setIsolantExt(isolant);
-            b.setRevtFacade(facade);
+            float longueur =
+                    Float.parseFloat(
+                            vue.getChampLongueur().getText()
+                    );
 
-            Stockage.batiments.add(b);
+            float largeur =
+                    Float.parseFloat(
+                            vue.getChampLargeur().getText()
+                    );
+
+            Revetement isolant =
+                    vue.getComboIsolant().getValue();
+
+            Revetement facade =
+                    vue.getComboFacade().getValue();
+
+            if (
+                    longueur <= 0
+                    ||
+                    largeur <= 0
+                    ||
+                    isolant == null
+                    ||
+                    facade == null
+            ) {
+
+                afficherErreur(
+                        "Veuillez remplir les dimensions et choisir les matériaux extérieurs."
+                );
+
+                return;
+            }
+
+            Batiment batiment;
+
+            if (typeBatiment.equals("Maison")) {
+
+                batiment =
+                        new Maison(
+                                typeBatiment,
+                                longueur,
+                                largeur
+                        );
+
+            } else {
+
+                batiment =
+                        new Immeuble(
+                                typeBatiment,
+                                longueur,
+                                largeur
+                        );
+            }
+
+            batiment.setIsolantExt(isolant);
+
+            batiment.setRevtFacade(facade);
+
+            Stockage.batiments.add(batiment);
+
             vue.getLabelCalcSuperficie().setVisible(true);
-            vue.getLabelCalcSuperficie().setText("Superficie : " + b.getSuperficie() + " m²");
 
-            Stage nF = new Stage();
-            if (b instanceof Maison) new CPlanBatiment(nF, b);
-            else new CPlanImmeuble(nF, (Immeuble) b);
+            vue.getLabelCalcSuperficie().setText(
+                    "Superficie : "
+                            + batiment.getSuperficie()
+                            + " m²"
+            );
+
+            if (batiment instanceof Maison) {
+
+                Appartement planMaison =
+                        ((Maison) batiment).getPlanMaison();
+
+                new CPlanAppartement(
+                        fenetre,
+                        planMaison
+                );
+
+            } else {
+
+                new CPlanImmeuble(
+                        fenetre,
+                        (Immeuble) batiment
+                );
+            }
 
         } catch (NumberFormatException ex) {
-            afficherErreur("Les dimensions doivent être des nombres valides.");
+
+            afficherErreur(
+                    "Les dimensions doivent être des nombres valides."
+            );
         }
     }
 
-    private void afficherErreur(String msg) {
-        Alert a = new Alert(Alert.AlertType.ERROR);
-        a.setHeaderText("Erreur de saisie");
-        a.setContentText(msg);
-        a.showAndWait();
+    private void afficherErreur(String message) {
+
+        Alert alert =
+                new Alert(Alert.AlertType.ERROR);
+
+        alert.setHeaderText("Erreur de saisie");
+
+        alert.setContentText(message);
+
+        alert.showAndWait();
     }
 }
