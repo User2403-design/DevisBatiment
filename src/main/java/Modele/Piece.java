@@ -91,6 +91,23 @@ public class Piece {
                 )
         );
     }
+    
+    
+public Revetement getRevetementSol() {
+    return revetementSol;
+}
+
+public void setRevetementSol(Revetement revetementSol) {
+    this.revetementSol = revetementSol;
+}
+
+public Revetement getRevetementPlafond() {
+    return revetementPlafond;
+}
+
+public void setRevetementPlafond(Revetement revetementPlafond) {
+    this.revetementPlafond = revetementPlafond;
+}
 
     public double calculerPrixTotal(double hauteurPlafond) {
 
