@@ -3,22 +3,19 @@
  * Click nbfs://nbhost/SystemFileSystem/Templates/Classes/Class.java to edit this template
  */
 package Modele;
-import java.util.ArrayList;
-/**
- *
- * @author seb12
- */
 
+import java.util.ArrayList;
 
 public class Niveau {
 
-    // Numéro d'étage : 1, 2, 3...
     private int numeroNiveau;
 
-    // Liste des appartements de ce niveau
     private ArrayList<Appartement> appartements;
-    
+
     private final double hauteurPlafond = 3;
+
+    private Point pointEscalier1;
+    private Point pointEscalier2;
 
     public Niveau() {
         this.appartements = new ArrayList<>();
@@ -47,6 +44,22 @@ public class Niveau {
 
     public void setAppartements(ArrayList<Appartement> appartements) {
         this.appartements = appartements;
+    }
+
+    public Point getPointEscalier1() {
+        return pointEscalier1;
+    }
+
+    public void setPointEscalier1(Point pointEscalier1) {
+        this.pointEscalier1 = pointEscalier1;
+    }
+
+    public Point getPointEscalier2() {
+        return pointEscalier2;
+    }
+
+    public void setPointEscalier2(Point pointEscalier2) {
+        this.pointEscalier2 = pointEscalier2;
     }
 
     public void ajouterAppartement(Appartement appartement) {
