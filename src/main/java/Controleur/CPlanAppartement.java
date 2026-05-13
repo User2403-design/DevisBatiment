@@ -1,7 +1,8 @@
-/*
- * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
- * Click nbfs://nbhost/SystemFileSystem/Templates/Classes/Class.java to edit this template
- */
+///*
+// * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
+// * Click nbfs://nbhost/SystemFileSystem/Templates/Classes/Class.java to edit this template
+// */
+//
 
 package Controleur;
 
@@ -13,577 +14,323 @@ import Modele.Piece;
 import Modele.Point;
 import Modele.Revetement;
 import Vue.VuePlanAppartement;
+import javafx.geometry.Insets;
 import javafx.geometry.Pos;
 import javafx.scene.Scene;
-import javafx.scene.control.Alert;
-import javafx.scene.control.Label;
-import javafx.scene.control.TextInputDialog;
-import javafx.scene.layout.Pane;
+import javafx.scene.control.*;
+import javafx.scene.layout.*;
 import javafx.scene.paint.Color;
 import javafx.scene.shape.Circle;
 import javafx.scene.shape.Rectangle;
+import javafx.scene.text.Font;
+import javafx.scene.text.FontWeight;
 import javafx.scene.text.Text;
 import javafx.stage.Stage;
 
 import java.util.List;
 import java.util.Optional;
 
+/**
+ * Contrôleur gérant la logique de l'appartement.
+ * Ajout de l'ouverture du catalogue depuis le bandeau supérieur.
+ */
 public class CPlanAppartement {
 
     private VuePlanAppartement vue;
     private Stage fenetre;
     private Appartement appartement;
+    private GestionCatalogue catalogue;
 
     private Point premierPoint;
-    private Point deuxiemePoint;
-
     private Piece pieceSelectionnee;
-
     private double echelle = 1;
     private final double margeSecurite = 40.0;
-
-    private GestionCatalogue catalogue;
     private int compteurOuverture = 1;
 
     public CPlanAppartement(Stage fenetre, Appartement appartement) {
         this.fenetre = fenetre;
         this.appartement = appartement;
         this.catalogue = new GestionCatalogue();
+        this.vue = new VuePlanAppartement();
 
-        vue = new VuePlanAppartement();
-
-        Scene scene = new Scene(vue.getRoot());
+        Scene scene = new Scene(vue.getRoot(), 1300, 850);
         fenetre.setScene(scene);
-        fenetre.setTitle("Plan du logement");
+        fenetre.setTitle("Édition du logement : " + appartement.getNom());
         fenetre.setMaximized(true);
         fenetre.show();
 
-        chargerRevetements();
-
+        initEvents();
         calculerEchelle();
         rafraichirPlan();
         mettreAJourSidebar();
+    }
 
-        vue.getPanePlan().widthProperty().addListener((obs, oldVal, newVal) -> {
-            calculerEchelle();
-            rafraichirPlan();
-        });
+    private void initEvents() {
+        // Redimensionnement
+        vue.getPanePlan().widthProperty().addListener((o, oldV, newV) -> { calculerEchelle(); rafraichirPlan(); });
+        vue.getPanePlan().heightProperty().addListener((o, oldV, newV) -> { calculerEchelle(); rafraichirPlan(); });
 
-        vue.getPanePlan().heightProperty().addListener((obs, oldVal, newVal) -> {
-            calculerEchelle();
-            rafraichirPlan();
-        });
+        // Clic sur le plan
+        vue.getPanePlan().setOnMouseClicked(e -> gererClicSouris(e.getX(), e.getY()));
 
-        vue.getPanePlan().setOnMouseClicked(event -> {
-            gererClicSouris(event.getX(), event.getY());
-        });
+        // Sélection dans la liste
+        vue.getListePieces().getSelectionModel().selectedItemProperty().addListener((obs, old, n) -> selectionnerPiece(n));
 
-        vue.getListePieces().getSelectionModel().selectedItemProperty().addListener((obs, anciennePiece, nouvellePiece) -> {
-            selectionnerPiece(nouvellePiece);
-        });
-
-        vue.getBoutonEffacerSelection().setOnAction(e -> {
-            premierPoint = null;
-            deuxiemePoint = null;
-            pieceSelectionnee = null;
-
-            vue.getListePieces().getSelectionModel().clearSelection();
-            vue.getInfoMessage().setText("Sélection annulée.");
-
-            mettreAJourDetailsPiece();
-            rafraichirPlan();
-        });
-
-        vue.getBoutonSupprimerDernierePiece().setOnAction(e -> {
-            appartement.supprimerDernierePiece();
-
-            premierPoint = null;
-            deuxiemePoint = null;
-            pieceSelectionnee = null;
-
-            vue.getInfoMessage().setText("Dernière pièce supprimée.");
-
-            mettreAJourSidebar();
-            mettreAJourDetailsPiece();
-            rafraichirPlan();
-        });
-
+        // Boutons du bas
+        vue.getBoutonEffacerSelection().setOnAction(e -> annulerSelection());
+        vue.getBoutonSupprimerDernierePiece().setOnAction(e -> supprimerDernierePiece());
         vue.getBoutonFermer().setOnAction(e -> fenetre.close());
 
-        vue.getBoutonAppliquerRevetement().setOnAction(e -> appliquerRevetement());
-
-        vue.getBoutonAjouterOuverture().setOnAction(e -> ajouterOuverture());
+        // Boutons du haut
+        vue.getBoutonOuvrirRevetements().setOnAction(e -> ouvrirFenetreRevetements());
+        vue.getBoutonOuvrirOuvertures().setOnAction(e -> ouvrirFenetreOuvertures());
+        
+        // Nouveau : Événement pour le bouton Catalogue
+        vue.getBoutonCatalogue().setOnAction(e -> {
+            Stage fenetreCatalogue = new Stage();
+            new CCatalogue(fenetreCatalogue);
+        });
     }
 
-    private void chargerRevetements() {
-        vue.getComboRevetement().getItems().clear();
+    // --- LOGIQUE DES FENÊTRES SECONDAIRES ---
 
-        for (Object nomRubriqueObj : catalogue.getNomsRubriques()) {
-            String nomRubrique = nomRubriqueObj.toString();
-
-            List produits = catalogue.getProduits(nomRubrique);
-
-            for (Object obj : produits) {
-                if (obj instanceof Revetement) {
-                    vue.getComboRevetement().getItems().add((Revetement) obj);
-                }
-            }
+    private void ouvrirFenetreRevetements() {
+        if (pieceSelectionnee == null) {
+            afficherErreur("Sélectionnez d'abord une pièce sur le plan.");
+            return;
         }
+
+        Stage popup = new Stage();
+        popup.setTitle("Revêtements - " + pieceSelectionnee.getUsage());
+
+        ComboBox<String> comboSurface = new ComboBox<>();
+        comboSurface.getItems().addAll("Sol", "Plafond");
+        pieceSelectionnee.getMurs().forEach(m -> comboSurface.getItems().add(m.getIdMur()));
+        comboSurface.setPromptText("Surface à traiter");
+
+        ComboBox<Revetement> comboRev = new ComboBox<>();
+        catalogue.getNomsRubriques().forEach(rub -> comboRev.getItems().addAll(catalogue.getProduits(rub)));
+        comboRev.setPromptText("Matériau");
+
+        Button btnValider = new Button("Appliquer");
+        btnValider.setMaxWidth(Double.MAX_VALUE);
+        btnValider.setOnAction(e -> {
+            String surf = comboSurface.getValue();
+            Revetement r = comboRev.getValue();
+            if (surf != null && r != null) {
+                if (surf.equals("Sol")) pieceSelectionnee.setRevetementSol(r);
+                else if (surf.equals("Plafond")) pieceSelectionnee.setRevetementPlafond(r);
+                else pieceSelectionnee.getMurs().stream().filter(m -> m.getIdMur().equals(surf)).findFirst().ifPresent(m -> m.setRevetement(r));
+                mettreAJourDetailsPiece();
+                rafraichirPlan();
+                popup.close();
+            }
+        });
+
+        VBox layout = new VBox(15, new Label("Appliquer un matériau sur une surface :"), comboSurface, comboRev, btnValider);
+        layout.setPadding(new Insets(20));
+        popup.setScene(new Scene(layout, 350, 250));
+        popup.show();
     }
+
+    private void ouvrirFenetreOuvertures() {
+        if (pieceSelectionnee == null) {
+            afficherErreur("Sélectionnez d'abord une pièce sur le plan.");
+            return;
+        }
+
+        Stage popup = new Stage();
+        popup.setTitle("Ouvertures - " + pieceSelectionnee.getUsage());
+
+        ComboBox<String> comboMur = new ComboBox<>();
+        pieceSelectionnee.getMurs().forEach(m -> comboMur.getItems().add(m.getIdMur()));
+        comboMur.setPromptText("Choisir un mur");
+
+        ComboBox<String> comboType = new ComboBox<>();
+        comboType.getItems().addAll("Fenêtre", "Porte");
+        
+        TextField txtL = new TextField(); txtL.setPromptText("Largeur (m)");
+        TextField txtH = new TextField(); txtH.setPromptText("Hauteur (m)");
+
+        Button btnAjouter = new Button("Ajouter l'ouverture");
+        btnAjouter.setMaxWidth(Double.MAX_VALUE);
+        btnAjouter.setOnAction(e -> {
+            try {
+                String murId = comboMur.getValue();
+                String type = comboType.getValue();
+                float l = Float.parseFloat(txtL.getText());
+                float h = Float.parseFloat(txtH.getText());
+
+                if (murId != null && type != null) {
+                    pieceSelectionnee.getMurs().stream().filter(m -> m.getIdMur().equals(murId)).findFirst()
+                        .ifPresent(m -> m.ajouterOuverture(new Ouverture(compteurOuverture++, type, l, h)));
+                    mettreAJourDetailsPiece();
+                    popup.close();
+                }
+            } catch (Exception ex) { afficherErreur("Valeurs numériques invalides."); }
+        });
+
+        VBox layout = new VBox(15, new Label("Ajouter une ouverture sur un mur :"), comboMur, comboType, txtL, txtH, btnAjouter);
+        layout.setPadding(new Insets(20));
+        popup.setScene(new Scene(layout, 350, 350));
+        popup.show();
+    }
+
+    // --- DESSIN ET SIDEBAR ---
 
     private void calculerEchelle() {
-        double largeurPane = vue.getPanePlan().getWidth();
-        double hauteurPane = vue.getPanePlan().getHeight();
+        double lp = vue.getPanePlan().getWidth();
+        double hp = vue.getPanePlan().getHeight();
+        if (lp <= 0) lp = 900; if (hp <= 0) hp = 650;
 
-        if (largeurPane <= 0) {
-            largeurPane = vue.getPanePlan().getPrefWidth();
-        }
+        double ld = lp - (margeSecurite * 2);
+        double hd = hp - (margeSecurite * 2);
 
-        if (hauteurPane <= 0) {
-            hauteurPane = vue.getPanePlan().getPrefHeight();
-        }
-
-        double largeurDisponible = largeurPane - (margeSecurite * 2);
-        double hauteurDisponible = hauteurPane - (margeSecurite * 2);
-
-        if (largeurDisponible <= 0 || hauteurDisponible <= 0) {
-            echelle = 1;
-            return;
-        }
-
-        double echelleX = largeurDisponible / appartement.getLargeur();
-        double echelleY = hauteurDisponible / appartement.getHauteur();
-
-        echelle = Math.min(echelleX, echelleY);
+        echelle = Math.min(ld / appartement.getLargeur(), hd / appartement.getHauteur());
     }
 
-    private void gererClicSouris(double xPixel, double yPixel) {
-        calculerEchelle();
+    private void gererClicSouris(double xPx, double yPx) {
+        double offsetX = (vue.getPanePlan().getWidth() - (appartement.getLargeur() * echelle)) / 2;
+        double offsetY = (vue.getPanePlan().getHeight() - (appartement.getHauteur() * echelle)) / 2;
 
-        Pane pane = vue.getPanePlan();
+        float xr = (float) ((xPx - offsetX) / echelle);
+        float yr = (float) ((yPx - offsetY) / echelle);
 
-        double largeurPane = pane.getWidth();
-        double hauteurPane = pane.getHeight();
+        if (xr < 0 || xr > appartement.getLargeur() || yr < 0 || yr > appartement.getHauteur()) return;
 
-        if (largeurPane <= 0) {
-            largeurPane = pane.getPrefWidth();
-        }
-
-        if (hauteurPane <= 0) {
-            hauteurPane = pane.getPrefHeight();
-        }
-
-        double offsetX = (largeurPane - (appartement.getLargeur() * echelle)) / 2;
-        double offsetY = (hauteurPane - (appartement.getHauteur() * echelle)) / 2;
-
-        float xReel = (float) ((xPixel - offsetX) / echelle);
-        float yReel = (float) ((yPixel - offsetY) / echelle);
-
-        if (xReel < 0 || xReel > appartement.getLargeur()
-                || yReel < 0 || yReel > appartement.getHauteur()) {
-            vue.getInfoMessage().setText("Clic hors du logement.");
-            return;
-        }
-
-        Piece pieceCliquee = trouverPieceCliquee(xReel, yReel);
-
-        if (pieceCliquee != null && premierPoint == null) {
-            selectionnerPiece(pieceCliquee);
-            vue.getListePieces().getSelectionModel().select(pieceCliquee);
+        Piece p = trouverPiece(xr, yr);
+        if (p != null && premierPoint == null) {
+            vue.getListePieces().getSelectionModel().select(p);
             return;
         }
 
         if (premierPoint == null) {
-            pieceSelectionnee = null;
-            vue.getListePieces().getSelectionModel().clearSelection();
-            mettreAJourDetailsPiece();
-
-            premierPoint = new Point(xReel, yReel);
-            vue.getInfoMessage().setText("Point 1 enregistré.");
+            premierPoint = new Point(xr, yr);
+            vue.getInfoMessage().setText("Point 1 posé. Cliquez sur le coin opposé.");
             rafraichirPlan();
         } else {
-            deuxiemePoint = new Point(xReel, yReel);
-            finaliserPiece();
+            finaliserPiece(new Point(xr, yr));
         }
     }
 
-    private Piece trouverPieceCliquee(float x, float y) {
-        for (Piece piece : appartement.getPieces()) {
-            boolean dedans =
-                    x >= piece.getXMin()
-                    && x <= piece.getXMax()
-                    && y >= piece.getYMin()
-                    && y <= piece.getYMax();
-
-            if (dedans) {
-                return piece;
-            }
-        }
-
-        return null;
-    }
-
-    private void selectionnerPiece(Piece piece) {
-        pieceSelectionnee = piece;
-
-        if (piece != null) {
-            vue.getInfoMessage().setText("Pièce sélectionnée : " + piece.getUsage());
-        }
-
-        mettreAJourDetailsPiece();
-        mettreAJourSurfacesDisponibles();
-        rafraichirPlan();
-    }
-
-    private void finaliserPiece() {
-        if (premierPoint.getX() == deuxiemePoint.getX()
-                || premierPoint.getY() == deuxiemePoint.getY()) {
-            vue.getInfoMessage().setText("Erreur : rectangle impossible.");
-            deuxiemePoint = null;
-            rafraichirPlan();
-            return;
-        }
-
-        String usage = demanderUsagePiece();
-
-        Piece nouvellePiece = new Piece(premierPoint, deuxiemePoint, usage);
-
-        if (chevaucheUnePiece(nouvellePiece)) {
-            vue.getInfoMessage().setText("Erreur : chevauchement.");
+    private void finaliserPiece(Point p2) {
+        if (premierPoint.getX() == p2.getX() || premierPoint.getY() == p2.getY()) {
+            afficherErreur("Rectangle invalide.");
         } else {
-            appartement.ajouterPiece(nouvellePiece);
-            pieceSelectionnee = nouvellePiece;
-
-            vue.getInfoMessage().setText(
-                    usage + " créée (" + String.format("%.2f", nouvellePiece.getSuperficie()) + " m²)"
-            );
-
+            String usage = demanderNom();
+            Piece np = new Piece(premierPoint, p2, usage);
+            appartement.ajouterPiece(np);
+            selectionnerPiece(np);
             mettreAJourSidebar();
-            vue.getListePieces().getSelectionModel().select(nouvellePiece);
-            mettreAJourDetailsPiece();
-            mettreAJourSurfacesDisponibles();
         }
-
         premierPoint = null;
-        deuxiemePoint = null;
-
         rafraichirPlan();
     }
 
-    private boolean chevaucheUnePiece(Piece nouvellePiece) {
-        for (Piece p : appartement.getPieces()) {
-            boolean pasDeChevauchement =
-                    nouvellePiece.getXMax() <= p.getXMin()
-                    || nouvellePiece.getXMin() >= p.getXMax()
-                    || nouvellePiece.getYMax() <= p.getYMin()
-                    || nouvellePiece.getYMin() >= p.getYMax();
-
-            if (!pasDeChevauchement) {
-                return true;
-            }
-        }
-
-        return false;
+    private Piece trouverPiece(float x, float y) {
+        return appartement.getPieces().stream().filter(p -> x >= p.getXMin() && x <= p.getXMax() && y >= p.getYMin() && y <= p.getYMax()).findFirst().orElse(null);
     }
 
-    private void appliquerRevetement() {
-        if (pieceSelectionnee == null) {
-            afficherErreur("Veuillez d'abord sélectionner une pièce.");
-            return;
-        }
-
-        String surface = vue.getComboSurface().getValue();
-        Revetement revetement = vue.getComboRevetement().getValue();
-
-        if (surface == null || revetement == null) {
-            afficherErreur("Veuillez choisir une surface et un revêtement.");
-            return;
-        }
-
-        if (surface.equals("Sol")) {
-            pieceSelectionnee.setRevetementSol(revetement);
-        } else if (surface.equals("Plafond")) {
-            pieceSelectionnee.setRevetementPlafond(revetement);
-        } else {
-            Mur mur = trouverMurParNom(surface);
-
-            if (mur != null) {
-                mur.setRevetement(revetement);
-            }
-        }
-
-        vue.getInfoMessage().setText("Revêtement appliqué sur : " + surface);
-
+    private void selectionnerPiece(Piece p) {
+        pieceSelectionnee = p;
+        if (p != null) vue.getInfoMessage().setText("Sélection : " + p.getUsage());
         mettreAJourDetailsPiece();
         rafraichirPlan();
-    }
-
-    private void ajouterOuverture() {
-        if (pieceSelectionnee == null) {
-            afficherErreur("Veuillez d'abord sélectionner une pièce.");
-            return;
-        }
-
-        String surface = vue.getComboSurface().getValue();
-
-        if (surface == null || surface.equals("Sol") || surface.equals("Plafond")) {
-            afficherErreur("Une ouverture ne peut être ajoutée que sur un mur.");
-            return;
-        }
-
-        Mur mur = trouverMurParNom(surface);
-
-        if (mur == null) {
-            afficherErreur("Mur introuvable.");
-            return;
-        }
-
-        String typeOuverture = vue.getComboTypeOuverture().getValue();
-
-        if (typeOuverture == null) {
-            afficherErreur("Veuillez choisir Fenêtre ou Porte.");
-            return;
-        }
-
-        try {
-            float largeur = Float.parseFloat(vue.getChampLargeurOuverture().getText());
-            float hauteur = Float.parseFloat(vue.getChampHauteurOuverture().getText());
-
-            if (largeur <= 0 || hauteur <= 0) {
-                afficherErreur("Les dimensions de l'ouverture doivent être positives.");
-                return;
-            }
-
-            Ouverture ouverture = new Ouverture(compteurOuverture, typeOuverture, largeur, hauteur);
-            compteurOuverture++;
-
-            mur.ajouterOuverture(ouverture);
-
-            vue.getInfoMessage().setText(typeOuverture + " ajoutée sur : " + surface);
-
-            vue.getChampLargeurOuverture().clear();
-            vue.getChampHauteurOuverture().clear();
-
-            mettreAJourDetailsPiece();
-            rafraichirPlan();
-
-        } catch (NumberFormatException e) {
-            afficherErreur("Largeur et hauteur doivent être des nombres valides.");
-        }
-    }
-
-    private Mur trouverMurParNom(String nomMur) {
-        if (pieceSelectionnee == null) {
-            return null;
-        }
-
-        for (Mur mur : pieceSelectionnee.getMurs()) {
-            if (mur.getIdMur().equals(nomMur)) {
-                return mur;
-            }
-        }
-
-        return null;
-    }
-
-    private void mettreAJourSurfacesDisponibles() {
-        vue.getComboSurface().getItems().clear();
-
-        if (pieceSelectionnee == null) {
-            return;
-        }
-
-        vue.getComboSurface().getItems().add("Sol");
-        vue.getComboSurface().getItems().add("Plafond");
-
-        for (Mur mur : pieceSelectionnee.getMurs()) {
-            vue.getComboSurface().getItems().add(mur.getIdMur());
-        }
     }
 
     private void rafraichirPlan() {
-        calculerEchelle();
+        Pane p = vue.getPanePlan(); p.getChildren().clear();
+        double ox = (p.getWidth() - (appartement.getLargeur() * echelle)) / 2;
+        double oy = (p.getHeight() - (appartement.getHauteur() * echelle)) / 2;
 
-        Pane pane = vue.getPanePlan();
-        pane.getChildren().clear();
+        // Contour de l'appartement
+        Rectangle contour = new Rectangle(ox, oy, appartement.getLargeur() * echelle, appartement.getHauteur() * echelle);
+        contour.setFill(Color.TRANSPARENT); contour.setStroke(Color.BLACK); contour.setStrokeWidth(3);
+        p.getChildren().add(contour);
 
-        double largeurPane = pane.getWidth();
-        double hauteurPane = pane.getHeight();
+        for (Piece pc : appartement.getPieces()) {
+            double pcX = ox + pc.getXMin() * echelle;
+            double pcY = oy + pc.getYMin() * echelle;
+            double pcW = pc.getLargeur() * echelle;
+            double pcH = pc.getHauteur() * echelle;
 
-        if (largeurPane <= 0) {
-            largeurPane = pane.getPrefWidth();
-        }
+            // Rectangle de la pièce
+            Rectangle r = new Rectangle(pcX, pcY, pcW, pcH);
+            r.setFill(pc == pieceSelectionnee ? Color.LIGHTGREEN : Color.LIGHTBLUE);
+            r.setOpacity(0.3); r.setStroke(pc == pieceSelectionnee ? Color.GREEN : Color.BLUE);
+            r.setStrokeWidth(2);
+            p.getChildren().add(r);
 
-        if (hauteurPane <= 0) {
-            hauteurPane = pane.getPrefHeight();
-        }
+            // Nom de la pièce (au centre)
+            Text tUsage = new Text(pc.getUsage());
+            tUsage.setFont(Font.font("System", FontWeight.BOLD, 12));
+            tUsage.setX(pcX + pcW/2 - tUsage.getLayoutBounds().getWidth()/2);
+            tUsage.setY(pcY + pcH/2);
+            p.getChildren().add(tUsage);
 
-        double offsetX = (largeurPane - (appartement.getLargeur() * echelle)) / 2;
-        double offsetY = (hauteurPane - (appartement.getHauteur() * echelle)) / 2;
+            // --- Ajout des labels des murs ---
+            for (Mur m : pc.getMurs()) {
+                Text labelMur = new Text(m.getIdMur());
+                labelMur.setFont(Font.font("System", 9));
+                labelMur.setFill(Color.DARKSLATEGRAY);
+                
+                // Calcul des dimensions du texte pour l'alignement
+                double textW = labelMur.getLayoutBounds().getWidth();
+                double textH = labelMur.getLayoutBounds().getHeight();
 
-        Rectangle contourLogement = new Rectangle(
-                offsetX,
-                offsetY,
-                appartement.getLargeur() * echelle,
-                appartement.getHauteur() * echelle
-        );
-
-        contourLogement.setFill(Color.TRANSPARENT);
-        contourLogement.setStroke(Color.BLACK);
-        contourLogement.setStrokeWidth(3);
-
-        pane.getChildren().add(contourLogement);
-
-        for (Piece piece : appartement.getPieces()) {
-            double xMin = offsetX + piece.getXMin() * echelle;
-            double yMin = offsetY + piece.getYMin() * echelle;
-            double largeur = piece.getLargeur() * echelle;
-            double hauteur = piece.getHauteur() * echelle;
-
-            Rectangle rectanglePiece = new Rectangle(xMin, yMin, largeur, hauteur);
-
-            if (piece == pieceSelectionnee) {
-                rectanglePiece.setFill(Color.LIGHTGREEN);
-                rectanglePiece.setOpacity(0.55);
-                rectanglePiece.setStroke(Color.GREEN);
-                rectanglePiece.setStrokeWidth(3);
-            } else {
-                rectanglePiece.setFill(Color.LIGHTBLUE);
-                rectanglePiece.setOpacity(0.35);
-                rectanglePiece.setStroke(Color.BLUE);
-                rectanglePiece.setStrokeWidth(1.5);
-            }
-
-            pane.getChildren().add(rectanglePiece);
-
-            afficherNomPiece(piece, xMin, yMin, largeur, hauteur);
-
-            if (piece == pieceSelectionnee) {
-                afficherNomsMurs(xMin, yMin, largeur, hauteur);
+                String id = m.getIdMur();
+                // Utilisation de .contains() car le modèle renvoie "Mur Nord", "Mur Sud", etc.
+                if (id.contains("Nord")) {
+                    labelMur.setX(pcX + pcW/2 - textW/2);
+                    labelMur.setY(pcY + 12);
+                } else if (id.contains("Sud")) {
+                    labelMur.setX(pcX + pcW/2 - textW/2);
+                    labelMur.setY(pcY + pcH - 5);
+                } else if (id.contains("Est")) {
+                    labelMur.setX(pcX + pcW - textW - 5);
+                    labelMur.setY(pcY + pcH/2 + textH/4);
+                } else if (id.contains("Ouest")) {
+                    labelMur.setX(pcX + 5);
+                    labelMur.setY(pcY + pcH/2 + textH/4);
+                }
+                
+                p.getChildren().add(labelMur);
             }
         }
 
-        if (premierPoint != null) {
-            Circle pointRouge = new Circle(
-                    offsetX + premierPoint.getX() * echelle,
-                    offsetY + premierPoint.getY() * echelle,
-                    4,
-                    Color.RED
-            );
-
-            pane.getChildren().add(pointRouge);
-        }
-    }
-
-    private void afficherNomPiece(Piece piece, double xMin, double yMin, double largeur, double hauteur) {
-        Text nomPiece = new Text(piece.getUsage());
-
-        nomPiece.setX(xMin + largeur / 2 - 25);
-        nomPiece.setY(yMin + hauteur / 2);
-
-        vue.getPanePlan().getChildren().add(nomPiece);
-    }
-
-    private void afficherNomsMurs(double xMin, double yMin, double largeur, double hauteur) {
-        Label murNord = creerLabelMur("Mur Nord");
-        murNord.setLayoutX(xMin + largeur / 2 - 35);
-        murNord.setLayoutY(yMin - 10);
-
-        Label murSud = creerLabelMur("Mur Sud");
-        murSud.setLayoutX(xMin + largeur / 2 - 30);
-        murSud.setLayoutY(yMin + hauteur - 12);
-
-        Label murEst = creerLabelMur("Mur Est");
-        murEst.setLayoutX(xMin + largeur - 55);
-        murEst.setLayoutY(yMin + hauteur / 2 - 12);
-
-        Label murOuest = creerLabelMur("Mur Ouest");
-        murOuest.setLayoutX(xMin + 5);
-        murOuest.setLayoutY(yMin + hauteur / 2 - 12);
-
-        vue.getPanePlan().getChildren().addAll(
-                murNord,
-                murSud,
-                murEst,
-                murOuest
-        );
-    }
-
-    private Label creerLabelMur(String texte) {
-        Label label = new Label(texte);
-
-        label.setAlignment(Pos.CENTER);
-        label.setStyle(
-                "-fx-background-color: white;" +
-                "-fx-border-color: black;" +
-                "-fx-border-width: 1px;" +
-                "-fx-padding: 2px 6px;" +
-                "-fx-font-size: 11px;"
-        );
-
-        return label;
-    }
-
-    private String demanderUsagePiece() {
-        TextInputDialog dialog = new TextInputDialog("Pièce");
-        dialog.setTitle("Nouvelle pièce");
-        dialog.setHeaderText("Créer une pièce");
-        dialog.setContentText("Nom :");
-
-        Optional<String> res = dialog.showAndWait();
-
-        if (res.isPresent() && !res.get().trim().isEmpty()) {
-            return res.get().trim();
-        }
-
-        return "Pièce";
+        if (premierPoint != null) p.getChildren().add(new Circle(ox + premierPoint.getX() * echelle, oy + premierPoint.getY() * echelle, 4, Color.RED));
     }
 
     private void mettreAJourSidebar() {
-        vue.getListePieces().getItems().clear();
-        vue.getListePieces().getItems().addAll(appartement.getPieces());
-
-        vue.getLabelNbPieces().setText(
-                "Nombre de pièces : " + appartement.getPieces().size()
-        );
+        vue.getListePieces().getItems().setAll(appartement.getPieces());
+        vue.getLabelNbPieces().setText("Nombre de pièces : " + appartement.getPieces().size());
     }
 
     private void mettreAJourDetailsPiece() {
-        vue.getListeMurs().getItems().clear();
-
         if (pieceSelectionnee == null) {
             vue.getLabelDetailsPiece().setText("Aucune pièce sélectionnée.");
-            vue.getComboSurface().getItems().clear();
+            vue.getListeMurs().getItems().clear();
             return;
         }
-
-        String revSol = pieceSelectionnee.getRevetementSol() == null
-                ? "aucun"
-                : pieceSelectionnee.getRevetementSol().getNomRevt();
-
-        String revPlafond = pieceSelectionnee.getRevetementPlafond() == null
-                ? "aucun"
-                : pieceSelectionnee.getRevetementPlafond().getNomRevt();
-
-        String details =
-                "Nom : " + pieceSelectionnee.getUsage()
-                + "\nLargeur : " + String.format("%.2f", pieceSelectionnee.getLargeur()) + " m"
-                + "\nHauteur : " + String.format("%.2f", pieceSelectionnee.getHauteur()) + " m"
-                + "\nSurface : " + String.format("%.2f", pieceSelectionnee.getSuperficie()) + " m²"
-                + "\nRevêtement sol : " + revSol
-                + "\nRevêtement plafond : " + revPlafond;
-
-        vue.getLabelDetailsPiece().setText(details);
-
-        for (Mur mur : pieceSelectionnee.getMurs()) {
-            vue.getListeMurs().getItems().add(mur);
-        }
+        String s = String.format("Nom : %s\nSurface : %.2f m²\nSol : %s\nPlafond : %s", 
+            pieceSelectionnee.getUsage(), pieceSelectionnee.getSuperficie(),
+            pieceSelectionnee.getRevetementSol() != null ? pieceSelectionnee.getRevetementSol().getNomRevt() : "aucun",
+            pieceSelectionnee.getRevetementPlafond() != null ? pieceSelectionnee.getRevetementPlafond().getNomRevt() : "aucun");
+        vue.getLabelDetailsPiece().setText(s);
+        vue.getListeMurs().getItems().setAll(pieceSelectionnee.getMurs());
     }
 
-    private void afficherErreur(String message) {
-        Alert alert = new Alert(Alert.AlertType.ERROR);
-        alert.setHeaderText("Erreur");
-        alert.setContentText(message);
-        alert.showAndWait();
+    private void annulerSelection() { premierPoint = null; pieceSelectionnee = null; rafraichirPlan(); mettreAJourDetailsPiece(); }
+    
+    private void supprimerDernierePiece() { appartement.supprimerDernierePiece(); annulerSelection(); mettreAJourSidebar(); }
+
+    private String demanderNom() {
+        TextInputDialog d = new TextInputDialog("Pièce");
+        d.setTitle("Nouvelle pièce"); d.setHeaderText(null); d.setContentText("Nom de la pièce :");
+        return d.showAndWait().orElse("Pièce");
+    }
+
+    private void afficherErreur(String m) {
+        Alert a = new Alert(Alert.AlertType.WARNING); a.setTitle("Attention"); a.setHeaderText(null); a.setContentText(m); a.showAndWait();
     }
 }
