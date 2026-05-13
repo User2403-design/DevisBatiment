@@ -2,6 +2,7 @@
  * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
  * Click nbfs://nbhost/SystemFileSystem/Templates/Classes/Class.java to edit this template
  */
+
 package Controleur;
 import Modele.Appartement;
 import Modele.Immeuble;
@@ -38,6 +39,9 @@ public class CPlanImmeuble {
 
     private double echelle;
     private final double margeSecurite = 40.0;
+    
+    // Tolérance du magnétisme
+    private final float SEUIL_MAGNETISME = 1.0f;
 
     public CPlanImmeuble(Stage fenetre, Immeuble immeuble) {
         this.fenetre = fenetre;
@@ -164,6 +168,37 @@ public class CPlanImmeuble {
 
         echelle = Math.min(echelleX, echelleY);
     }
+    
+    /**
+     * Ajuste les coordonnées du clic pour les "coller" aux murs proches.
+     */
+    private Point appliquerMagnetisme(float xReel, float yReel) {
+        float xSnap = xReel;
+        float ySnap = yReel;
+        float distMinX = SEUIL_MAGNETISME;
+        float distMinY = SEUIL_MAGNETISME;
+
+        // Murs extérieurs de l'immeuble
+        float[] lignesX = {0, immeuble.getXmax()};
+        float[] lignesY = {0, immeuble.getYmax()};
+
+        for (float lx : lignesX) {
+            if (Math.abs(xReel - lx) < distMinX) { distMinX = Math.abs(xReel - lx); xSnap = lx; }
+        }
+        for (float ly : lignesY) {
+            if (Math.abs(yReel - ly) < distMinY) { distMinY = Math.abs(yReel - ly); ySnap = ly; }
+        }
+
+        // Murs des autres appartements sur l'étage
+        for (Appartement a : getNiveauCourant().getAppartements()) {
+            if (Math.abs(xReel - a.getXMin()) < distMinX) { distMinX = Math.abs(xReel - a.getXMin()); xSnap = a.getXMin(); }
+            if (Math.abs(xReel - a.getXMax()) < distMinX) { distMinX = Math.abs(xReel - a.getXMax()); xSnap = a.getXMax(); }
+            if (Math.abs(yReel - a.getYMin()) < distMinY) { distMinY = Math.abs(yReel - a.getYMin()); ySnap = a.getYMin(); }
+            if (Math.abs(yReel - a.getYMax()) < distMinY) { distMinY = Math.abs(yReel - a.getYMax()); ySnap = a.getYMax(); }
+        }
+
+        return new Point(xSnap, ySnap);
+    }
 
     private void gererClicSouris(double xPixel, double yPixel) {
         double offsetX = (vue.getPanePlan().getWidth() - (immeuble.getXmax() * echelle)) / 2;
@@ -177,12 +212,15 @@ public class CPlanImmeuble {
             return;
         }
 
+        // Application du magnétisme
+        Point ptClique = appliquerMagnetisme(xReel, yReel);
+
         if (premierPoint == null) {
-            premierPoint = new Point(xReel, yReel);
+            premierPoint = ptClique;
             vue.getInfoMessage().setText("Point 1 enregistré. Cliquez sur le coin opposé.");
             rafraichirPlan();
         } else {
-            deuxiemePoint = new Point(xReel, yReel);
+            deuxiemePoint = ptClique;
             finaliserAppartement();
         }
     }

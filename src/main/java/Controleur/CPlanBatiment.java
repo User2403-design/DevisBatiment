@@ -3,7 +3,6 @@
  * Click nbfs://nbhost/SystemFileSystem/Templates/Classes/Class.java to edit this template
  */
 
-
 package Controleur;
 
 import Modele.Batiment;
@@ -36,6 +35,9 @@ public class CPlanBatiment {
     // Paramètres d'affichage dynamiques
     private double echelle;
     private final double margeSecurite = 40.0; // Espace minimal aux bords du Pane
+    
+    // Tolérance du magnétisme en mètres (ex: 0.5m = 50cm)
+    private final float SEUIL_MAGNETISME = 1.0f;
 
     public CPlanBatiment(Stage fenetre, Batiment batiment) {
         this.fenetre = fenetre;
@@ -107,6 +109,37 @@ public class CPlanBatiment {
         // On garde la plus petite des deux pour que tout le bâtiment soit visible
         echelle = Math.min(echelleX, echelleY);
     }
+    
+    /**
+     * Ajuste les coordonnées du clic pour les "coller" aux murs proches.
+     */
+    private Point appliquerMagnetisme(float xReel, float yReel) {
+        float xSnap = xReel;
+        float ySnap = yReel;
+        float distMinX = SEUIL_MAGNETISME;
+        float distMinY = SEUIL_MAGNETISME;
+
+        // Bords du bâtiment (murs extérieurs)
+        float[] lignesX = {0, batiment.getXmax()};
+        float[] lignesY = {0, batiment.getYmax()};
+
+        for (float lx : lignesX) {
+            if (Math.abs(xReel - lx) < distMinX) { distMinX = Math.abs(xReel - lx); xSnap = lx; }
+        }
+        for (float ly : lignesY) {
+            if (Math.abs(yReel - ly) < distMinY) { distMinY = Math.abs(yReel - ly); ySnap = ly; }
+        }
+
+        // Bords des pièces existantes
+        for (Piece p : batiment.getPieces()) {
+            if (Math.abs(xReel - p.getXMin()) < distMinX) { distMinX = Math.abs(xReel - p.getXMin()); xSnap = p.getXMin(); }
+            if (Math.abs(xReel - p.getXMax()) < distMinX) { distMinX = Math.abs(xReel - p.getXMax()); xSnap = p.getXMax(); }
+            if (Math.abs(yReel - p.getYMin()) < distMinY) { distMinY = Math.abs(yReel - p.getYMin()); ySnap = p.getYMin(); }
+            if (Math.abs(yReel - p.getYMax()) < distMinY) { distMinY = Math.abs(yReel - p.getYMax()); ySnap = p.getYMax(); }
+        }
+
+        return new Point(xSnap, ySnap);
+    }
 
     /**
      * Convertit un clic écran en coordonnées réelles dans le bâtiment,
@@ -126,13 +159,16 @@ public class CPlanBatiment {
             vue.getInfoSurface().setText("Clic hors des murs extérieurs !");
             return;
         }
+        
+        // Application de l'assistance (magnétisme)
+        Point ptClique = appliquerMagnetisme(xReel, yReel);
 
         if (premierPoint == null) {
-            premierPoint = new Point(xReel, yReel);
+            premierPoint = ptClique;
             vue.getInfoSurface().setText("Point 1 posé. Cliquez sur le coin opposé.");
             rafraichirPlan();
         } else {
-            deuxiemePoint = new Point(xReel, yReel);
+            deuxiemePoint = ptClique;
             finaliserPiece();
         }
     }
@@ -217,5 +253,3 @@ public class CPlanBatiment {
             return resultat.orElse("Pièce");
           }
 }
-
-

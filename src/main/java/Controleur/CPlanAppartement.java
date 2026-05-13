@@ -46,6 +46,9 @@ public class CPlanAppartement {
     private double echelle = 1;
     private final double margeSecurite = 40.0;
     private int compteurOuverture = 1;
+    
+    // Tolérance du magnétisme (ex: 0.5m)
+    private final float SEUIL_MAGNETISME = 1.0f;
 
     public CPlanAppartement(Stage fenetre, Appartement appartement) {
         this.fenetre = fenetre;
@@ -188,6 +191,37 @@ public class CPlanAppartement {
 
         echelle = Math.min(ld / appartement.getLargeur(), hd / appartement.getHauteur());
     }
+    
+    /**
+     * Ajuste les coordonnées du clic pour les "coller" aux murs proches.
+     */
+    private Point appliquerMagnetisme(float xReel, float yReel) {
+        float xSnap = xReel;
+        float ySnap = yReel;
+        float distMinX = SEUIL_MAGNETISME;
+        float distMinY = SEUIL_MAGNETISME;
+
+        // Limites de l'appartement
+        float[] lignesX = {0, appartement.getLargeur()};
+        float[] lignesY = {0, appartement.getHauteur()};
+
+        for (float lx : lignesX) {
+            if (Math.abs(xReel - lx) < distMinX) { distMinX = Math.abs(xReel - lx); xSnap = lx; }
+        }
+        for (float ly : lignesY) {
+            if (Math.abs(yReel - ly) < distMinY) { distMinY = Math.abs(yReel - ly); ySnap = ly; }
+        }
+
+        // Bords des autres pièces
+        for (Piece p : appartement.getPieces()) {
+            if (Math.abs(xReel - p.getXMin()) < distMinX) { distMinX = Math.abs(xReel - p.getXMin()); xSnap = p.getXMin(); }
+            if (Math.abs(xReel - p.getXMax()) < distMinX) { distMinX = Math.abs(xReel - p.getXMax()); xSnap = p.getXMax(); }
+            if (Math.abs(yReel - p.getYMin()) < distMinY) { distMinY = Math.abs(yReel - p.getYMin()); ySnap = p.getYMin(); }
+            if (Math.abs(yReel - p.getYMax()) < distMinY) { distMinY = Math.abs(yReel - p.getYMax()); ySnap = p.getYMax(); }
+        }
+
+        return new Point(xSnap, ySnap);
+    }
 
     private void gererClicSouris(double xPx, double yPx) {
         double offsetX = (vue.getPanePlan().getWidth() - (appartement.getLargeur() * echelle)) / 2;
@@ -198,18 +232,22 @@ public class CPlanAppartement {
 
         if (xr < 0 || xr > appartement.getLargeur() || yr < 0 || yr > appartement.getHauteur()) return;
 
+        // L'utilisateur a cliqué sur une pièce existante ? (Sélection avec clic direct)
         Piece p = trouverPiece(xr, yr);
         if (p != null && premierPoint == null) {
             vue.getListePieces().getSelectionModel().select(p);
             return;
         }
 
+        // Sinon, c'est un clic pour dessiner une nouvelle pièce (Application du magnétisme)
+        Point ptClique = appliquerMagnetisme(xr, yr);
+
         if (premierPoint == null) {
-            premierPoint = new Point(xr, yr);
+            premierPoint = ptClique;
             vue.getInfoMessage().setText("Point 1 posé. Cliquez sur le coin opposé.");
             rafraichirPlan();
         } else {
-            finaliserPiece(new Point(xr, yr));
+            finaliserPiece(ptClique);
         }
     }
 
