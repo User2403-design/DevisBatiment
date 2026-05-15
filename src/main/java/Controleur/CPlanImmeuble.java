@@ -2,7 +2,6 @@
  * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
  * Click nbfs://nbhost/SystemFileSystem/Templates/Classes/Class.java to edit this template
  */
-
 package Controleur;
 
 import Modele.Appartement;
@@ -10,18 +9,21 @@ import Modele.Immeuble;
 import Modele.Niveau;
 import Modele.Point;
 import Vue.VuePlanImmeuble;
+import javafx.application.Platform;
 import javafx.scene.Scene;
 import javafx.scene.control.Alert;
+import javafx.scene.control.ButtonType;
 import javafx.scene.control.TextInputDialog;
 import javafx.scene.layout.Pane;
 import javafx.scene.paint.Color;
 import javafx.scene.shape.Circle;
+import javafx.scene.shape.Line;
 import javafx.scene.shape.Rectangle;
-import javafx.stage.Stage;
-import java.util.Optional;
-import javafx.scene.text.Text;
 import javafx.scene.text.Font;
 import javafx.scene.text.FontWeight;
+import javafx.scene.text.Text;
+import javafx.stage.Stage;
+import java.util.Optional;
 
 public class CPlanImmeuble {
 
@@ -39,7 +41,8 @@ public class CPlanImmeuble {
     private final double margeSecurite = 40.0;
     private final double seuilMagnetisme = 10.0;
 
-    private boolean modeCreationEscalier = true;
+    // Étapes : ESCALIER -> COULOIR -> APPARTEMENT
+    private String modeCreation = "ESCALIER";
 
     public CPlanImmeuble(Stage fenetre, Immeuble immeuble) {
         this.fenetre = fenetre;
@@ -49,13 +52,21 @@ public class CPlanImmeuble {
         vue = new VuePlanImmeuble();
 
         Scene scene = new Scene(vue.getRoot(), 1300, 800);
+
         fenetre.setScene(scene);
         fenetre.setTitle("Éditeur d'immeuble");
-        fenetre.setMaximized(true);
         fenetre.show();
+        fenetre.setMaximized(true);
+        fenetre.setFullScreen(false);
+
+        // On cache le bouton, car l'escalier est demandé automatiquement au début.
+        vue.getBoutonDefinirEscalier().setVisible(false);
+        vue.getBoutonDefinirEscalier().setManaged(false);
 
         calculerEchelle();
-        vue.getInfoMessage().setText("Définissez d'abord l'escalier : cliquez sur 2 points.");
+
+        vue.getInfoMessage().setText("Étape 1 : tracez l'escalier avec 2 clics.");
+
         mettreAJourAffichage();
 
         vue.getPanePlan().widthProperty().addListener((obs, oldVal, newVal) -> {
@@ -77,14 +88,6 @@ public class CPlanImmeuble {
             new CCatalogue(fenetreCatalogue);
         });
 
-        vue.getBoutonDefinirEscalier().setOnAction(e -> {
-            modeCreationEscalier = true;
-            premierPoint = null;
-            deuxiemePoint = null;
-            vue.getInfoMessage().setText("Cliquez sur 2 points pour redéfinir l'escalier.");
-            rafraichirPlan();
-        });
-
         vue.getBoutonOuvrirAppartement().setOnAction(e -> {
             Appartement appartementSelectionne = vue.getListeAppartements().getSelectionModel().getSelectedItem();
 
@@ -95,6 +98,9 @@ public class CPlanImmeuble {
 
             Stage nouvelleFenetre = new Stage();
             new CPlanAppartement(nouvelleFenetre, appartementSelectionne);
+            nouvelleFenetre.show();
+            nouvelleFenetre.setMaximized(true);
+            nouvelleFenetre.setFullScreen(false);
         });
 
         vue.getBoutonSupprimerDernierAppartement().setOnAction(e -> {
@@ -177,33 +183,36 @@ public class CPlanImmeuble {
         float xReel = (float) ((xPixel - offsetX) / echelle);
         float yReel = (float) ((yPixel - offsetY) / echelle);
 
-        xReel = appliquerMagnetisme(xReel, immeuble.getXmax());
-        yReel = appliquerMagnetisme(yReel, immeuble.getYmax());
-
         if (xReel < 0 || xReel > immeuble.getXmax() || yReel < 0 || yReel > immeuble.getYmax()) {
             vue.getInfoMessage().setText("Clic hors de l'étage.");
             return;
         }
 
-        if (immeuble.getPointEscalier1() == null || immeuble.getPointEscalier2() == null) {
-            modeCreationEscalier = true;
+        // Magnétisme seulement pour les appartements.
+        if (modeCreation.equals("APPARTEMENT")) {
+            xReel = appliquerMagnetisme(xReel, immeuble.getXmax());
+            yReel = appliquerMagnetisme(yReel, immeuble.getYmax());
         }
 
         if (premierPoint == null) {
             premierPoint = new Point(xReel, yReel);
 
-            if (modeCreationEscalier) {
-                vue.getInfoMessage().setText("Point 1 de l'escalier enregistré. Cliquez sur le coin opposé.");
+            if (modeCreation.equals("ESCALIER")) {
+                vue.getInfoMessage().setText("Point 1 de l'escalier posé. Cliquez sur le coin opposé.");
+            } else if (modeCreation.equals("COULOIR")) {
+                vue.getInfoMessage().setText("Point 1 du couloir posé. Cliquez sur le coin opposé.");
             } else {
-                vue.getInfoMessage().setText("Point 1 enregistré. Cliquez sur le coin opposé.");
+                vue.getInfoMessage().setText("Point 1 de l'appartement posé. Cliquez sur le coin opposé.");
             }
 
             rafraichirPlan();
         } else {
             deuxiemePoint = new Point(xReel, yReel);
 
-            if (modeCreationEscalier) {
-                finaliserEscalier();
+            if (modeCreation.equals("ESCALIER")) {
+                afficherApercuPuisValiderEscalier();
+            } else if (modeCreation.equals("COULOIR")) {
+                afficherApercuPuisValiderCouloir();
             } else {
                 finaliserAppartement();
             }
@@ -222,51 +231,91 @@ public class CPlanImmeuble {
         return valeur;
     }
 
-    private void finaliserEscalier() {
-        if (premierPoint.getX() == deuxiemePoint.getX() || premierPoint.getY() == deuxiemePoint.getY()) {
-            vue.getInfoMessage().setText("Erreur : escalier impossible.");
+    private boolean zoneInvisible(Point p1, Point p2) {
+        return p1.getX() == p2.getX() || p1.getY() == p2.getY();
+    }
+
+    private void afficherApercuPuisValiderEscalier() {
+        if (zoneInvisible(premierPoint, deuxiemePoint)) {
+            afficherErreur("Les deux clics donnent une zone invisible. Recommencez avec deux points différents.");
+            premierPoint = null;
             deuxiemePoint = null;
             rafraichirPlan();
             return;
         }
 
-        for (Niveau niveau : immeuble.getNiveaux()) {
-            for (Appartement appartement : niveau.getAppartements()) {
-                if (chevaucheZone(appartement, premierPoint, deuxiemePoint)) {
-                    afficherErreur("Impossible de placer l'escalier ici : il chevauche déjà un appartement.");
-                    premierPoint = null;
-                    deuxiemePoint = null;
-                    modeCreationEscalier = true;
-                    mettreAJourAffichage();
-                    return;
-                }
+        vue.getInfoMessage().setText("Aperçu de l'escalier. Confirmez si la position vous convient.");
+        rafraichirPlan();
+
+        Platform.runLater(() -> {
+            boolean ok = demanderConfirmation(
+                    "Confirmer l'escalier ?",
+                    "Vérifiez l'aperçu sur le plan. Après validation, l'escalier ne pourra plus être modifié."
+            );
+
+            if (ok) {
+                immeuble.definirEscalierCommun(premierPoint, deuxiemePoint);
+                premierPoint = null;
+                deuxiemePoint = null;
+                modeCreation = "COULOIR";
+                vue.getInfoMessage().setText("Étape 2 : tracez maintenant le couloir central lié à l'escalier.");
+                mettreAJourAffichage();
+            } else {
+                premierPoint = null;
+                deuxiemePoint = null;
+                vue.getInfoMessage().setText("Escalier annulé. Tracez-le à nouveau.");
+                rafraichirPlan();
             }
+        });
+    }
+
+    private void afficherApercuPuisValiderCouloir() {
+        if (zoneInvisible(premierPoint, deuxiemePoint)) {
+            afficherErreur("Les deux clics donnent une zone invisible. Recommencez avec deux points différents.");
+            premierPoint = null;
+            deuxiemePoint = null;
+            rafraichirPlan();
+            return;
         }
 
-        immeuble.definirEscalierCommun(premierPoint, deuxiemePoint);
+        if (!zonesSeTouchent(premierPoint, deuxiemePoint, immeuble.getPointEscalier1(), immeuble.getPointEscalier2())) {
+            afficherErreur("Le couloir doit toucher directement l'escalier.");
+            premierPoint = null;
+            deuxiemePoint = null;
+            vue.getInfoMessage().setText("Tracez le couloir : il doit toucher l'escalier.");
+            rafraichirPlan();
+            return;
+        }
 
-        vue.getInfoMessage().setText("Escalier créé en rouge sur tous les étages. Vous pouvez maintenant créer les appartements.");
+        vue.getInfoMessage().setText("Aperçu du couloir. Confirmez si la position vous convient.");
+        rafraichirPlan();
 
-        premierPoint = null;
-        deuxiemePoint = null;
-        modeCreationEscalier = false;
+        Platform.runLater(() -> {
+            boolean ok = demanderConfirmation(
+                    "Confirmer le couloir ?",
+                    "Vérifiez l'aperçu sur le plan. Après validation, le couloir ne pourra plus être modifié."
+            );
 
-        mettreAJourAffichage();
+            if (ok) {
+                immeuble.definirCouloirCommun(premierPoint, deuxiemePoint);
+                premierPoint = null;
+                deuxiemePoint = null;
+                modeCreation = "APPARTEMENT";
+                vue.getInfoMessage().setText("Escalier et couloir validés. Vous pouvez maintenant créer les appartements.");
+                mettreAJourAffichage();
+            } else {
+                premierPoint = null;
+                deuxiemePoint = null;
+                vue.getInfoMessage().setText("Couloir annulé. Tracez-le à nouveau.");
+                rafraichirPlan();
+            }
+        });
     }
 
     private void finaliserAppartement() {
-        if (immeuble.getPointEscalier1() == null || immeuble.getPointEscalier2() == null) {
-            afficherErreur("Vous devez définir l'escalier avant de créer des appartements.");
-            vue.getInfoMessage().setText("Définissez d'abord l'escalier : cliquez sur 2 points.");
+        if (!modeCreation.equals("APPARTEMENT")) {
+            afficherErreur("Vous devez d'abord définir l'escalier puis le couloir.");
             premierPoint = null;
-            deuxiemePoint = null;
-            modeCreationEscalier = true;
-            rafraichirPlan();
-            return;
-        }
-
-        if (premierPoint.getX() == deuxiemePoint.getX() || premierPoint.getY() == deuxiemePoint.getY()) {
-            vue.getInfoMessage().setText("Erreur : rectangle impossible.");
             deuxiemePoint = null;
             rafraichirPlan();
             return;
@@ -274,20 +323,23 @@ public class CPlanImmeuble {
 
         String nomAppartement = demanderNomAppartement();
 
-        Appartement nouvelAppartement = new Appartement(nomAppartement, premierPoint, deuxiemePoint);
+        // L'appartement est automatiquement ajusté pour aller du couloir jusqu'au bord extérieur.
+        Appartement nouvelAppartement = creerAppartementAjusteAuCouloir(nomAppartement, premierPoint, deuxiemePoint);
 
-        if (chevaucheEscalier(nouvelAppartement)) {
-            vue.getInfoMessage().setText("Erreur : impossible de créer un appartement sur l'escalier.");
+        if (zoneInvisible(new Point(nouvelAppartement.getXMin(), nouvelAppartement.getYMin()),
+                new Point(nouvelAppartement.getXMax(), nouvelAppartement.getYMax()))) {
+            afficherErreur("La zone choisie est invisible. Cliquez sur deux points plus espacés.");
+        } else if (chevaucheEscalier(nouvelAppartement)) {
             afficherErreur("Impossible de créer un appartement sur l'escalier.");
+        } else if (chevaucheCouloir(nouvelAppartement)) {
+            afficherErreur("Impossible de créer un appartement sur le couloir.");
         } else if (chevaucheUnAppartement(nouvelAppartement)) {
-            vue.getInfoMessage().setText("Erreur : cet appartement chevauche un autre appartement.");
+            afficherErreur("Cet appartement chevauche déjà un autre appartement.");
         } else {
             getNiveauCourant().ajouterAppartement(nouvelAppartement);
 
             vue.getInfoMessage().setText(
-                    nomAppartement + " créé ("
-                    + String.format("%.2f", nouvelAppartement.getSuperficie())
-                    + " m²)"
+                    nomAppartement + " créé automatiquement jusqu'au couloir/bord extérieur."
             );
         }
 
@@ -295,6 +347,47 @@ public class CPlanImmeuble {
         deuxiemePoint = null;
 
         mettreAJourAffichage();
+    }
+
+    private Appartement creerAppartementAjusteAuCouloir(String nom, Point p1, Point p2) {
+        Point c1 = immeuble.getPointCouloir1();
+        Point c2 = immeuble.getPointCouloir2();
+
+        float xMinCouloir = Math.min(c1.getX(), c2.getX());
+        float xMaxCouloir = Math.max(c1.getX(), c2.getX());
+        float yMinCouloir = Math.min(c1.getY(), c2.getY());
+        float yMaxCouloir = Math.max(c1.getY(), c2.getY());
+
+        float largeurCouloir = xMaxCouloir - xMinCouloir;
+        float hauteurCouloir = yMaxCouloir - yMinCouloir;
+
+        float xMin = Math.min(p1.getX(), p2.getX());
+        float xMax = Math.max(p1.getX(), p2.getX());
+        float yMin = Math.min(p1.getY(), p2.getY());
+        float yMax = Math.max(p1.getY(), p2.getY());
+
+        float centreX = (xMin + xMax) / 2;
+        float centreY = (yMin + yMax) / 2;
+
+        // Couloir vertical : les appartements vont à gauche ou à droite du couloir.
+        if (hauteurCouloir >= largeurCouloir) {
+            float centreCouloirX = (xMinCouloir + xMaxCouloir) / 2;
+
+            if (centreX < centreCouloirX) {
+                return new Appartement(nom, new Point(0, yMin), new Point(xMinCouloir, yMax));
+            } else {
+                return new Appartement(nom, new Point(xMaxCouloir, yMin), new Point(immeuble.getXmax(), yMax));
+            }
+        }
+
+        // Couloir horizontal : les appartements vont au-dessus ou en-dessous du couloir.
+        float centreCouloirY = (yMinCouloir + yMaxCouloir) / 2;
+
+        if (centreY < centreCouloirY) {
+            return new Appartement(nom, new Point(xMin, 0), new Point(xMax, yMinCouloir));
+        } else {
+            return new Appartement(nom, new Point(xMin, yMaxCouloir), new Point(xMax, immeuble.getYmax()));
+        }
     }
 
     private boolean chevaucheUnAppartement(Appartement nouvelAppartement) {
@@ -314,17 +407,18 @@ public class CPlanImmeuble {
     }
 
     private boolean chevaucheEscalier(Appartement appartement) {
-        Point p1 = getNiveauCourant().getPointEscalier1();
-        Point p2 = getNiveauCourant().getPointEscalier2();
+        return chevaucheZone(appartement, getNiveauCourant().getPointEscalier1(), getNiveauCourant().getPointEscalier2());
+    }
 
+    private boolean chevaucheCouloir(Appartement appartement) {
+        return chevaucheZone(appartement, getNiveauCourant().getPointCouloir1(), getNiveauCourant().getPointCouloir2());
+    }
+
+    private boolean chevaucheZone(Appartement appartement, Point p1, Point p2) {
         if (p1 == null || p2 == null) {
             return false;
         }
 
-        return chevaucheZone(appartement, p1, p2);
-    }
-
-    private boolean chevaucheZone(Appartement appartement, Point p1, Point p2) {
         float xMinZone = Math.min(p1.getX(), p2.getX());
         float xMaxZone = Math.max(p1.getX(), p2.getX());
         float yMinZone = Math.min(p1.getY(), p2.getY());
@@ -337,6 +431,42 @@ public class CPlanImmeuble {
                 || appartement.getYMin() >= yMaxZone;
 
         return !pasDeChevauchement;
+    }
+
+    private boolean zonesSeTouchent(Point a1, Point a2, Point b1, Point b2) {
+        if (a1 == null || a2 == null || b1 == null || b2 == null) {
+            return false;
+        }
+
+        float axMin = Math.min(a1.getX(), a2.getX());
+        float axMax = Math.max(a1.getX(), a2.getX());
+        float ayMin = Math.min(a1.getY(), a2.getY());
+        float ayMax = Math.max(a1.getY(), a2.getY());
+
+        float bxMin = Math.min(b1.getX(), b2.getX());
+        float bxMax = Math.max(b1.getX(), b2.getX());
+        float byMin = Math.min(b1.getY(), b2.getY());
+        float byMax = Math.max(b1.getY(), b2.getY());
+
+        boolean separes =
+                axMax < bxMin
+                || axMin > bxMax
+                || ayMax < byMin
+                || ayMin > byMax;
+
+        return !separes;
+    }
+
+    private boolean demanderConfirmation(String titre, String message) {
+        Alert alert = new Alert(Alert.AlertType.CONFIRMATION);
+
+        alert.setTitle(titre);
+        alert.setHeaderText(null);
+        alert.setContentText(message);
+
+        Optional<ButtonType> resultat = alert.showAndWait();
+
+        return resultat.isPresent() && resultat.get() == ButtonType.OK;
     }
 
     private void mettreAJourAffichage() {
@@ -367,14 +497,132 @@ public class CPlanImmeuble {
                 immeuble.getYmax() * echelle
         );
 
-        contour.setFill(Color.TRANSPARENT);
-        contour.setStroke(Color.BLACK);
+        contour.setFill(Color.web("#FFFDF9"));
+        contour.setStroke(Color.web("#4A4A4A"));
         contour.setStrokeWidth(3);
 
         pane.getChildren().add(contour);
 
+        dessinerGrille(pane, offsetX, offsetY);
         dessinerEscalier(pane, offsetX, offsetY);
+        dessinerCouloir(pane, offsetX, offsetY);
+        dessinerAppartements(pane, offsetX, offsetY);
+        dessinerApercu(pane, offsetX, offsetY);
+        dessinerPointEnCours(pane, offsetX, offsetY);
+    }
 
+    private void dessinerGrille(Pane pane, double offsetX, double offsetY) {
+        for (int x = 0; x <= immeuble.getXmax(); x++) {
+            Line ligne = new Line(
+                    offsetX + x * echelle,
+                    offsetY,
+                    offsetX + x * echelle,
+                    offsetY + immeuble.getYmax() * echelle
+            );
+
+            ligne.setStroke(Color.web("#E8E8E8"));
+            pane.getChildren().add(ligne);
+        }
+
+        for (int y = 0; y <= immeuble.getYmax(); y++) {
+            Line ligne = new Line(
+                    offsetX,
+                    offsetY + y * echelle,
+                    offsetX + immeuble.getXmax() * echelle,
+                    offsetY + y * echelle
+            );
+
+            ligne.setStroke(Color.web("#E8E8E8"));
+            pane.getChildren().add(ligne);
+        }
+
+        Text infoEchelle = new Text(
+                offsetX,
+                offsetY + immeuble.getYmax() * echelle + 25,
+                "Échelle : 1 carreau = 1 m"
+        );
+
+        infoEchelle.setFill(Color.web("#555555"));
+        infoEchelle.setFont(Font.font("Arial", FontWeight.BOLD, 12));
+
+        pane.getChildren().add(infoEchelle);
+    }
+
+    private void dessinerEscalier(Pane pane, double offsetX, double offsetY) {
+        dessinerZone(
+                pane,
+                offsetX,
+                offsetY,
+                getNiveauCourant().getPointEscalier1(),
+                getNiveauCourant().getPointEscalier2(),
+                "#FF8A8A",
+                "#B00020",
+                "ESCALIER"
+        );
+    }
+
+    private void dessinerCouloir(Pane pane, double offsetX, double offsetY) {
+        dessinerZone(
+                pane,
+                offsetX,
+                offsetY,
+                getNiveauCourant().getPointCouloir1(),
+                getNiveauCourant().getPointCouloir2(),
+                "#CDB4DB",
+                "#6A4C93",
+                "COULOIR"
+        );
+    }
+
+    private void dessinerApercu(Pane pane, double offsetX, double offsetY) {
+        if (premierPoint == null || deuxiemePoint == null) {
+            return;
+        }
+
+        if (modeCreation.equals("ESCALIER")) {
+            dessinerZone(pane, offsetX, offsetY, premierPoint, deuxiemePoint, "#FFB3B3", "#B00020", "APERÇU");
+        } else if (modeCreation.equals("COULOIR")) {
+            dessinerZone(pane, offsetX, offsetY, premierPoint, deuxiemePoint, "#D8B4E2", "#6A4C93", "APERÇU");
+        }
+    }
+
+    private void dessinerZone(Pane pane, double offsetX, double offsetY, Point p1, Point p2, String couleurFond, String couleurContour, String texte) {
+        if (p1 == null || p2 == null) {
+            return;
+        }
+
+        float xMin = Math.min(p1.getX(), p2.getX());
+        float xMax = Math.max(p1.getX(), p2.getX());
+        float yMin = Math.min(p1.getY(), p2.getY());
+        float yMax = Math.max(p1.getY(), p2.getY());
+
+        double largeur = (xMax - xMin) * echelle;
+        double hauteur = (yMax - yMin) * echelle;
+
+        double xRectangle = offsetX + xMin * echelle;
+        double yRectangle = offsetY + yMin * echelle;
+
+        Rectangle rectangle = new Rectangle(xRectangle, yRectangle, largeur, hauteur);
+
+        rectangle.setFill(Color.web(couleurFond));
+        rectangle.setOpacity(0.65);
+        rectangle.setStroke(Color.web(couleurContour));
+        rectangle.setStrokeWidth(2);
+
+        pane.getChildren().add(rectangle);
+
+        Text label = new Text(texte);
+
+        label.setFont(Font.font("Arial", FontWeight.BOLD, 14));
+        label.setFill(Color.web(couleurContour));
+
+        label.setX(xRectangle + largeur / 2 - 35);
+        label.setY(yRectangle + hauteur / 2);
+
+        pane.getChildren().add(label);
+    }
+
+    private void dessinerAppartements(Pane pane, double offsetX, double offsetY) {
         for (Appartement appartement : getNiveauCourant().getAppartements()) {
             Rectangle rectangleAppartement = new Rectangle(
                     offsetX + appartement.getXMin() * echelle,
@@ -383,74 +631,37 @@ public class CPlanImmeuble {
                     appartement.getHauteur() * echelle
             );
 
-            rectangleAppartement.setFill(Color.LIGHTGREEN);
-            rectangleAppartement.setOpacity(0.4);
-            rectangleAppartement.setStroke(Color.DARKGREEN);
+            rectangleAppartement.setFill(Color.web("#B8E0D2"));
+            rectangleAppartement.setOpacity(0.65);
+            rectangleAppartement.setStroke(Color.web("#52796F"));
+            rectangleAppartement.setStrokeWidth(2);
 
             pane.getChildren().add(rectangleAppartement);
         }
+    }
 
-        if (premierPoint != null) {
-            Color couleurPoint = modeCreationEscalier ? Color.RED : Color.BLUE;
-
-            Circle point1 = new Circle(
-                    offsetX + premierPoint.getX() * echelle,
-                    offsetY + premierPoint.getY() * echelle,
-                    4,
-                    couleurPoint
-            );
-
-            pane.getChildren().add(point1);
+    private void dessinerPointEnCours(Pane pane, double offsetX, double offsetY) {
+        if (premierPoint == null) {
+            return;
         }
+
+        Color couleurPoint = Color.web("#355070");
+
+        if (modeCreation.equals("ESCALIER")) {
+            couleurPoint = Color.web("#B00020");
+        } else if (modeCreation.equals("COULOIR")) {
+            couleurPoint = Color.web("#6A4C93");
+        }
+
+        Circle point1 = new Circle(
+                offsetX + premierPoint.getX() * echelle,
+                offsetY + premierPoint.getY() * echelle,
+                5,
+                couleurPoint
+        );
+
+        pane.getChildren().add(point1);
     }
-
-   private void dessinerEscalier(Pane pane, double offsetX, double offsetY) {
-
-    Point p1 = getNiveauCourant().getPointEscalier1();
-    Point p2 = getNiveauCourant().getPointEscalier2();
-
-    if (p1 == null || p2 == null) {
-        return;
-    }
-
-    float xMin = Math.min(p1.getX(), p2.getX());
-    float xMax = Math.max(p1.getX(), p2.getX());
-    float yMin = Math.min(p1.getY(), p2.getY());
-    float yMax = Math.max(p1.getY(), p2.getY());
-
-    double largeur = (xMax - xMin) * echelle;
-    double hauteur = (yMax - yMin) * echelle;
-
-    double xRectangle = offsetX + xMin * echelle;
-    double yRectangle = offsetY + yMin * echelle;
-
-    Rectangle rectangleEscalier = new Rectangle(
-            xRectangle,
-            yRectangle,
-            largeur,
-            hauteur
-    );
-
-    rectangleEscalier.setFill(Color.RED);
-    rectangleEscalier.setOpacity(0.45);
-    rectangleEscalier.setStroke(Color.DARKRED);
-    rectangleEscalier.setStrokeWidth(2);
-
-    pane.getChildren().add(rectangleEscalier);
-
-    Text texteEscalier = new Text("ESCALIER");
-
-    texteEscalier.setFont(Font.font("Arial", FontWeight.BOLD, 16));
-    texteEscalier.setFill(Color.DARKRED);
-
-    double centreX = xRectangle + largeur / 2;
-    double centreY = yRectangle + hauteur / 2;
-
-    texteEscalier.setX(centreX - 40);
-    texteEscalier.setY(centreY);
-
-    pane.getChildren().add(texteEscalier);
-}
 
     private String demanderNomAppartement() {
         TextInputDialog dialog = new TextInputDialog("Appartement");

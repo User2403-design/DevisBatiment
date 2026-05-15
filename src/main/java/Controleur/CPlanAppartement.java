@@ -26,14 +26,11 @@ import javafx.scene.text.Font;
 import javafx.scene.text.FontWeight;
 import javafx.scene.text.Text;
 import javafx.stage.Stage;
-
+import javafx.scene.shape.Line;
 import java.util.List;
 import java.util.Optional;
 
-/**
- * Contrôleur gérant la logique de l'appartement.
- * Ajout de l'ouverture du catalogue depuis le bandeau supérieur.
- */
+
 public class CPlanAppartement {
 
     private VuePlanAppartement vue;
@@ -96,6 +93,35 @@ public class CPlanAppartement {
     }
 
     // --- LOGIQUE DES FENÊTRES SECONDAIRES ---
+   
+    private void dessinerGrille(Pane pane, double offsetX, double offsetY) {
+
+    for (int x = 0; x <= appartement.getLargeur(); x++) {
+
+        Line ligne = new Line(
+                offsetX + x * echelle,
+                offsetY,
+                offsetX + x * echelle,
+                offsetY + appartement.getHauteur() * echelle
+        );
+
+        ligne.setStroke(Color.LIGHTGRAY);
+        pane.getChildren().add(ligne);
+    }
+
+    for (int y = 0; y <= appartement.getHauteur(); y++) {
+
+        Line ligne = new Line(
+                offsetX,
+                offsetY + y * echelle,
+                offsetX + appartement.getLargeur() * echelle,
+                offsetY + y * echelle
+        );
+
+        ligne.setStroke(Color.LIGHTGRAY);
+        pane.getChildren().add(ligne);
+    }
+}
 
     private void ouvrirFenetreRevetements() {
         if (pieceSelectionnee == null) {
@@ -291,7 +317,8 @@ public class CPlanAppartement {
             double pcY = oy + pc.getYMin() * echelle;
             double pcW = pc.getLargeur() * echelle;
             double pcH = pc.getHauteur() * echelle;
-
+            
+            
             // Rectangle de la pièce
             Rectangle r = new Rectangle(pcX, pcY, pcW, pcH);
             r.setFill(pc == pieceSelectionnee ? Color.LIGHTGREEN : Color.LIGHTBLUE);

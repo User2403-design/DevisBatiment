@@ -19,7 +19,6 @@ import javafx.scene.text.Font;
 public class VuePlanImmeuble {
 
     private BorderPane root;
-
     private Pane panePlan;
 
     private Label titre;
@@ -32,32 +31,33 @@ public class VuePlanImmeuble {
     private Button boutonEtageSuivant;
     private Button boutonAjouterEtage;
     private Button boutonSupprimerEtage;
-
     private Button boutonSupprimerDernierAppartement;
     private Button boutonOuvrirAppartement;
     private Button boutonFermer;
-
     private Button boutonCatalogue;
-
     private Button boutonDefinirEscalier;
 
     public VuePlanImmeuble() {
         root = new BorderPane();
+        root.setStyle("-fx-background-color: #FDF7F2;");
 
         titre = new Label("Plan de l'immeuble");
-        titre.setFont(new Font(24));
+        titre.setFont(new Font("Arial", 26));
+        titre.setStyle("-fx-text-fill: #2F3E46; -fx-font-weight: bold;");
 
         infoEtage = new Label("Étage 1");
-        infoEtage.setFont(new Font(18));
+        infoEtage.setFont(new Font("Arial", 18));
+        infoEtage.setStyle("-fx-text-fill: #52796F; -fx-font-weight: bold;");
 
-        infoMessage = new Label("Cliquez sur 2 points pour créer un appartement.");
-        infoMessage.setFont(new Font(14));
+        infoMessage = new Label("Définissez d'abord l'escalier.");
+        infoMessage.setFont(new Font("Arial", 14));
+        infoMessage.setStyle("-fx-text-fill: #555555;");
 
         VBox blocCentreHaut = new VBox(8, titre, infoEtage, infoMessage);
         blocCentreHaut.setAlignment(Pos.CENTER);
 
-        boutonCatalogue = new Button(" Consulter le Catalogue");
-        boutonCatalogue.setStyle("-fx-font-size: 14px; -fx-padding: 8 15; -fx-background-color: #2b579a; -fx-text-fill: white; -fx-cursor: hand; -fx-background-radius: 5;");
+        boutonCatalogue = new Button("Consulter le catalogue");
+        appliquerStyleBouton(boutonCatalogue, "#A2D2FF");
 
         HBox blocDroiteHaut = new HBox(boutonCatalogue);
         blocDroiteHaut.setAlignment(Pos.CENTER_RIGHT);
@@ -71,9 +71,11 @@ public class VuePlanImmeuble {
         panePlan = new Pane();
         panePlan.setPrefSize(900, 600);
         panePlan.setStyle(
-                "-fx-background-color: white;"
-                + "-fx-border-color: black;"
+                "-fx-background-color: #FFFDF9;"
+                + "-fx-border-color: #C9ADA7;"
                 + "-fx-border-width: 2px;"
+                + "-fx-border-radius: 10;"
+                + "-fx-background-radius: 10;"
         );
 
         VBox blocCentre = new VBox(panePlan);
@@ -81,35 +83,35 @@ public class VuePlanImmeuble {
         blocCentre.setAlignment(Pos.CENTER);
 
         Label labelListe = new Label("Appartements de l'étage");
-        labelListe.setFont(new Font(16));
+        labelListe.setFont(new Font("Arial", 16));
+        labelListe.setStyle("-fx-text-fill: #2F3E46; -fx-font-weight: bold;");
 
         listeAppartements = new ListView<>();
         listeAppartements.setPrefSize(260, 250);
 
         boutonOuvrirAppartement = new Button("Ouvrir l'appartement");
-        boutonOuvrirAppartement.setMaxWidth(Double.MAX_VALUE);
-
         boutonSupprimerDernierAppartement = new Button("Supprimer dernier appartement");
-        boutonSupprimerDernierAppartement.setMaxWidth(Double.MAX_VALUE);
+        boutonDefinirEscalier = new Button("Définir / refaire escalier");
 
-        boutonDefinirEscalier = new Button("Définir escalier");
-        boutonDefinirEscalier.setMaxWidth(Double.MAX_VALUE);
+        appliquerStyleBouton(boutonOuvrirAppartement, "#B8E0D2");
+        appliquerStyleBouton(boutonSupprimerDernierAppartement, "#FFC8DD");
+        appliquerStyleBouton(boutonDefinirEscalier, "#FFADAD");
 
         Label labelEtages = new Label("Gestion des étages");
-        labelEtages.setFont(new Font(16));
+        labelEtages.setFont(new Font("Arial", 16));
+        labelEtages.setStyle("-fx-text-fill: #2F3E46; -fx-font-weight: bold;");
 
         boutonEtagePrecedent = new Button("Étage précédent");
         boutonEtageSuivant = new Button("Étage suivant");
         boutonAjouterEtage = new Button("Ajouter un étage");
         boutonSupprimerEtage = new Button("Supprimer dernier étage");
-
-        boutonEtagePrecedent.setMaxWidth(Double.MAX_VALUE);
-        boutonEtageSuivant.setMaxWidth(Double.MAX_VALUE);
-        boutonAjouterEtage.setMaxWidth(Double.MAX_VALUE);
-        boutonSupprimerEtage.setMaxWidth(Double.MAX_VALUE);
-
         boutonFermer = new Button("Fermer");
-        boutonFermer.setMaxWidth(Double.MAX_VALUE);
+
+        appliquerStyleBouton(boutonEtagePrecedent, "#D8D8D8");
+        appliquerStyleBouton(boutonEtageSuivant, "#D8D8D8");
+        appliquerStyleBouton(boutonAjouterEtage, "#B8E0D2");
+        appliquerStyleBouton(boutonSupprimerEtage, "#FFC8DD");
+        appliquerStyleBouton(boutonFermer, "#D8D8D8");
 
         VBox blocDroite = new VBox(
                 12,
@@ -127,68 +129,44 @@ public class VuePlanImmeuble {
         );
 
         blocDroite.setPadding(new Insets(20));
-        blocDroite.setPrefWidth(300);
+        blocDroite.setPrefWidth(310);
         blocDroite.setAlignment(Pos.TOP_CENTER);
-        blocDroite.setStyle("-fx-background-color: #f7f7f7; -fx-border-color: #cccccc;");
+        blocDroite.setStyle(
+                "-fx-background-color: #F8EDEB;"
+                + "-fx-border-color: #E8C2CA;"
+                + "-fx-border-width: 1px;"
+        );
 
         root.setTop(blocHaut);
         root.setCenter(blocCentre);
         root.setRight(blocDroite);
     }
 
-    public BorderPane getRoot() {
-        return root;
+    // Méthode simple pour éviter de répéter le style des boutons.
+    private void appliquerStyleBouton(Button bouton, String couleur) {
+        bouton.setMaxWidth(Double.MAX_VALUE);
+        bouton.setStyle(
+                "-fx-background-color: " + couleur + ";"
+                + "-fx-text-fill: #2F3E46;"
+                + "-fx-font-size: 14px;"
+                + "-fx-font-weight: bold;"
+                + "-fx-padding: 9 15 9 15;"
+                + "-fx-cursor: hand;"
+        );
     }
 
-    public Pane getPanePlan() {
-        return panePlan;
-    }
-
-    public Label getInfoEtage() {
-        return infoEtage;
-    }
-
-    public Label getInfoMessage() {
-        return infoMessage;
-    }
-
-    public ListView<Appartement> getListeAppartements() {
-        return listeAppartements;
-    }
-
-    public Button getBoutonEtagePrecedent() {
-        return boutonEtagePrecedent;
-    }
-
-    public Button getBoutonEtageSuivant() {
-        return boutonEtageSuivant;
-    }
-
-    public Button getBoutonAjouterEtage() {
-        return boutonAjouterEtage;
-    }
-
-    public Button getBoutonSupprimerEtage() {
-        return boutonSupprimerEtage;
-    }
-
-    public Button getBoutonSupprimerDernierAppartement() {
-        return boutonSupprimerDernierAppartement;
-    }
-
-    public Button getBoutonOuvrirAppartement() {
-        return boutonOuvrirAppartement;
-    }
-
-    public Button getBoutonFermer() {
-        return boutonFermer;
-    }
-
-    public Button getBoutonCatalogue() {
-        return boutonCatalogue;
-    }
-
-    public Button getBoutonDefinirEscalier() {
-        return boutonDefinirEscalier;
-    }
+    public BorderPane getRoot() { return root; }
+    public Pane getPanePlan() { return panePlan; }
+    public Label getInfoEtage() { return infoEtage; }
+    public Label getInfoMessage() { return infoMessage; }
+    public ListView<Appartement> getListeAppartements() { return listeAppartements; }
+    public Button getBoutonEtagePrecedent() { return boutonEtagePrecedent; }
+    public Button getBoutonEtageSuivant() { return boutonEtageSuivant; }
+    public Button getBoutonAjouterEtage() { return boutonAjouterEtage; }
+    public Button getBoutonSupprimerEtage() { return boutonSupprimerEtage; }
+    public Button getBoutonSupprimerDernierAppartement() { return boutonSupprimerDernierAppartement; }
+    public Button getBoutonOuvrirAppartement() { return boutonOuvrirAppartement; }
+    public Button getBoutonFermer() { return boutonFermer; }
+    public Button getBoutonCatalogue() { return boutonCatalogue; }
+    public Button getBoutonDefinirEscalier() { return boutonDefinirEscalier; }
 }
