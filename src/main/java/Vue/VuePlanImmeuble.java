@@ -91,11 +91,11 @@ public class VuePlanImmeuble {
 
         boutonOuvrirAppartement = new Button("Ouvrir l'appartement");
         boutonSupprimerDernierAppartement = new Button("Supprimer dernier appartement");
-        boutonDefinirEscalier = new Button("Définir / refaire escalier");
+        //boutonDefinirEscalier = new Button("Définir / refaire escalier");
 
         appliquerStyleBouton(boutonOuvrirAppartement, "#B8E0D2");
         appliquerStyleBouton(boutonSupprimerDernierAppartement, "#FFC8DD");
-        appliquerStyleBouton(boutonDefinirEscalier, "#FFADAD");
+        //appliquerStyleBouton(boutonDefinirEscalier, "#FFADAD");
 
         Label labelEtages = new Label("Gestion des étages");
         labelEtages.setFont(new Font("Arial", 16));
@@ -119,7 +119,7 @@ public class VuePlanImmeuble {
                 listeAppartements,
                 boutonOuvrirAppartement,
                 boutonSupprimerDernierAppartement,
-                boutonDefinirEscalier,
+                //boutonDefinirEscalier,
                 labelEtages,
                 boutonEtagePrecedent,
                 boutonEtageSuivant,
@@ -168,5 +168,5 @@ public class VuePlanImmeuble {
     public Button getBoutonOuvrirAppartement() { return boutonOuvrirAppartement; }
     public Button getBoutonFermer() { return boutonFermer; }
     public Button getBoutonCatalogue() { return boutonCatalogue; }
-    public Button getBoutonDefinirEscalier() { return boutonDefinirEscalier; }
+    //public Button getBoutonDefinirEscalier() { return boutonDefinirEscalier; }
 }

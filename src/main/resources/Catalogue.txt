@@ -1,14 +1,14 @@
 
-# Revetement
-Revetement;Parquet;25.5
-Revetement;Carrelage;30.0
-Revetement;Moquette;15.0
-Revetement;Marbre;30.0
-Revetment;Crepi;25.0
+#Sol
+SOl;Parquet;25.5
+Sol;Carrelage;30.0
+Sol;Moquette;15.0
+Sol;Marbre;30.0
 
 # Facade
 Facade;Enduit;65.0
 Facade;Crepi;80.0
+Facade;Briques;.0
 
 # Isolant
 Isolant;Laine de verre;10.0
