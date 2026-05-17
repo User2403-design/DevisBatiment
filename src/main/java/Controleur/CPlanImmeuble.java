@@ -5,6 +5,7 @@ import Modele.Appartement;
 import Modele.Immeuble;
 import Modele.Niveau;
 import Modele.Point;
+import Modele.Stockage;
 import Vue.VuePlanImmeuble;
 import javafx.application.Platform;
 import javafx.scene.Scene;
@@ -32,6 +33,7 @@ import javafx.scene.layout.GridPane;
 import javafx.geometry.Insets;
 import Modele.GestionCatalogue;
 import Modele.Revetement;
+import javafx.scene.control.TextArea;
 
 /**
  * Contrôleur pour la gestion du plan de l'immeuble.
@@ -85,6 +87,22 @@ public class CPlanImmeuble {
         vue.getBoutonAjouterEtage().setOnAction(e -> ajouterEtage());
         vue.getBoutonSupprimerEtage().setOnAction(e -> supprimerEtage());
         vue.getBoutonFermer().setOnAction(e -> fenetre.close());
+        vue.getBoutonGenererDevis().setOnAction(e -> {
+
+    String texteDevis = Stockage.genererTexteDevis();
+
+    TextArea zoneTexte = new TextArea(texteDevis);
+    zoneTexte.setEditable(false);
+    zoneTexte.setWrapText(false);
+
+    Stage fenetreDevis = new Stage();
+    fenetreDevis.setTitle("Devis du bâtiment");
+
+    Scene scene = new Scene(zoneTexte, 900, 650);
+    fenetreDevis.setScene(scene);
+    fenetreDevis.show();
+});
+    
     }
 
     private void calculerEchelle() {

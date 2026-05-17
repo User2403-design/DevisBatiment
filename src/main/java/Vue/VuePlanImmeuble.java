@@ -36,6 +36,8 @@ public class VuePlanImmeuble {
     private Button boutonFermer;
     private Button boutonCatalogue;
     private Button boutonDefinirEscalier;
+    private Button boutonGenererDevis;
+    
     private Label labelDetailsCouloir;
 
     public VuePlanImmeuble() {
@@ -113,7 +115,8 @@ public class VuePlanImmeuble {
         boutonAjouterEtage = new Button("Ajouter un étage");
         boutonSupprimerEtage = new Button("Supprimer dernier étage");
         boutonFermer = new Button("Fermer");
-
+        boutonGenererDevis = new Button("Générer devis");
+        appliquerStyleBouton(boutonGenererDevis, "#A2D2FF");
         appliquerStyleBouton(boutonEtagePrecedent, "#D8D8D8");
         appliquerStyleBouton(boutonEtageSuivant, "#D8D8D8");
         appliquerStyleBouton(boutonAjouterEtage, "#B8E0D2");
@@ -126,6 +129,7 @@ public class VuePlanImmeuble {
                 listeAppartements,
                 boutonOuvrirAppartement,
                 boutonSupprimerDernierAppartement,
+      
                 new javafx.scene.control.Separator(), // Séparateur visuel
                 labelTitreCouloir,
                 labelDetailsCouloir,
@@ -135,6 +139,7 @@ public class VuePlanImmeuble {
                 boutonEtageSuivant,
                 boutonAjouterEtage,
                 boutonSupprimerEtage,
+                boutonGenererDevis,
                 boutonFermer
         );
 
@@ -178,9 +183,10 @@ public class VuePlanImmeuble {
     public Button getBoutonOuvrirAppartement() { return boutonOuvrirAppartement; }
     public Button getBoutonFermer() { return boutonFermer; }
     public Button getBoutonCatalogue() { return boutonCatalogue; }
-
     public Label getLabelDetailsCouloir() {
         return labelDetailsCouloir;
     }
-    
+    public Button getBoutonGenererDevis() {
+    return boutonGenererDevis;}
+  
 }

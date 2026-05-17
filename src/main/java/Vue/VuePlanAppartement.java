@@ -30,6 +30,7 @@ public class VuePlanAppartement {
     private Button boutonEffacerSelection;
     private Button boutonSupprimerDernierePiece;
     private Button boutonFermer;
+    private Button boutonGenererDevis;
 
     public VuePlanAppartement() {
 
@@ -50,7 +51,9 @@ public class VuePlanAppartement {
         boutonCatalogue = new Button("Catalogue");
         boutonOuvrirRevetements = new Button("Revêtements");
         boutonOuvrirOuvertures = new Button("Ouvertures");
-
+        boutonGenererDevis = new Button("Générer devis");
+        
+        appliquerStyleBouton(boutonGenererDevis, "#A2D2FF");
         appliquerStyleBouton(boutonCatalogue, "#A2D2FF");
         appliquerStyleBouton(boutonOuvrirRevetements, "#B8E0D2");
         appliquerStyleBouton(boutonOuvrirOuvertures, "#CDB4DB");
@@ -152,6 +155,7 @@ public class VuePlanAppartement {
                 25,
                 boutonEffacerSelection,
                 boutonSupprimerDernierePiece,
+                boutonGenererDevis,
                 boutonFermer
         );
 
@@ -232,5 +236,9 @@ public class VuePlanAppartement {
     public Button getBoutonFermer() {
         return boutonFermer;
     }
+    
+    public Button getBoutonGenererDevis() {
+    return boutonGenererDevis;
+}
 }
 

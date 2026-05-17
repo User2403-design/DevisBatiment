@@ -4,6 +4,7 @@ package Controleur;
 import Modele.Appartement;
 import Modele.GestionCatalogue;
 import Modele.Mur;
+import Modele.Stockage;
 import Modele.Ouverture;
 import Modele.Piece;
 import Modele.Point;
@@ -77,6 +78,22 @@ public class CPlanAppartement {
             Stage fenetreCatalogue = new Stage();
             new CCatalogue(fenetreCatalogue);
         });
+        
+        vue.getBoutonGenererDevis().setOnAction(e -> {
+
+    String texteDevis = Stockage.genererTexteDevis();
+
+    TextArea zoneTexte = new TextArea(texteDevis);
+    zoneTexte.setEditable(false);
+    zoneTexte.setWrapText(false);
+
+    Stage fenetreDevis = new Stage();
+    fenetreDevis.setTitle("Devis du bâtiment");
+
+    Scene scene = new Scene(zoneTexte, 900, 650);
+    fenetreDevis.setScene(scene);
+    fenetreDevis.show();
+});
     }
 
     /**
