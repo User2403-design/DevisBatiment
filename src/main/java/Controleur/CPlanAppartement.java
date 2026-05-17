@@ -339,9 +339,21 @@ public class CPlanAppartement {
         comboArticle.setPromptText("3. Sélectionner un produit");
         comboArticle.setMaxWidth(Double.MAX_VALUE);
         comboArticle.setDisable(true); // Désactivé tant que le type n'est pas choisi
+        
+                // Champs de dimensions en lecture seule
+        TextField txtL = new TextField(); 
+        txtL.setPromptText("Largeur (m)");
+        txtL.setEditable(false);
+        txtL.setStyle("-fx-background-color: #EAEAEA; -fx-text-fill: #555555; -fx-font-weight: bold;");
 
-        TextField txtL = new TextField(); txtL.setPromptText("Largeur (m)");
-        TextField txtH = new TextField(); txtH.setPromptText("Hauteur (m)");
+        TextField txtH = new TextField(); 
+        txtH.setPromptText("Hauteur (m)");
+        txtH.setEditable(false);
+        txtH.setStyle("-fx-background-color: #EAEAEA; -fx-text-fill: #555555; -fx-font-weight: bold;");
+
+
+//        TextField txtL = new TextField(); txtL.setPromptText("Largeur (m)");
+//        TextField txtH = new TextField(); txtH.setPromptText("Hauteur (m)");
 
         // Gestion de la logique de choix du mur (débloque le type d'ouverture possible)
         comboMur.setOnAction(e -> {
@@ -390,7 +402,7 @@ public class CPlanAppartement {
             // Pré-remplissage des dimensions standard pour assister l'utilisateur
             if (type.equals("Fenêtre")) {
                 txtL.setText("1.2");
-                txtH.setText("1.4");
+                txtH.setText("1.2");
             } else {
                 txtL.setText("0.9");
                 txtH.setText("2.1");
@@ -450,7 +462,7 @@ public class CPlanAppartement {
                 labelArticle,
                 comboArticle,
                 new Separator(),
-                new Label("Dimensions personnalisées :"),
+                new Label("Dimensions requises (Lecture seule) :"),
                 txtL,
                 txtH,
                 new Separator(),
