@@ -8,7 +8,7 @@ Sol;Marbre;30.0
 # Facade
 Facade;Enduit;65.0
 Facade;Crepi;80.0
-Facade;Briques;.0
+Facade;Briques;70.0
 
 # Isolant
 Isolant;Laine de verre;10.0
