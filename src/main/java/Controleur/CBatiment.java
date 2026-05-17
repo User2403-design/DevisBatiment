@@ -1,7 +1,7 @@
-/*
- * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
- * Click nbfs://nbhost/SystemFileSystem/Templates/Classes/Class.java to edit this template
- */
+////*
+// * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
+// * Click nbfs://nbhost/SystemFileSystem/Templates/Classes/Class.java to edit this template
+// */
 
 package Controleur;
 
@@ -225,3 +225,75 @@ public class CBatiment {
         alert.showAndWait();
     }
 }
+
+
+//package Controleur;
+//
+//import Modele.Appartement;
+//import Modele.Batiment;
+//import Modele.Immeuble;
+//import Modele.Maison;
+//import Vue.VueBatiment;
+//import javafx.stage.Stage;
+//
+//public class CBatiment {
+//
+//    private VueBatiment vue;
+//    private Stage fenetre;
+//    private Batiment batiment;
+//
+//    public CBatiment(Stage fenetre, Batiment batiment) {
+//        this.fenetre = fenetre;
+//        this.batiment = batiment;
+//        this.vue = new VueBatiment();
+//
+//        // On s'assure que la scène est bien configurée
+//        if (fenetre.getScene() != null) {
+//            fenetre.getScene().setRoot(vue.getRoot());
+//        }
+//        
+//        fenetre.setTitle("Gestion du Bâtiment : " + batiment.getNom());
+//
+//        initEvents();
+//        rafraichirInfos();
+//    }
+//
+//    private void initEvents() {
+//        // Bouton pour voir le plan de masse (vue de dessus extérieure)
+//        vue.getBoutonEditerPlan().setOnAction(e -> {
+//            Stage fenetrePlan = new Stage();
+//            new CPlanBatiment(fenetrePlan, batiment);
+//        });
+//
+//        // Bouton pour l'aménagement intérieur
+//        vue.getBoutonEditerAppartement().setOnAction(e -> {
+//            if (batiment instanceof Maison) {
+//                // Si c'est une maison, on édite directement son appartement unique
+//                editerAppartement(((Maison) batiment).getAppartement());
+//            } else if (batiment instanceof Immeuble) {
+//                // Si c'est un immeuble, on passe par la vue de gestion des appartements
+//                Stage fenetreImmeuble = new Stage();
+//                new CPlanImmeuble(fenetreImmeuble, (Immeuble) batiment);
+//            }
+//        });
+//
+//        vue.getBoutonRetour().setOnAction(e -> fenetre.close());
+//    }
+//
+//    private void editerAppartement(Appartement a) {
+//        if (a != null) {
+//            // true si c'est une maison, false sinon (appartement d'immeuble)
+//            boolean estMaison = (batiment instanceof Maison);
+//            new CPlanAppartement(new Stage(), a, estMaison);
+//        }
+//    }
+//
+//    private void rafraichirInfos() {
+//        String typeLogement = (batiment instanceof Maison) ? "Maison Individuelle" : "Immeuble Collectif";
+//        String infos = "Nom : " + batiment.getNom() + "\n"
+//                     + "Adresse : " + batiment.getAdresse() + "\n"
+//                     + "Type : " + typeLogement + "\n"
+//                     + "Nombre de niveaux : " + batiment.getNiveaux().size();
+//        vue.getLabelInfos().setText(infos);
+//    }
+//}

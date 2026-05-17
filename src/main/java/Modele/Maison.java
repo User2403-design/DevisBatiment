@@ -5,7 +5,7 @@
 package Modele;
 
 public class Maison extends Batiment {
-
+    
     private Appartement planMaison;
 
     public Maison(String typeBatiment, float longueur, float largeur) {
@@ -14,7 +14,8 @@ public class Maison extends Batiment {
         this.planMaison = new Appartement(
                 "Plan maison",
                 new Point(0, 0),
-                new Point(longueur, largeur)
+                new Point(longueur, largeur),
+                TypeLogement.MAISON  // Spécifier le type MAISON
         );
     }
 
@@ -25,4 +26,12 @@ public class Maison extends Batiment {
     public void setPlanMaison(Appartement planMaison) {
         this.planMaison = planMaison;
     }
+
+    /**
+     * Valide que le plan de la maison respecte les règles spécifiques
+     */
+    public boolean validerPlan() {
+        return planMaison != null && planMaison.validerPlan();
+    }
+
 }

@@ -13,13 +13,15 @@ import java.util.ArrayList;
 
 
 public class Appartement {
-
-    // Nom affiché dans la liste
+// Nom affiché dans la liste
     private String nom;
 
     // Les 2 coins du rectangle de l'appartement dans l'étage
     private Point coin1;
     private Point coin2;
+
+    // Type de logement (MAISON ou APPARTEMENT)
+    private TypeLogement typeLogement;
 
     // Liste des pièces de l'appartement
     private ArrayList<Piece> pieces;
@@ -28,8 +30,12 @@ public class Appartement {
     private Revetement revetementPlafondDefaut;
     private Revetement revetementMurDefaut;
 
+    // Porte d'entrée (pour les maisons)
+    private Ouverture porteEntree;
+
     public Appartement() {
         this.pieces = new ArrayList<>();
+        this.typeLogement = TypeLogement.APPARTEMENT;
     }
 
     public Appartement(String nom, Point coin1, Point coin2) {
@@ -37,6 +43,15 @@ public class Appartement {
         this.coin1 = coin1;
         this.coin2 = coin2;
         this.pieces = new ArrayList<>();
+        this.typeLogement = TypeLogement.APPARTEMENT;
+    }
+
+    public Appartement(String nom, Point coin1, Point coin2, TypeLogement typeLogement) {
+        this.nom = nom;
+        this.coin1 = coin1;
+        this.coin2 = coin2;
+        this.pieces = new ArrayList<>();
+        this.typeLogement = typeLogement;
     }
 
     public String getNom() {
@@ -61,6 +76,14 @@ public class Appartement {
 
     public void setCoin2(Point coin2) {
         this.coin2 = coin2;
+    }
+
+    public TypeLogement getTypeLogement() {
+        return typeLogement;
+    }
+
+    public void setTypeLogement(TypeLogement typeLogement) {
+        this.typeLogement = typeLogement;
     }
 
     public ArrayList<Piece> getPieces() {
@@ -93,6 +116,26 @@ public class Appartement {
 
     public void setRevetementMurDefaut(Revetement revetementMurDefaut) {
         this.revetementMurDefaut = revetementMurDefaut;
+    }
+
+    public Ouverture getPorteEntree() {
+        return porteEntree;
+    }
+
+    public void setPorteEntree(Ouverture porteEntree) {
+        this.porteEntree = porteEntree;
+    }
+
+    /**
+     * Vérifie si le plan respecte les règles du type de logement
+     */
+    public boolean validerPlan() {
+        if (typeLogement == TypeLogement.MAISON) {
+            // Pour une maison : vérifier qu'il existe une porte d'entrée
+            return porteEntree != null;
+        }
+        // Pour un appartement : pas de validation spécifique pour l'instant
+        return true;
     }
 
     
