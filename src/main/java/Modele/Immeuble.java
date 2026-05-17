@@ -9,13 +9,21 @@ import java.util.ArrayList;
 public class Immeuble extends Batiment {
     
     private Point pointCouloir1;
-private Point pointCouloir2;
+    private Point pointCouloir2;
 
     private ArrayList<Niveau> niveaux;
 
     // Escalier commun à tous les niveaux.
     private Point pointEscalier1;
     private Point pointEscalier2;
+    
+    // NOUVEAUX ATTRIBUTS POUR LES REVÊTEMENTS DU COULOIR
+    private Revetement revetementSolCouloir;
+    private Revetement revetementPlafondCouloir;
+    private Revetement revetementMurNordCouloir;
+    private Revetement revetementMurEstCouloir;
+    private Revetement revetementMurSudCouloir;
+    private Revetement revetementMurOuestCouloir;
 
     
 public Point getPointCouloir1() {
@@ -72,6 +80,56 @@ public void definirCouloirCommun(Point point1, Point point2) {
     public Point getPointEscalier2() {
         return pointEscalier2;
     }
+
+    public Revetement getRevetementSolCouloir() {
+        return revetementSolCouloir;
+    }
+
+    public void setRevetementSolCouloir(Revetement revetementSolCouloir) {
+        this.revetementSolCouloir = revetementSolCouloir;
+    }
+
+    public Revetement getRevetementPlafondCouloir() {
+        return revetementPlafondCouloir;
+    }
+
+    public void setRevetementPlafondCouloir(Revetement revetementPlafondCouloir) {
+        this.revetementPlafondCouloir = revetementPlafondCouloir;
+    }
+
+    public Revetement getRevetementMurNordCouloir() {
+        return revetementMurNordCouloir;
+    }
+
+    public void setRevetementMurNordCouloir(Revetement revetementMurNordCouloir) {
+        this.revetementMurNordCouloir = revetementMurNordCouloir;
+    }
+
+    public Revetement getRevetementMurEstCouloir() {
+        return revetementMurEstCouloir;
+    }
+
+    public void setRevetementMurEstCouloir(Revetement revetementMurEstCouloir) {
+        this.revetementMurEstCouloir = revetementMurEstCouloir;
+    }
+
+    public Revetement getRevetementMurSudCouloir() {
+        return revetementMurSudCouloir;
+    }
+
+    public void setRevetementMurSudCouloir(Revetement revetementMurSudCouloir) {
+        this.revetementMurSudCouloir = revetementMurSudCouloir;
+    }
+
+    public Revetement getRevetementMurOuestCouloir() {
+        return revetementMurOuestCouloir;
+    }
+
+    public void setRevetementMurOuestCouloir(Revetement revetementMurOuestCouloir) {
+        this.revetementMurOuestCouloir = revetementMurOuestCouloir;
+    }
+    
+    
 
     // Cette méthode place le même escalier sur tous les étages.
     public void definirEscalierCommun(Point point1, Point point2) {

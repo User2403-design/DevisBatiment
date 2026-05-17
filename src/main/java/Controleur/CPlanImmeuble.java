@@ -24,6 +24,14 @@ import javafx.stage.Stage;
 import java.util.Optional;
 import java.util.ArrayList;
 import java.util.List;
+import javafx.scene.control.Dialog;
+import javafx.scene.control.ButtonBar;
+import javafx.scene.control.ComboBox;
+import javafx.scene.control.Label;
+import javafx.scene.layout.GridPane;
+import javafx.geometry.Insets;
+import Modele.GestionCatalogue;
+import Modele.Revetement;
 
 /**
  * Contrôleur pour la gestion du plan de l'immeuble.
@@ -178,26 +186,110 @@ public class CPlanImmeuble {
         });
     }
 
-    private void validerCouloir() {
-        if (!zonesSeTouchent(premierPoint, deuxiemePoint, immeuble.getPointEscalier1(), immeuble.getPointEscalier2())) {
-            afficherErreur("Le couloir doit toucher l'escalier.");
-            resetPoints();
-            return;
-        }
-        
-        rafraichirPlan();
-        Platform.runLater(() -> {
-            if (demanderConfirmation("Valider le couloir ?", "Vérifiez l'aperçu. Le couloir sera identique à tous les étages.")) {
-                immeuble.definirCouloirCommun(premierPoint, deuxiemePoint);
-                modeCreation = "APPARTEMENT";
-                vue.getInfoMessage().setText("Couloir validé. Créez vos appartements.");
-                resetPoints();
-                mettreAJourAffichage();
-            } else {
-                resetPoints();
-            }
-        });
+private void validerCouloir() {
+    if (!zonesSeTouchent(premierPoint, deuxiemePoint, immeuble.getPointEscalier1(), immeuble.getPointEscalier2())) {
+        afficherErreur("Le couloir doit toucher l'escalier.");
+        resetPoints();
+        return;
     }
+    
+    rafraichirPlan();
+    Platform.runLater(() -> {
+        if (demanderConfirmation("Valider le couloir ?", "Vérifiez l'aperçu. Le couloir sera identique à tous les étages.")) {
+            immeuble.definirCouloirCommun(premierPoint, deuxiemePoint);
+            
+            // OUVERTURE DE LA BOÎTE DE DIALOGUE POUR LES REVÊTEMENTS
+            ouvrirDialogRevetementsCouloir();
+
+            modeCreation = "APPARTEMENT";
+            vue.getInfoMessage().setText("Couloir validé. Créez vos appartements.");
+            resetPoints();
+            mettreAJourAffichage();
+        } else {
+            resetPoints();
+        }
+    });
+}
+
+private void ouvrirDialogRevetementsCouloir() {
+    Dialog<ButtonType> dialog = new Dialog<>();
+    dialog.setTitle("Configuration du couloir");
+    dialog.setHeaderText("Sélectionnez les revêtements pour le couloir commun :");
+
+    ButtonType btnValider = new ButtonType("Valider", ButtonBar.ButtonData.OK_DONE);
+    dialog.getDialogPane().getButtonTypes().addAll(btnValider, ButtonType.CANCEL);
+
+    GridPane grid = new GridPane();
+    grid.setHgap(15);
+    grid.setVgap(10);
+    grid.setPadding(new Insets(20, 20, 20, 20));
+
+    // Récupération des produits du catalogue
+    GestionCatalogue catalogue = new GestionCatalogue();
+
+    ComboBox<Revetement> comboSol = new ComboBox<>();
+    comboSol.getItems().addAll(catalogue.getProduits("Sol"));
+    comboSol.setPromptText("Sélectionner un sol");
+    comboSol.setMaxWidth(Double.MAX_VALUE);
+
+    ComboBox<Revetement> comboPlafond = new ComboBox<>();
+    comboPlafond.getItems().addAll(catalogue.getProduits("CouleurPeinture"));
+    comboPlafond.setPromptText("Sélectionner une peinture");
+    comboPlafond.setMaxWidth(Double.MAX_VALUE);
+
+    ComboBox<Revetement> comboMurNord = new ComboBox<>();
+    comboMurNord.getItems().addAll(catalogue.getProduits("CouleurPeinture"));
+    comboMurNord.setPromptText("Peinture Mur Nord");
+    comboMurNord.setMaxWidth(Double.MAX_VALUE);
+
+    ComboBox<Revetement> comboMurEst = new ComboBox<>();
+    comboMurEst.getItems().addAll(catalogue.getProduits("CouleurPeinture"));
+    comboMurEst.setPromptText("Peinture Mur Est");
+    comboMurEst.setMaxWidth(Double.MAX_VALUE);
+
+    ComboBox<Revetement> comboMurSud = new ComboBox<>();
+    comboMurSud.getItems().addAll(catalogue.getProduits("CouleurPeinture"));
+    comboMurSud.setPromptText("Peinture Mur Sud");
+    comboMurSud.setMaxWidth(Double.MAX_VALUE);
+
+    ComboBox<Revetement> comboMurOuest = new ComboBox<>();
+    comboMurOuest.getItems().addAll(catalogue.getProduits("CouleurPeinture"));
+    comboMurOuest.setPromptText("Peinture Mur Ouest");
+    comboMurOuest.setMaxWidth(Double.MAX_VALUE);
+
+    // Placement des éléments dans la grille
+    grid.add(new Label("Revêtement de Sol :"), 0, 0);
+    grid.add(comboSol, 1, 0);
+    
+    grid.add(new Label("Revêtement du Plafond :"), 0, 1);
+    grid.add(comboPlafond, 1, 1);
+    
+    grid.add(new Label("Paroi Mur Nord :"), 0, 2);
+    grid.add(comboMurNord, 1, 2);
+    
+    grid.add(new Label("Paroi Mur Est :"), 0, 3);
+    grid.add(comboMurEst, 1, 3);
+    
+    grid.add(new Label("Paroi Mur Sud :"), 0, 4);
+    grid.add(comboMurSud, 1, 4);
+    
+    grid.add(new Label("Paroi Mur Ouest :"), 0, 5);
+    grid.add(comboMurOuest, 1, 5);
+
+    dialog.getDialogPane().setContent(grid);
+
+    // Attente de la validation par l'utilisateur
+    Optional<ButtonType> result = dialog.showAndWait();
+    if (result.isPresent() && result.get() == btnValider) {
+        // Enregistrement des choix dans l'immeuble
+        immeuble.setRevetementSolCouloir(comboSol.getValue());
+        immeuble.setRevetementPlafondCouloir(comboPlafond.getValue());
+        immeuble.setRevetementMurNordCouloir(comboMurNord.getValue());
+        immeuble.setRevetementMurEstCouloir(comboMurEst.getValue());
+        immeuble.setRevetementMurSudCouloir(comboMurSud.getValue());
+        immeuble.setRevetementMurOuestCouloir(comboMurOuest.getValue());
+    }
+}
 
     private void resetPoints() { 
         premierPoint = null; 
@@ -250,11 +342,31 @@ public class CPlanImmeuble {
         mettreAJourAffichage();
     }
     
-    private void mettreAJourAffichage() {
-        vue.getInfoEtage().setText("Étage " + getNiveauCourant().getNumeroNiveau() + " / " + immeuble.getNbreNiveaux());
-        vue.getListeAppartements().getItems().setAll(getNiveauCourant().getAppartements());
-        rafraichirPlan();
+private void mettreAJourAffichage() {
+    vue.getInfoEtage().setText("Étage " + getNiveauCourant().getNumeroNiveau() + " / " + immeuble.getNbreNiveaux());
+    vue.getListeAppartements().getItems().setAll(getNiveauCourant().getAppartements());
+    
+    // MISE À JOUR ERGONOMIQUE DES MATÉRIAUX DU COULOIR
+    if (immeuble.getPointCouloir1() == null) {
+        vue.getLabelDetailsCouloir().setText("Aucun couloir défini pour le moment.");
+    } else {
+        String details = String.format(
+            "• Sol : %s\n" +
+            "• Plafond : %s\n" +
+            "• Murs N/E : %s | %s\n" +
+            "• Murs S/O : %s | %s",
+            immeuble.getRevetementSolCouloir() != null ? immeuble.getRevetementSolCouloir().getNomRevt() : "Aucun",
+            immeuble.getRevetementPlafondCouloir() != null ? immeuble.getRevetementPlafondCouloir().getNomRevt() : "Aucun",
+            immeuble.getRevetementMurNordCouloir() != null ? immeuble.getRevetementMurNordCouloir().getNomRevt() : "Aucun",
+            immeuble.getRevetementMurEstCouloir() != null ? immeuble.getRevetementMurEstCouloir().getNomRevt() : "Aucun",
+            immeuble.getRevetementMurSudCouloir() != null ? immeuble.getRevetementMurSudCouloir().getNomRevt() : "Aucun",
+            immeuble.getRevetementMurOuestCouloir() != null ? immeuble.getRevetementMurOuestCouloir().getNomRevt() : "Aucun"
+        );
+        vue.getLabelDetailsCouloir().setText(details);
     }
+
+    rafraichirPlan();
+}
 
     private void rafraichirPlan() {
         Pane pane = vue.getPanePlan();

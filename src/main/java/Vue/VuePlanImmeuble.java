@@ -36,6 +36,7 @@ public class VuePlanImmeuble {
     private Button boutonFermer;
     private Button boutonCatalogue;
     private Button boutonDefinirEscalier;
+    private Label labelDetailsCouloir;
 
     public VuePlanImmeuble() {
         root = new BorderPane();
@@ -91,15 +92,21 @@ public class VuePlanImmeuble {
 
         boutonOuvrirAppartement = new Button("Ouvrir l'appartement");
         boutonSupprimerDernierAppartement = new Button("Supprimer dernier appartement");
-        //boutonDefinirEscalier = new Button("Définir / refaire escalier");
 
         appliquerStyleBouton(boutonOuvrirAppartement, "#B8E0D2");
         appliquerStyleBouton(boutonSupprimerDernierAppartement, "#FFC8DD");
-        //appliquerStyleBouton(boutonDefinirEscalier, "#FFADAD");
 
         Label labelEtages = new Label("Gestion des étages");
         labelEtages.setFont(new Font("Arial", 16));
         labelEtages.setStyle("-fx-text-fill: #2F3E46; -fx-font-weight: bold;");
+        Label labelTitreCouloir = new Label("Matériaux du couloir");
+        labelTitreCouloir.setFont(new Font("Arial", 16));
+        labelTitreCouloir.setStyle("-fx-text-fill: #2F3E46; -fx-font-weight: bold;");
+
+        labelDetailsCouloir = new Label("Aucun couloir défini pour le moment.");
+        labelDetailsCouloir.setWrapText(true);
+        labelDetailsCouloir.setMinHeight(70);
+        labelDetailsCouloir.setStyle("-fx-text-fill: #555555; -fx-font-family: 'Arial'; -fx-font-size: 13px;");
 
         boutonEtagePrecedent = new Button("Étage précédent");
         boutonEtageSuivant = new Button("Étage suivant");
@@ -119,7 +126,10 @@ public class VuePlanImmeuble {
                 listeAppartements,
                 boutonOuvrirAppartement,
                 boutonSupprimerDernierAppartement,
-                //boutonDefinirEscalier,
+                new javafx.scene.control.Separator(), // Séparateur visuel
+                labelTitreCouloir,
+                labelDetailsCouloir,
+                new javafx.scene.control.Separator(), // Séparateur visuel
                 labelEtages,
                 boutonEtagePrecedent,
                 boutonEtageSuivant,
@@ -168,5 +178,9 @@ public class VuePlanImmeuble {
     public Button getBoutonOuvrirAppartement() { return boutonOuvrirAppartement; }
     public Button getBoutonFermer() { return boutonFermer; }
     public Button getBoutonCatalogue() { return boutonCatalogue; }
-    //public Button getBoutonDefinirEscalier() { return boutonDefinirEscalier; }
+
+    public Label getLabelDetailsCouloir() {
+        return labelDetailsCouloir;
+    }
+    
 }
