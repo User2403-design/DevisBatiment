@@ -33,6 +33,11 @@ public class Appartement {
     // Porte d'entrée (pour les maisons)
     private Ouverture porteEntree;
 
+     // Pour la zone vide restante pas comprise dans pièce
+    private Revetement revetementSolZoneRestante;
+    private Revetement revetementMurZoneRestante;
+    private Revetement revetementPlafondZoneRestante;
+   
     public Appartement() {
         this.pieces = new ArrayList<>();
         this.typeLogement = TypeLogement.APPARTEMENT;
@@ -54,6 +59,31 @@ public class Appartement {
         this.typeLogement = typeLogement;
     }
 
+    public Revetement getRevetementSolZoneRestante() {
+        return revetementSolZoneRestante;
+    }
+
+    public void setRevetementSolZoneRestante(Revetement revetementSolZoneRestante) {
+        this.revetementSolZoneRestante = revetementSolZoneRestante;
+    }
+
+    public Revetement getRevetementMurZoneRestante() {
+        return revetementMurZoneRestante;
+    }
+
+    public void setRevetementMurZoneRestante(Revetement revetementMurZoneRestante) {
+        this.revetementMurZoneRestante = revetementMurZoneRestante;
+    }
+
+    public Revetement getRevetementPlafondZoneRestante() {
+        return revetementPlafondZoneRestante;
+    }
+
+    public void setRevetementPlafondZoneRestante(Revetement revetementPlafondZoneRestante) {
+        this.revetementPlafondZoneRestante = revetementPlafondZoneRestante;
+    }
+
+    
     public String getNom() {
         return nom;
     }

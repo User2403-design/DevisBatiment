@@ -51,7 +51,7 @@ public class VuePlanAppartement {
         boutonCatalogue = new Button("Catalogue");
         boutonOuvrirRevetements = new Button("Revêtements");
         boutonOuvrirOuvertures = new Button("Ouvertures");
-        boutonGenererDevis = new Button("Générer devis");
+        boutonGenererDevis = new Button("Zone restante");
         
         appliquerStyleBouton(boutonGenererDevis, "#A2D2FF");
         appliquerStyleBouton(boutonCatalogue, "#A2D2FF");

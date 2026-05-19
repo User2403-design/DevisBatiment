@@ -10,17 +10,17 @@ Mail             : contact@BatirandCo-btp.fr
 INFORMATIONS GENERALES
 ------------------------------------------------------------------------------------
 Type du bâtiment      : Immeuble
-Surface totale        : 1089,00 m²
-Nombre de niveaux     : 1
+Surface totale        : 625,00 m²
+Nombre de niveaux     : 3
 
 FACADES EXTERNES
 ------------------------------------------------------------------------------------
 Désignation                            Unité      Quantité      Prix U.        Total
 ------------------------------------------------------------------------------------
-Revêtement façade - Crepi              m²           330,00      80,00 €   26400,00 €
-Isolant extérieur - Polystyrène        m²           330,00      12,50 €    4125,00 €
+Revêtement façade - Enduit             m²           250,00      65,00 €   16250,00 €
+Isolant extérieur - Polystyrène        m²           250,00      12,50 €    3125,00 €
 
-Sous-total façades : 30525,00 €
+Sous-total façades : 19375,00 €
 
 INTERIEUR
 ------------------------------------------------------------------------------------
@@ -29,44 +29,122 @@ NIVEAU 1
 ====================================================================================
 
 Appartement / logement : Appartement 1
-Surface : 209,00 m²
+Surface : 88,76 m²
+Désignation                            Unité      Quantité      Prix U.        Total
+------------------------------------------------------------------------------------
+
+Zone restante
+
+Sous-total logement : 0,00 €
+
+Appartement / logement : Appartement 2
+Surface : 102,85 m²
+Désignation                            Unité      Quantité      Prix U.        Total
+------------------------------------------------------------------------------------
+
+Zone restante
+
+Sous-total logement : 0,00 €
+
+Appartement / logement : Appartement 3
+Surface : 73,67 m²
+Désignation                            Unité      Quantité      Prix U.        Total
+------------------------------------------------------------------------------------
+
+Zone restante
+
+Sous-total logement : 0,00 €
+
+Appartement / logement : Appartement 4
+Surface : 226,39 m²
+Désignation                            Unité      Quantité      Prix U.        Total
+------------------------------------------------------------------------------------
+
+Zone restante
+
+Sous-total logement : 0,00 €
+
+NIVEAU 2
+====================================================================================
+
+Appartement / logement : Appartement 1
+Surface : 226,39 m²
+Désignation                            Unité      Quantité      Prix U.        Total
+------------------------------------------------------------------------------------
+
+Zone restante
+
+Sous-total logement : 0,00 €
+
+Appartement / logement : Appartement 2
+Surface : 268,06 m²
+Désignation                            Unité      Quantité      Prix U.        Total
+------------------------------------------------------------------------------------
+
+Zone restante
+
+Sous-total logement : 0,00 €
+
+NIVEAU 3
+====================================================================================
+
+Appartement / logement : Appartement 1
+Surface : 268,06 m²
 Désignation                            Unité      Quantité      Prix U.        Total
 ------------------------------------------------------------------------------------
 
 Pièce : Pièce
-Sol - Carrelage                        m²            39,34      30,00 €    1180,14 €
-Isolant sol - Polystyrène              m²            39,34      12,50 €     491,72 €
-Plafond - Blanc                        m²            39,34       5,50 €     216,36 €
-Mur Nord - Blanc                       m²            16,16       5,50 €      88,89 €
-Mur Nord - isolant Polystyrène         m²            16,16      12,50 €     202,02 €
-Fenêtre - DoubleVitrage                u              1,00     250,00 €     250,00 €
-Mur Est - Rouge                        m²            13,97       6,00 €      83,81 €
-Mur Est - isolant Polystyrène          m²            13,97      12,50 €     174,60 €
-Mur Sud - Rouge                        m²            15,71       6,00 €      94,27 €
-Porte - Verre                          u              1,00     200,00 €     200,00 €
 
-Sous-total logement : 2981,81 €
+Pièce : Pièce
+Sol - Carrelage                        m²            55,87      30,00 €    1676,17 €
+Isolant plafond - Polystyrène          m²            55,87      12,50 €     698,40 €
+
+Pièce : Pièce
+Isolant plafond - Polystyrène          m²            28,45      12,50 €     355,65 €
+Fenêtre - DoubleVitrage                u              1,00     250,00 €     250,00 €
+
+Pièce : Pièce
+
+Pièce : Pièce
+
+Zone restante
+Zone restante - sol - Carrelage        m²           113,20      30,00 €    3396,05 €
+Zone restante - murs - Rouge           m²           463,07       6,00 €    2778,41 €
+Zone restante - plafond - Bleu         m²           113,20       6,00 €     679,21 €
+
+Sous-total logement : 9833,90 €
+
+Appartement / logement : Appartement 2
+Surface : 226,39 m²
+Désignation                            Unité      Quantité      Prix U.        Total
+------------------------------------------------------------------------------------
+
+Pièce : Pièce
+
+Zone restante
+
+Sous-total logement : 0,00 €
 
 ESCALIER
 ------------------------------------------------------------------------------------
 Désignation                            Unité      Quantité      Prix U.        Total
 ------------------------------------------------------------------------------------
-Escalier intérieur                     u                 1    3500,00 €    3500,00 €
+Escalier intérieur                     u                 3    3500,00 €   10500,00 €
 
-Sous-total escalier : 3500,00 €
+Sous-total escalier : 10500,00 €
 
 COULOIRS
 ------------------------------------------------------------------------------------
-Revêtement sol      : Moquette - 15,00 €/m²
-Revêtement plafond  : Bleu - 6,00 €/m²
-Mur Nord            : Blanc - 5,50 €/m²
-Mur Est             : Rouge - 6,00 €/m²
-Mur Sud             : Rose - 6,00 €/m²
-Mur Ouest           : Brun - 6,00 €/m²
+Revêtement sol      : aucun
+Revêtement plafond  : aucun
+Mur Nord            : aucun
+Mur Est             : aucun
+Mur Sud             : aucun
+Mur Ouest           : aucun
 Tarif inclus dans le coût global des murs.
 
 ====================================================================================
-                                                      TOTAL HT : 37006,81 €
-                                                        TVA 20% : 7401,36 €
-                                                     TOTAL TTC : 44408,17 €
+                                                      TOTAL HT : 39708,90 €
+                                                        TVA 20% : 7941,78 €
+                                                     TOTAL TTC : 47650,68 €
 ====================================================================================

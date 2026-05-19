@@ -430,13 +430,81 @@ public class Stockage {
                     porte.getArticle().getPrixRevt()
             );
         }
+double surfaceZoneRestante = calculerSurfaceZoneRestante(appartement);
+double surfaceMursZoneRestante = calculerSurfaceMursZoneRestante(appartement, hauteurPlafond);
 
+if (surfaceZoneRestante > 0) {
+    devis.append("\nZone restante\n");
+
+    if (appartement.getRevetementSolZoneRestante() != null) {
+        sousTotalAppartement += ajouterLigne(
+                devis,
+                "Zone restante - sol - " + appartement.getRevetementSolZoneRestante().getNomRevt(),
+                "m²",
+                surfaceZoneRestante,
+                appartement.getRevetementSolZoneRestante().getPrixRevt()
+        );
+    }
+
+    if (appartement.getRevetementMurZoneRestante() != null) {
+        sousTotalAppartement += ajouterLigne(
+                devis,
+                "Zone restante - murs - " + appartement.getRevetementMurZoneRestante().getNomRevt(),
+                "m²",
+                surfaceMursZoneRestante,
+                appartement.getRevetementMurZoneRestante().getPrixRevt()
+        );
+    }
+
+    if (appartement.getRevetementPlafondZoneRestante() != null) {
+        sousTotalAppartement += ajouterLigne(
+                devis,
+                "Zone restante - plafond - " + appartement.getRevetementPlafondZoneRestante().getNomRevt(),
+                "m²",
+                surfaceZoneRestante,
+                appartement.getRevetementPlafondZoneRestante().getPrixRevt()
+        );
+    }
+}
         devis.append("\nSous-total logement : ")
                 .append(format(sousTotalAppartement))
                 .append(" €\n");
 
         return sousTotalAppartement;
     }
+
+    private static double calculerSurfaceZoneRestante(Appartement appartement) {
+    double surfacePieces = 0;
+
+    for (Object objPiece : appartement.getPieces()) {
+        Piece piece = (Piece) objPiece;
+        surfacePieces += piece.getSuperficie();
+    }
+
+    double surfaceRestante = appartement.getSuperficie() - surfacePieces;
+
+    if (surfaceRestante < 0) {
+        return 0;
+    }
+
+    return surfaceRestante;
+}
+
+private static double calculerPerimetreZoneRestante(Appartement appartement) {
+    double perimetreAppartement = 2 * (appartement.getLargeur() + appartement.getHauteur());
+    double perimetrePieces = 0;
+
+    for (Object objPiece : appartement.getPieces()) {
+        Piece piece = (Piece) objPiece;
+        perimetrePieces += 2 * (piece.getLargeur() + piece.getHauteur());
+    }
+
+    return perimetreAppartement + perimetrePieces;
+}
+
+private static double calculerSurfaceMursZoneRestante(Appartement appartement, double hauteurPlafond) {
+    return calculerPerimetreZoneRestante(appartement) * hauteurPlafond;
+}
 
     private static double ajouterLigne(
             StringBuilder devis,
