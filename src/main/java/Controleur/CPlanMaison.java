@@ -194,11 +194,14 @@ public class CPlanMaison {
                 afficherErreur("Veuillez choisir un revêtement pour le sol, les murs et le plafond.");
                 return;
             }
+revetementSolZoneRestante = comboSol.getValue();
+revetementMurZoneRestante = comboMur.getValue();
+revetementPlafondZoneRestante = comboPlafond.getValue();
 
-            appartement.setRevetementSolZoneRestante(comboSol.getValue());
-            appartement.setRevetementMurZoneRestante(comboMur.getValue());
-            appartement.setRevetementPlafondZoneRestante(comboPlafond.getValue());
-
+appartement.setRevetementSolZoneRestante(revetementSolZoneRestante);
+appartement.setRevetementMurZoneRestante(revetementMurZoneRestante);
+appartement.setRevetementPlafondZoneRestante(revetementPlafondZoneRestante);
+            
             popup.close();
             afficherDevisAvecZoneRestante();
         });
@@ -214,28 +217,6 @@ public class CPlanMaison {
     // AJOUT : affiche le devis normal + la zone restante
     private void afficherDevisAvecZoneRestante() {
         String texteDevis = Stockage.genererTexteDevis();
-
-        if (calculerSurfaceZoneRestante() > 0) {
-            texteDevis += "\n\n===== Zone restante =====\n";
-            texteDevis += String.format("Surface sol : %.2f m²\n", calculerSurfaceZoneRestante());
-            texteDevis += String.format("Surface plafond : %.2f m²\n", calculerSurfaceZoneRestante());
-            texteDevis += String.format("Surface murs : %.2f m²\n", calculerSurfaceMursZoneRestante());
-
-            texteDevis += "\nRevêtement sol : "
-                    + revetementSolZoneRestante.getNomRevt()
-                    + " - "
-                    + String.format("%.2f €", revetementSolZoneRestante.getPrixRevt() * calculerSurfaceZoneRestante());
-
-            texteDevis += "\nRevêtement murs : "
-                    + revetementMurZoneRestante.getNomRevt()
-                    + " - "
-                    + String.format("%.2f €", revetementMurZoneRestante.getPrixRevt() * calculerSurfaceMursZoneRestante());
-
-            texteDevis += "\nRevêtement plafond : "
-                    + revetementPlafondZoneRestante.getNomRevt()
-                    + " - "
-                    + String.format("%.2f €", revetementPlafondZoneRestante.getPrixRevt() * calculerSurfaceZoneRestante());
-        }
 
         TextArea zoneTexte = new TextArea(texteDevis);
         zoneTexte.setEditable(false);

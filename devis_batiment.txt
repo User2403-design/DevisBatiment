@@ -9,142 +9,38 @@ Mail             : contact@BatirandCo-btp.fr
 
 INFORMATIONS GENERALES
 ------------------------------------------------------------------------------------
-Type du bâtiment      : Immeuble
+Type du bâtiment      : Maison
 Surface totale        : 625,00 m²
-Nombre de niveaux     : 3
+Nombre de niveaux     : 0
 
 FACADES EXTERNES
 ------------------------------------------------------------------------------------
 Désignation                            Unité      Quantité      Prix U.        Total
 ------------------------------------------------------------------------------------
-Revêtement façade - Enduit             m²           250,00      65,00 €   16250,00 €
+Revêtement façade - Crepi              m²           250,00      80,00 €   20000,00 €
 Isolant extérieur - Polystyrène        m²           250,00      12,50 €    3125,00 €
 
-Sous-total façades : 19375,00 €
+Sous-total façades : 23125,00 €
 
 INTERIEUR
 ------------------------------------------------------------------------------------
 
-NIVEAU 1
-====================================================================================
-
-Appartement / logement : Appartement 1
-Surface : 88,76 m²
-Désignation                            Unité      Quantité      Prix U.        Total
-------------------------------------------------------------------------------------
-
-Zone restante
-
-Sous-total logement : 0,00 €
-
-Appartement / logement : Appartement 2
-Surface : 102,85 m²
-Désignation                            Unité      Quantité      Prix U.        Total
-------------------------------------------------------------------------------------
-
-Zone restante
-
-Sous-total logement : 0,00 €
-
-Appartement / logement : Appartement 3
-Surface : 73,67 m²
-Désignation                            Unité      Quantité      Prix U.        Total
-------------------------------------------------------------------------------------
-
-Zone restante
-
-Sous-total logement : 0,00 €
-
-Appartement / logement : Appartement 4
-Surface : 226,39 m²
-Désignation                            Unité      Quantité      Prix U.        Total
-------------------------------------------------------------------------------------
-
-Zone restante
-
-Sous-total logement : 0,00 €
-
-NIVEAU 2
-====================================================================================
-
-Appartement / logement : Appartement 1
-Surface : 226,39 m²
-Désignation                            Unité      Quantité      Prix U.        Total
-------------------------------------------------------------------------------------
-
-Zone restante
-
-Sous-total logement : 0,00 €
-
-Appartement / logement : Appartement 2
-Surface : 268,06 m²
-Désignation                            Unité      Quantité      Prix U.        Total
-------------------------------------------------------------------------------------
-
-Zone restante
-
-Sous-total logement : 0,00 €
-
-NIVEAU 3
-====================================================================================
-
-Appartement / logement : Appartement 1
-Surface : 268,06 m²
-Désignation                            Unité      Quantité      Prix U.        Total
-------------------------------------------------------------------------------------
-
-Pièce : Pièce
-
-Pièce : Pièce
-Sol - Carrelage                        m²            55,87      30,00 €    1676,17 €
-Isolant plafond - Polystyrène          m²            55,87      12,50 €     698,40 €
-
-Pièce : Pièce
-Isolant plafond - Polystyrène          m²            28,45      12,50 €     355,65 €
-Fenêtre - DoubleVitrage                u              1,00     250,00 €     250,00 €
-
-Pièce : Pièce
-
-Pièce : Pièce
-
-Zone restante
-Zone restante - sol - Carrelage        m²           113,20      30,00 €    3396,05 €
-Zone restante - murs - Rouge           m²           463,07       6,00 €    2778,41 €
-Zone restante - plafond - Bleu         m²           113,20       6,00 €     679,21 €
-
-Sous-total logement : 9833,90 €
-
-Appartement / logement : Appartement 2
-Surface : 226,39 m²
+Appartement / logement : Plan maison
+Surface : 625,00 m²
 Désignation                            Unité      Quantité      Prix U.        Total
 ------------------------------------------------------------------------------------
 
 Pièce : Pièce
 
 Zone restante
+Zone restante - sol - Carrelage        m²           515,24      30,00 €   15457,30 €
+Zone restante - murs - Rouge           m²           355,49       6,00 €    2132,91 €
+Zone restante - plafond - Rouge        m²           515,24       6,00 €    3091,46 €
 
-Sous-total logement : 0,00 €
-
-ESCALIER
-------------------------------------------------------------------------------------
-Désignation                            Unité      Quantité      Prix U.        Total
-------------------------------------------------------------------------------------
-Escalier intérieur                     u                 3    3500,00 €   10500,00 €
-
-Sous-total escalier : 10500,00 €
-
-COULOIRS
-------------------------------------------------------------------------------------
-Revêtement sol      : aucun
-Revêtement plafond  : aucun
-Mur Nord            : aucun
-Mur Est             : aucun
-Mur Sud             : aucun
-Mur Ouest           : aucun
-Tarif inclus dans le coût global des murs.
+Sous-total logement : 20681,67 €
 
 ====================================================================================
-                                                      TOTAL HT : 39708,90 €
-                                                        TVA 20% : 7941,78 €
-                                                     TOTAL TTC : 47650,68 €
+                                                      TOTAL HT : 43806,67 €
+                                                        TVA 20% : 8761,33 €
+                                                     TOTAL TTC : 52568,00 €
 ====================================================================================
