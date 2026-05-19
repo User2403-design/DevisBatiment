@@ -1,4 +1,7 @@
-///////2eme modif : ajout des articles d'ouvertures
+///*
+// * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
+// * Click nbfs://nbhost/SystemFileSystem/Templates/Classes/Class.java to edit this template
+// */
 //package Controleur;
 //
 //import Modele.Appartement;
@@ -25,8 +28,11 @@
 //import javafx.stage.Stage;
 //import java.util.List;
 //
-//public class CPlanAppartement {
-//
+///**
+// *
+// * @author seb12
+// */
+//public class CPlanMaison {
 //    private VuePlanAppartement vue;
 //    private Stage fenetre;
 //    private Appartement appartement;
@@ -40,7 +46,8 @@
 //    
 //    private final double SEUIL_MAGNETISME_PIXELS = 20.0;
 //
-//    public CPlanAppartement(Stage fenetre, Appartement appartement) {
+//    public CPlanMaison(Stage fenetre, Appartement appartement) {
+//        
 //        this.fenetre = fenetre;
 //        this.appartement = appartement;
 //        this.catalogue = new GestionCatalogue();
@@ -682,9 +689,13 @@
 //    private void afficherErreur(String m) {
 //        Alert a = new Alert(Alert.AlertType.WARNING); a.setTitle("Attention"); a.setHeaderText(null); a.setContentText(m); a.showAndWait();
 //    }
+//    
 //}
-//
 
+/*
+ * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
+ * Click nbfs://nbhost/SystemFileSystem/Templates/Classes/Class.java to edit this template
+ */
 package Controleur;
 
 import Modele.Appartement;
@@ -695,7 +706,7 @@ import Modele.Ouverture;
 import Modele.Piece;
 import Modele.Point;
 import Modele.Revetement;
-import Vue.VuePlanAppartement;
+import Vue.VuePlanMaison; // Utilisation de la vue dédiée à la maison
 import javafx.geometry.Insets;
 import javafx.geometry.Pos;
 import javafx.scene.Scene;
@@ -711,9 +722,12 @@ import javafx.scene.text.Text;
 import javafx.stage.Stage;
 import java.util.List;
 
-public class CPlanAppartement {
-
-    private VuePlanAppartement vue;
+/**
+ *
+ * @author seb12
+ */
+public class CPlanMaison {
+    private VuePlanMaison vue; // Correction de la classe de la vue
     private Stage fenetre;
     private Appartement appartement;
     private GestionCatalogue catalogue;
@@ -725,19 +739,17 @@ public class CPlanAppartement {
     private int compteurOuverture = 1;
     
     private final double SEUIL_MAGNETISME_PIXELS = 20.0;
-    
-    // Ajout d'une propriété pour retenir l'emplacement obligatoire du couloir
-    private String coteCouloir;
 
-    public CPlanAppartement(Stage fenetre, Appartement appartement) {
+    public CPlanMaison(Stage fenetre, Appartement appartement) {
+        
         this.fenetre = fenetre;
         this.appartement = appartement;
         this.catalogue = new GestionCatalogue();
-        this.vue = new VuePlanAppartement();
+        this.vue = new VuePlanMaison(); // Correction de l'instanciation
 
         Scene scene = new Scene(vue.getRoot(), 1300, 850);
         fenetre.setScene(scene);
-        fenetre.setTitle("Édition du logement : " + appartement.getNom());
+        fenetre.setTitle("Édition de la Maison : " + appartement.getNom());
         fenetre.setMaximized(true);
         fenetre.show();
 
@@ -746,32 +758,14 @@ public class CPlanAppartement {
         rafraichirPlan();
         mettreAJourSidebar();
 
-        // Contrainte immédiate avant le dessin des pièces
-        if (appartement.getPieces().isEmpty() && coteCouloir == null) {
-            demanderCoteCouloir();
+        // Message informatif d'accueil pour guider l'utilisateur
+        if (appartement.getPieces().isEmpty() && appartement.getPorteEntree() == null) {
+            Alert info = new Alert(Alert.AlertType.INFORMATION);
+            info.setTitle("Configuration de la Maison");
+            info.setHeaderText("Porte d'entrée requise");
+            info.setContentText("Pensez à placer une première porte sur l'une des façades extérieures afin de valider la porte d'entrée principale.");
+            info.show();
         }
-    }
-
-    /**
-     * Ouvre une boîte de choix pour définir l'orientation du couloir d'accès.
-     */
-    private void demanderCoteCouloir() {
-        ChoiceDialog<String> dialog = new ChoiceDialog<>("Nord", "Nord", "Sud", "Est", "Ouest");
-        dialog.setTitle("Configuration initiale de l'appartement");
-        dialog.setHeaderText("Emplacement du couloir commun");
-        dialog.setContentText("De quel côté de l'appartement se trouve le couloir d'accès (requis pour la porte d'entrée) ?");
-        
-        dialog.showAndWait().ifPresentOrElse(
-            cote -> {
-                this.coteCouloir = cote;
-                vue.getInfoMessage().setText("Couloir configuré au " + cote + ". Créez vos pièces.");
-            },
-            () -> {
-                // Par défaut si fermeture brutale de la boîte
-                this.coteCouloir = "Nord";
-                vue.getInfoMessage().setText("Couloir configuré par défaut au Nord. Créez vos pièces.");
-            }
-        );
     }
 
     private void initEvents() {
@@ -993,7 +987,7 @@ public class CPlanAppartement {
         }
 
         Stage popup = new Stage();
-        popup.setTitle("Ouvertures - " + pieceSelectionnee.getUsage());
+        popup.setTitle("Ouvertures - Maison : " + pieceSelectionnee.getUsage());
 
         VBox layout = new VBox(12);
         layout.setPadding(new Insets(20));
@@ -1022,32 +1016,14 @@ public class CPlanAppartement {
         TextField txtH = new TextField(); txtH.setEditable(false);
         txtH.setStyle("-fx-background-color: #EAEAEA; -fx-text-fill: #555555; -fx-font-weight: bold;");
 
-        // Modification fondamentale de la logique des portes pour l'Appartement
+        // Modification pour la maison : Les portes sont TOUJOURS autorisées, y compris sur les murs extérieurs
         comboMur.setOnAction(e -> {
-            String murId = comboMur.getValue();
-            Mur selectedMur = pieceSelectionnee.getMurs().stream()
-                .filter(m -> m.getIdMur().equals(murId))
-                .findFirst().orElse(null);
-
             comboType.getItems().clear();
             comboArticle.getItems().clear();
             comboArticle.setDisable(true);
             comboType.setDisable(false);
             
-            comboType.getItems().add("Fenêtre");
-            
-            if (selectedMur != null) {
-                if (!selectedMur.estExterieur()) {
-                    // Mur intérieur : portes intérieures toujours autorisées
-                    comboType.getItems().add("Porte");
-                } else if (coteCouloir != null && selectedMur.getIdMur().contains(coteCouloir)) {
-                    // Mur extérieur faisant face au couloir désigné : porte autorisée (Porte d'entrée)
-                    comboType.getItems().add("Porte");
-                } else {
-                    // Autre mur extérieur (balcons, fenêtres de chambres) : Porte de communication refusée
-                    comboType.setTooltip(new Tooltip("Les portes d'accès sont interdites sur les façades extérieures hors couloir."));
-                }
-            }
+            comboType.getItems().addAll("Fenêtre", "Porte"); // Pas de restriction pour la maison
         });
 
         comboType.setOnAction(e -> {
@@ -1079,35 +1055,37 @@ public class CPlanAppartement {
                 Revetement articleChoisi = comboArticle.getValue();
                 
                 if (murId == null || type == null || articleChoisi == null) {
-                    afficherErreur("Veuillez sélectionner un mur, un type et un produit.");
+                    afficherErreur("Veuillez remplir tous les champs de sélection.");
                     return;
                 }
 
                 float l = Float.parseFloat(txtL.getText());
                 float h = Float.parseFloat(txtH.getText());
 
-                pieceSelectionnee.getMurs().stream()
+                // Recherche et ajout de l'ouverture
+                Mur selectedMur = pieceSelectionnee.getMurs().stream()
                     .filter(m -> m.getIdMur().equals(murId))
-                    .findFirst()
-                    .ifPresent(m -> {
-                        Ouverture o = new Ouverture(compteurOuverture++, type, l, h, articleChoisi);
-                        
-                        // Si l'utilisateur pose la porte sur la façade autorisée du couloir
-                        if (type.equals("Porte") && m.estExterieur()) {
-                            appartement.setPorteEntree(o);
-                        }
-                        
-                        m.ajouterOuverture(o);
-                    });
+                    .findFirst().orElse(null);
+
+                if (selectedMur != null) {
+                    Ouverture nov = new Ouverture(compteurOuverture++, type, l, h, articleChoisi);
+                    
+                    // Si c'est une porte placée sur une façade et qu'aucune porte principale n'est définie
+                    if (type.equals("Porte") && selectedMur.estExterieur() && appartement.getPorteEntree() == null) {
+                        appartement.setPorteEntree(nov); // Assigner comme porte d'entrée de la maison
+                    }
+                    
+                    selectedMur.ajouterOuverture(nov);
+                }
                 
                 mettreAJourDetailsPiece();
                 popup.close();
             } catch (NumberFormatException ex) { 
-                afficherErreur("Valeurs de dimensions incorrectes."); 
+                afficherErreur("Valeurs numériques incorrectes."); 
             }
         });
 
-        layout.getChildren().addAll(labelExplicatif, comboMur, comboType, new Separator(), new Label("Choisir l'article :"), comboArticle, new Separator(), new Label("Dimensions requis (Lecture seule) :"), txtL, txtH, new Separator(), btnAjouter);
+        layout.getChildren().addAll(labelExplicatif, comboMur, comboType, new Separator(), new Label("Choisir l'article :"), comboArticle, new Separator(), new Label("Dimensions (Lecture seule) :"), txtL, txtH, new Separator(), btnAjouter);
         popup.setScene(new Scene(layout, 380, 460));
         popup.show();
     }

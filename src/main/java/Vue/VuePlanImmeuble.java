@@ -165,7 +165,7 @@ public class VuePlanImmeuble {
                 + "-fx-text-fill: #2F3E46;"
                 + "-fx-font-size: 14px;"
                 + "-fx-font-weight: bold;"
-                + "-fx-padding: 9 15 9 15;"
+                + "-fx-padding: 5 15 5 15;"
                 + "-fx-cursor: hand;"
         );
     }

@@ -192,7 +192,7 @@ public class CBatiment {
                 Appartement planMaison =
                         ((Maison) batiment).getPlanMaison();
 
-                new CPlanAppartement(
+                new CPlanMaison(
                         fenetre,
                         planMaison
                 );
