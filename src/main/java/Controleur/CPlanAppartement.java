@@ -1,4 +1,4 @@
-//2eme modif : ajout des articles d'ouvertures
+/////2eme modif : ajout des articles d'ouvertures
 package Controleur;
 
 import Modele.Appartement;

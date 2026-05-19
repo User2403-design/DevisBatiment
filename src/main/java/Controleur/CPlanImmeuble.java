@@ -1,4 +1,3 @@
-
 package Controleur;
 
 import Modele.Appartement;
@@ -335,6 +334,8 @@ private void ouvrirDialogRevetementsCouloir() {
         
         if (chevaucheEscalier(appartement) || chevaucheCouloir(appartement) || chevaucheUnAppartement(appartement)) {
             afficherErreur("Collision détectée avec un élément existant.");
+        } else if (!toucheCouloir(appartement)) {
+            afficherErreur("Erreur de conception : L'appartement doit obligatoirement être en contact direct avec le couloir commun.");
         } else {
             getNiveauCourant().ajouterAppartement(appartement);
         }
@@ -550,4 +551,20 @@ private void mettreAJourAffichage() {
         float bym = Math.min(b1.getY(), b2.getY()); float byM = Math.max(b1.getY(), b2.getY());
         return !(axM < bxm || axm > bxM || ayM < bym || aym > byM);
     }
+
+    /**
+     * Vérifie si l'appartement est en contact physique avec le couloir commun.
+     */
+    private boolean toucheCouloir(Appartement a) {
+        if (immeuble.getPointCouloir1() == null || immeuble.getPointCouloir2() == null) {
+            return false;
+        }
+        return zonesSeTouchent(
+            new Point(a.getXMin(), a.getYMin()),
+            new Point(a.getXMax(), a.getYMax()),
+            immeuble.getPointCouloir1(),
+            immeuble.getPointCouloir2()
+        );
+    }
 }
+
