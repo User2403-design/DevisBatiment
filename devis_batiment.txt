@@ -1,54 +1,72 @@
 ====================================================================================
-                     ENTREPRISE BTP - DEVIS BATIMENT
+                                    BATIR & Co - DEVIS BATIMENT
 ====================================================================================
 Raison sociale   : Entreprise BTP
-Adresse          : Adresse de l'entreprise
-Téléphone        : 00 00 00 00 00
-Mail             : contact@entreprise-btp.fr
+Adresse          : 14 rue de general Leclerc, 67000, STRASBOURG 
+Téléphone        : 09 54 69 23 00
+Mail             : contact@BatirandCo-btp.fr
 ====================================================================================
 
 INFORMATIONS GENERALES
 ------------------------------------------------------------------------------------
-Type du bâtiment      : Maison
-Surface totale        : 625,00 m²
-Nombre de niveaux     : 0
+Type du bâtiment      : Immeuble
+Surface totale        : 1089,00 m²
+Nombre de niveaux     : 1
 
 FACADES EXTERNES
 ------------------------------------------------------------------------------------
 Désignation                            Unité      Quantité      Prix U.        Total
 ------------------------------------------------------------------------------------
-Revêtement façade - Enduit             m²           250,00      65,00 €   16250,00 €
-Isolant extérieur - Polystyrène        m²           250,00      12,50 €    3125,00 €
+Revêtement façade - Crepi              m²           330,00      80,00 €   26400,00 €
+Isolant extérieur - Polystyrène        m²           330,00      12,50 €    4125,00 €
 
-Sous-total façades : 19375,00 €
+Sous-total façades : 30525,00 €
 
 INTERIEUR
 ------------------------------------------------------------------------------------
 
-Appartement / logement : Plan maison
-Surface : 625,00 m²
+NIVEAU 1
+====================================================================================
+
+Appartement / logement : Appartement 1
+Surface : 209,00 m²
 Désignation                            Unité      Quantité      Prix U.        Total
 ------------------------------------------------------------------------------------
 
 Pièce : Pièce
-
-Pièce : Pièce
-Mur Nord - Vert                        m²            23,38       5,50 €     128,60 €
-Mur Est - isolant Polystyrène          m²            18,90      12,50 €     236,24 €
+Sol - Carrelage                        m²            39,34      30,00 €    1180,14 €
+Isolant sol - Polystyrène              m²            39,34      12,50 €     491,72 €
+Plafond - Blanc                        m²            39,34       5,50 €     216,36 €
+Mur Nord - Blanc                       m²            16,16       5,50 €      88,89 €
+Mur Nord - isolant Polystyrène         m²            16,16      12,50 €     202,02 €
 Fenêtre - DoubleVitrage                u              1,00     250,00 €     250,00 €
+Mur Est - Rouge                        m²            13,97       6,00 €      83,81 €
+Mur Est - isolant Polystyrène          m²            13,97      12,50 €     174,60 €
+Mur Sud - Rouge                        m²            15,71       6,00 €      94,27 €
+Porte - Verre                          u              1,00     200,00 €     200,00 €
 
-Pièce : Pièce
-Porte - Bois                           u              1,00     150,00 €     150,00 €
+Sous-total logement : 2981,81 €
 
-Pièce : Pièce
-Plafond - Rouge                        m²            72,12       6,00 €     432,70 €
-Mur Est - isolant Polystyrène          m²            16,70      12,50 €     208,77 €
-Mur Sud - Rouge                        m²            26,99       6,00 €     161,92 €
+ESCALIER
+------------------------------------------------------------------------------------
+Désignation                            Unité      Quantité      Prix U.        Total
+------------------------------------------------------------------------------------
+Escalier intérieur                     u                 1    3500,00 €    3500,00 €
 
-Sous-total logement : 1568,24 €
+Sous-total escalier : 3500,00 €
+
+COULOIRS
+------------------------------------------------------------------------------------
+Revêtement sol      : Moquette - 15,00 €/m²
+Revêtement plafond  : Bleu - 6,00 €/m²
+Mur Nord            : Blanc - 5,50 €/m²
+Mur Est             : Rouge - 6,00 €/m²
+Mur Sud             : Rose - 6,00 €/m²
+Mur Ouest           : Brun - 6,00 €/m²
+Tarif inclus dans le coût global des murs.
 
 ====================================================================================
-                                                      TOTAL HT : 20943,24 €
-                                                        TVA 20% : 4188,65 €
-                                                     TOTAL TTC : 25131,88 €
+                                                      TOTAL HT : 37006,81 €
+                                                        TVA 20% : 7401,36 €
+                                                     TOTAL TTC : 44408,17 €
 ====================================================================================
