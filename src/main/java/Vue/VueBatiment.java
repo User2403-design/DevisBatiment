@@ -42,22 +42,22 @@ public class VueBatiment {
         root.setAlignment(Pos.CENTER);
         root.setPrefSize(Double.MAX_VALUE, Double.MAX_VALUE);
 
-        titre = new Label("Bienvenue chez Bâtir & Co !");
+        titre = new Label("BIENVENU CHEZ BATIR & CO");
         titre.setFont(new Font(28));
 
         question = new Label("Que souhaitez-vous construire ?");
         question.setFont(new Font(18));
 
-        maison = new Button("Maison");
-        immeuble = new Button("Immeuble");
+        maison = new Button("Une maison");
+        immeuble = new Button("Un immeuble");
         maison.setPrefSize(200, 40);
         immeuble.setPrefSize(200, 40);
         
-        labelLongueur = new Label("Longueur du bâtiment (m) :");
+        labelLongueur = new Label("Veuillez indiquer la longueur du bâtiment (m) :");
         champLongueur = new TextField();
         champLongueur.setMaxWidth(200);
         
-        labelLargeur = new Label("Largeur du bâtiment (m) :");
+        labelLargeur = new Label("Veuillez indiquer la largeur du bâtiment (m) :");
         champLargeur = new TextField();
         champLargeur.setMaxWidth(200);
 
@@ -75,7 +75,10 @@ public class VueBatiment {
         labelCalcSuperficie.setStyle("-fx-text-fill: green");
         
         valider = new Button("Valider et Créer");
-
+        appliquerStyleBouton(valider, "#A2D2FF");
+        appliquerStyleBouton(maison, "#B8E0D2");
+        appliquerStyleBouton(immeuble, "#FFC8DD");
+        
         // Masquage initial des champs de configuration
         setChampsVisibles(false);
        
@@ -88,6 +91,18 @@ public class VueBatiment {
                 labelCalcSuperficie, valider
         );
     }
+         private void appliquerStyleBouton(Button bouton, String couleur) {
+
+        bouton.setStyle(
+                "-fx-background-color: " + couleur + ";"
+                + "-fx-text-fill: #2F3E46;"
+                + "-fx-font-size: 14px;"
+                + "-fx-font-weight: bold;"
+                + "-fx-padding: 9 15 9 15;"
+                + "-fx-cursor: hand;"
+        );
+    }
+    
 
     /**
      * Affiche ou masque les champs de saisie une fois le type de bâtiment choisi.
