@@ -42,7 +42,7 @@ public class VueBatiment {
         root.setAlignment(Pos.CENTER);
         root.setPrefSize(Double.MAX_VALUE, Double.MAX_VALUE);
 
-        titre = new Label("BIENVENU CHEZ BATIR & CO");
+        titre = new Label("BIENVENUE CHEZ BATIR & CO");
         titre.setFont(new Font(28));
 
         question = new Label("Que souhaitez-vous construire ?");
