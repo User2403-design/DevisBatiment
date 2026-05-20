@@ -4,10 +4,6 @@
  */
 package Modele;
 
-/**
- *
- * @author seb12
- */
 import java.util.ArrayList;
 
 public class Batiment {
@@ -106,19 +102,19 @@ public class Batiment {
         this.pieces = pieces;
     }
 
-    // Méthode pratique pour ajouter une pièce
+    
     public void ajouterPiece(Piece piece) {
         this.pieces.add(piece);
     }
 
-    // Recalcule la surface totale du bâtiment
+    
     public float calculSurface() {
         return Xmax * Ymax;
     }
     // Supprime la dernière pièce ajoutée si la liste n'est pas vide
 public void supprimerDernierePiece() {
     if (!pieces.isEmpty()) {
-        pieces.remove(pieces.size() - 1);
+        pieces.remove(pieces.size() - 1); // se sert de l'indice de la pièce pour la supprimer ( exemple : indice salon est 3 si c'est al troisième pièce à avoir été créée
     }
 }
 }

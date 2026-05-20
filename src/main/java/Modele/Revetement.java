@@ -4,10 +4,6 @@
  */
 package Modele;
 
-/**
- *
- * @author chloe
- */
 public class Revetement {
  
 private int idRevt;

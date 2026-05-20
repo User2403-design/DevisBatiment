@@ -4,13 +4,6 @@
  */
 package Modele;
 
-/**
- *
- * @author seb12
- */
-/**
- * Énumération pour différencier les types de logements
- */
 public enum TypeLogement {
     MAISON("Maison"),
     APPARTEMENT("Appartement");

@@ -15,7 +15,7 @@ public class Maison extends Batiment {
                 "Plan maison",
                 new Point(0, 0),
                 new Point(longueur, largeur),
-                TypeLogement.MAISON  // Spécifier le type MAISON
+                TypeLogement.MAISON  // Spécifier le type MAISON ( provient d'enum dans la classe typelogement)
         );
     }
 
@@ -27,9 +27,6 @@ public class Maison extends Batiment {
         this.planMaison = planMaison;
     }
 
-    /**
-     * Valide que le plan de la maison respecte les règles spécifiques
-     */
     public boolean validerPlan() {
         return planMaison != null && planMaison.validerPlan();
     }

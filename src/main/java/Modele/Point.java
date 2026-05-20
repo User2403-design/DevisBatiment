@@ -4,10 +4,6 @@
  */
 package Modele;
 
-/**
- *
- * @author chloe
- */
 public class Point {
 
     private float x;
@@ -21,13 +17,13 @@ public class Point {
     public Point() {
     }
 
-    // Constructeur simple utilisé dans CPlanBatiment
+   
     public Point(float x, float y) {
         this.x = x;
         this.y = y;
     }
 
-    // Constructeur complet si vous en avez besoin ailleurs
+ 
     public Point(float x, float y, float xmin, float xmax, float ymin, float ymax) {
         this.x = x;
         this.y = y;

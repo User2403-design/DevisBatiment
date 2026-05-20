@@ -13,11 +13,11 @@ public class Immeuble extends Batiment {
 
     private ArrayList<Niveau> niveaux;
 
-    // Escalier commun à tous les niveaux.
+    
     private Point pointEscalier1;
     private Point pointEscalier2;
     
-    // NOUVEAUX ATTRIBUTS POUR LES REVÊTEMENTS DU COULOIR
+   
     private Revetement revetementSolCouloir;
     private Revetement revetementPlafondCouloir;
     private Revetement revetementMurNordCouloir;
@@ -131,7 +131,7 @@ public void definirCouloirCommun(Point point1, Point point2) {
     
     
 
-    // Cette méthode place le même escalier sur tous les étages.
+    //  méthode qui place le même escalier sur tous les étages
     public void definirEscalierCommun(Point point1, Point point2) {
         this.pointEscalier1 = point1;
         this.pointEscalier2 = point2;

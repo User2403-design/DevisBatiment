@@ -12,8 +12,7 @@ public class Niveau {
     private ArrayList<Appartement> appartements;
     private final double hauteurPlafond = 3;
 
-    // Deux points pour représenter le rectangle de l'escalier.
-    // On évite de créer une nouvelle classe pour garder le code simple.
+ 
     private Point pointEscalier1;
     private Point pointEscalier2;
     

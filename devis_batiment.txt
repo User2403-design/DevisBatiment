@@ -9,38 +9,72 @@ Mail             : contact@BatirandCo-btp.fr
 
 INFORMATIONS GENERALES
 ------------------------------------------------------------------------------------
-Type du bâtiment      : Maison
+Type du bâtiment      : Immeuble
 Surface totale        : 625,00 m²
-Nombre de niveaux     : 0
+Nombre de niveaux     : 1
 
 FACADES EXTERNES
 ------------------------------------------------------------------------------------
 Désignation                            Unité      Quantité      Prix U.        Total
 ------------------------------------------------------------------------------------
-Revêtement façade - Crepi              m²           250,00      80,00 €   20000,00 €
+Revêtement façade - Enduit             m²           250,00      65,00 €   16250,00 €
 Isolant extérieur - Polystyrène        m²           250,00      12,50 €    3125,00 €
 
-Sous-total façades : 23125,00 €
+Sous-total façades : 19375,00 €
 
 INTERIEUR
 ------------------------------------------------------------------------------------
 
-Appartement / logement : Plan maison
-Surface : 625,00 m²
+NIVEAU 1
+====================================================================================
+
+Appartement / logement : Appartement 1
+Surface : 131,35 m²
 Désignation                            Unité      Quantité      Prix U.        Total
 ------------------------------------------------------------------------------------
 
-Pièce : Pièce
+Zone restante
+
+Sous-total logement : 0,00 €
+
+Appartement / logement : Appartement 2
+Surface : 141,91 m²
+Désignation                            Unité      Quantité      Prix U.        Total
+------------------------------------------------------------------------------------
 
 Zone restante
-Zone restante - sol - Carrelage        m²           515,24      30,00 €   15457,30 €
-Zone restante - murs - Rouge           m²           355,49       6,00 €    2132,91 €
-Zone restante - plafond - Rouge        m²           515,24       6,00 €    3091,46 €
 
-Sous-total logement : 20681,67 €
+Sous-total logement : 0,00 €
+
+Appartement / logement : Appartement 3
+Surface : 225,00 m²
+Désignation                            Unité      Quantité      Prix U.        Total
+------------------------------------------------------------------------------------
+
+Zone restante
+
+Sous-total logement : 0,00 €
+
+ESCALIER
+------------------------------------------------------------------------------------
+Désignation                            Unité      Quantité      Prix U.        Total
+------------------------------------------------------------------------------------
+Escalier intérieur                     u                 1    3500,00 €    3500,00 €
+
+Sous-total escalier : 3500,00 €
+
+COULOIRS
+------------------------------------------------------------------------------------
+Revêtement sol      : aucun
+Revêtement plafond  : aucun
+Mur Nord            : aucun
+Mur Est             : aucun
+Mur Sud             : aucun
+Mur Ouest           : aucun
+Tarif inclus dans le coût global des murs.
 
 ====================================================================================
-                                                      TOTAL HT : 43806,67 €
-                                                        TVA 20% : 8761,33 €
-                                                     TOTAL TTC : 52568,00 €
+                                                      TOTAL HT : 22875,00 €
+                                                        TVA 20% : 4575,00 €
+                                                     TOTAL TTC : 27450,00 €
 ====================================================================================

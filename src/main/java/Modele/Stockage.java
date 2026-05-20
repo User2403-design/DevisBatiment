@@ -23,7 +23,7 @@ public class Stockage {
         devis.append("====================================================================================\n");
         devis.append("                                    BATIR & Co - DEVIS BATIMENT\n");
         devis.append("====================================================================================\n");
-        devis.append("Raison sociale   : Entreprise BTP\n");
+        devis.append("Entreprise BTP\n");
         devis.append("Adresse          : 14 rue de general Leclerc, 67000, STRASBOURG \n");
         devis.append("Téléphone        : 09 54 69 23 00\n");
         devis.append("Mail             : contact@BatirandCo-btp.fr\n");

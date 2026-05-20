@@ -56,7 +56,7 @@ public class Mur {
         return idMur + type + " - " + String.format("%.2f", calculerSurfaceNette(2.5)) + " m²";
     }
 
-    // --- Getters et Setters ---
+    
     public float getX1() { return p1.getX(); }
     public float getY1() { return p1.getY(); }
     public float getX2() { return p2.getX(); }

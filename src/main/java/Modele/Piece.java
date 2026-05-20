@@ -65,7 +65,7 @@ public class Piece {
         return usage + " - " + String.format("%.2f", superficie) + " m²";
     }
 
-    // --- Getters et Setters ---
+    
     public ArrayList<Mur> getMurs() { return murs; }
     public float getXMin() { return Math.min(coin1.getX(), coin2.getX()); }
     public float getXMax() { return Math.max(coin1.getX(), coin2.getX()); }

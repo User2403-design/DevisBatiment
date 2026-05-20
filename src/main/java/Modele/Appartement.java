@@ -5,32 +5,26 @@
 package Modele;
 import java.util.ArrayList;
 
-
-/**
- *
- * @author seb12
- */
-
-
 public class Appartement {
-// Nom affiché dans la liste
+    
+
     private String nom;
 
     // Les 2 coins du rectangle de l'appartement dans l'étage
     private Point coin1;
     private Point coin2;
 
-    // Type de logement (MAISON ou APPARTEMENT)
+    
     private TypeLogement typeLogement;
 
-    // Liste des pièces de l'appartement
+    
     private ArrayList<Piece> pieces;
     
     private Revetement revetementSolDefaut;
     private Revetement revetementPlafondDefaut;
     private Revetement revetementMurDefaut;
 
-    // Porte d'entrée (pour les maisons)
+    
     private Ouverture porteEntree;
 
      // Pour la zone vide restante pas comprise dans pièce
@@ -48,7 +42,7 @@ public class Appartement {
         this.coin1 = coin1;
         this.coin2 = coin2;
         this.pieces = new ArrayList<>();
-        this.typeLogement = TypeLogement.APPARTEMENT;
+        this.typeLogement = TypeLogement.APPARTEMENT; // constante de l'enum defini dans la classe TypeLogement
     }
 
     public Appartement(String nom, Point coin1, Point coin2, TypeLogement typeLogement) {
@@ -169,7 +163,7 @@ public class Appartement {
     }
 
     
-    // ---------- Méthodes utiles pour le rectangle ----------
+    // Méthodes utiles pour le rectangle
 
     public float getXMin() {
         return Math.min(coin1.getX(), coin2.getX());
@@ -199,20 +193,20 @@ public class Appartement {
         return getLargeur() * getHauteur();
     }
 
-    // ---------- Gestion des pièces ----------
+    // Gestion des pièces 
 
     public void ajouterPiece(Piece piece) {
         pieces.add(piece);
     }
 
     public void supprimerDernierePiece() {
-        if (!pieces.isEmpty()) {
-            pieces.remove(pieces.size() - 1);
+        if (!pieces.isEmpty())  // permet de verifier que le liste n'est pas vide 
+            pieces.remove(pieces.size() - 1); // donne l'indice de l'élement dans la pièce (chambre, salon,...) et le supprime
         }
-    }
-
+    
+// methode qui retourne une chaine de caractère représentant l'appartement, affiche le nom et la superficie 
     @Override
     public String toString() {
-        return nom + " - " + String.format("%.2f", getSuperficie()) + " m²";
+        return nom + " - " + String.format("%.2f", getSuperficie()) + " m²"; // %.2f permet d'afficher 2 chiffres après la virgule
     }
 }

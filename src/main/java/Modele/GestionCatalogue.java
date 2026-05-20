@@ -14,25 +14,26 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-/**
- * Classe de gestion du catalogue avec diagnostic intégré.
- */
 public class GestionCatalogue {
     
-    private Map<String, List<Revetement>> rubriques;
-    // Note : Pour Maven, le fichier doit être dans src/main/resources
-    private static final String CHEMIN_CATALOGUE = "/Catalogue.txt";
+    private Map<String, List<Revetement>> rubriques; // rappel : map est une structure qui fonctionne avec une clef (ici un texte) et une valeur 
+                                                     // la collection associe un nom de rubrique (sol, plafaond..)  à une liste de revetements
+    
+    private static final String CHEMIN_CATALOGUE = "/Catalogue.txt"; 
     
     public GestionCatalogue() {
-        this.rubriques = new HashMap<>();
-        chargerDonnees();
+        this.rubriques = new HashMap<>(); // créer une Map vide pour stocker les rubriques.
+        chargerDonnees(); // la on fait appel à la methode definie ci-dessous
     }
     
     private void chargerDonnees() {
         System.out.println("Tentative de chargement du catalogue depuis : " + CHEMIN_CATALOGUE);
         
-        try (InputStream is = getClass().getResourceAsStream(CHEMIN_CATALOGUE);
-             BufferedReader reader = (is == null) ? null : new BufferedReader(new InputStreamReader(is, StandardCharsets.UTF_8))) {
+        try (InputStream is = getClass().getResourceAsStream(CHEMIN_CATALOGUE); // input stream c'est un flux de lecture d'un fichier donc utile pour lire le catalogue fichier texte 
+             BufferedReader reader = (is == null) 
+                     ? null
+                     : new BufferedReader(new InputStreamReader(is, StandardCharsets.UTF_8)) // permet de créer un objet type lecteur texte UTF-8 qui peut lire ligne par ligne le fichier texte 
+                ) {                                                                          // StandardCharsets.UTF_8 : encodage pour les accents, caractères spéciaux 
 
             if (is == null) {
                 System.err.println("CRITIQUE : Fichier " + CHEMIN_CATALOGUE + " introuvable dans le classpath !");
@@ -47,7 +48,7 @@ public class GestionCatalogue {
 
             while ((ligne = reader.readLine()) != null) {
                 lignesLues++;
-                ligne = ligne.trim();
+                ligne = ligne.trim(); // permet d'enlever les espaces au début et a la fin d'un texte 
                 
                 if (ligne.isEmpty() || ligne.startsWith("//")) continue;
 
@@ -58,7 +59,7 @@ public class GestionCatalogue {
                     } else {
                         rubriqueCourante = ligne.substring(9).trim();
                     }
-                    rubriques.putIfAbsent(rubriqueCourante, new ArrayList<>());
+                    rubriques.putIfAbsent(rubriqueCourante, new ArrayList<>()); // si la rubrique n'existe pas on la créer, putifAbsent est une methode des Map, elle ajoute valeur uniquement si clé n'existe pas déjà 
                     System.out.println("Rubrique trouvée : [" + rubriqueCourante + "]");
                 } 
                 else {
@@ -97,7 +98,7 @@ public class GestionCatalogue {
     public List<Revetement> getProduits(String nomRubrique) {
         List<Revetement> liste = rubriques.get(nomRubrique);
         if (liste == null || liste.isEmpty()) {
-            // C'est ici que votre message d'erreur est généré
+           
             System.err.println("ERREUR : La rubrique '" + nomRubrique + "' est inconnue ou vide.");
             System.err.println("Rubriques disponibles dans le système : " + rubriques.keySet());
             return new ArrayList<>();
