@@ -43,22 +43,6 @@ public class Piece {
         murs.add(new Mur("Mur Ouest", basGauche, hautGauche, false));
     }
 
-    public double calculerPrixTotal(double hauteurPlafond) {
-        double total = 0;
-
-        // Calcul Revêtements et Isolants horizontaux
-        if (revetementSol != null) total += superficie * revetementSol.getPrixRevt();
-        if (isolantSol != null) total += superficie * isolantSol.getPrixRevt();
-        if (revetementPlafond != null) total += superficie * revetementPlafond.getPrixRevt();
-        if (isolantPlafond != null) total += superficie * isolantPlafond.getPrixRevt();
-
-        // Calcul Murs (Revêtement + Isolant inclus dans Mur.calculerPrix)
-        for (Mur m : murs) {
-            total += m.calculerPrix(hauteurPlafond);
-        }
-
-        return total;
-    }
 
     @Override
     public String toString() {
