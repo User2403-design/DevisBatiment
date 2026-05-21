@@ -4,9 +4,6 @@ import javafx.stage.Stage;
 import Controleur.CBatiment;
 
 
-
-
-
 public class App extends Application {
 
     @Override

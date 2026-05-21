@@ -13,10 +13,6 @@ import javafx.stage.Stage;
 
 import java.util.List;
 
-/**
- *
- * @author seb12
- */
 public class CCatalogue {
     private VueCatalogue vue;
     private GestionCatalogue catalogue;

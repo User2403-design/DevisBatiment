@@ -22,6 +22,8 @@ import javafx.scene.text.FontWeight;
 import javafx.scene.text.Text;
 import javafx.stage.Stage;
 import java.util.List;
+
+
 public class CPlanAppartement {
     private VuePlanAppartement vue;
     private Stage fenetre;
@@ -33,17 +35,18 @@ public class CPlanAppartement {
     private final double margeSecurite = 40.0;
     private int compteurOuverture = 1;
     
-    // AJOUT : revêtements de la zone restante
+    
 private Revetement revetementSolZoneRestante;
 private Revetement revetementMurZoneRestante;
 private Revetement revetementPlafondZoneRestante;
 
-// AJOUT : hauteur utilisée pour calculer la surface des murs
+
 private final double HAUTEUR_MURS = 2.5;
     private final double SEUIL_MAGNETISME_PIXELS = 20.0;
     
     // Ajout d'une propriété pour retenir l'emplacement obligatoire du couloir
     private String coteCouloir;
+    
     public CPlanAppartement(Stage fenetre, Appartement appartement) {
         this.fenetre = fenetre;
         this.appartement = appartement;
