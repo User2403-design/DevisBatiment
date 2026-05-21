@@ -10,23 +10,23 @@ Mail             : contact@BatirandCo-btp.fr
 INFORMATIONS GENERALES
 ------------------------------------------------------------------------------------
 Type du bâtiment      : Maison
-Surface totale        : 1210,00 m²
+Surface totale        : 260602,00 m²
 Nombre de niveaux     : 0
 
 FACADES EXTERNES
 ------------------------------------------------------------------------------------
 Désignation                            Unité      Quantité      Prix U.        Total
 ------------------------------------------------------------------------------------
-Revêtement façade - Crepi              m²           385,00      80,00 €   30800,00 €
-Isolant extérieur - Laine de verre     m²           385,00      10,00 €    3850,00 €
+Revêtement façade - Crepi              m²          5135,00      80,00 €  410800,00 €
+Isolant extérieur - Laine de verre     m²          5135,00      10,00 €   51350,00 €
 
-Sous-total façades : 34650,00 €
+Sous-total façades : 462150,00 €
 
 INTERIEUR
 ------------------------------------------------------------------------------------
 
 Appartement / logement : Plan maison
-Surface : 1210,00 m²
+Surface : 260602,00 m²
 Désignation                            Unité      Quantité      Prix U.        Total
 ------------------------------------------------------------------------------------
 
@@ -34,15 +34,21 @@ Pièce : Pièce
 
 Pièce : Pièce
 
-Zone restante
-Zone restante - sol - Carrelage        m²           883,61      30,00 €   26508,29 €
-Zone restante - murs - Bleu            m²           661,43       6,00 €    3968,59 €
-Zone restante - plafond - Rouge        m²           883,61       6,00 €    5301,66 €
+Pièce : Pièce
 
-Sous-total logement : 35778,54 €
+Pièce : Pièce
+
+Pièce : Pièce
+
+Zone restante
+Zone restante - sol - Carrelage        m²        149767,53      30,00 € 4493025,94 €
+Zone restante - murs - Bleu            m²         12187,40       6,00 €   73124,43 €
+Zone restante - plafond - Vert         m²        149767,53       5,50 €  823721,42 €
+
+Sous-total logement : 5389871,79 €
 
 ====================================================================================
-                                                      TOTAL HT : 70428,54 €
-                                                       TVA 20% : 14085,71 €
-                                                     TOTAL TTC : 84514,25 €
+                                                    TOTAL HT : 5852021,79 €
+                                                     TVA 20% : 1170404,36 €
+                                                   TOTAL TTC : 7022426,15 €
 ====================================================================================
