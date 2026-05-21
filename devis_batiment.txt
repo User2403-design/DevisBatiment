@@ -10,45 +10,37 @@ Mail             : contact@BatirandCo-btp.fr
 INFORMATIONS GENERALES
 ------------------------------------------------------------------------------------
 Type du bâtiment      : Maison
-Surface totale        : 260602,00 m²
+Surface totale        : 1089,00 m²
 Nombre de niveaux     : 0
 
 FACADES EXTERNES
 ------------------------------------------------------------------------------------
 Désignation                            Unité      Quantité      Prix U.        Total
 ------------------------------------------------------------------------------------
-Revêtement façade - Crepi              m²          5135,00      80,00 €  410800,00 €
-Isolant extérieur - Laine de verre     m²          5135,00      10,00 €   51350,00 €
+Revêtement façade - Enduit             m²           330,00      65,00 €   21450,00 €
+Isolant extérieur - Chanvre            m²           330,00      14,00 €    4620,00 €
 
-Sous-total façades : 462150,00 €
+Sous-total façades : 26070,00 €
 
 INTERIEUR
 ------------------------------------------------------------------------------------
 
 Appartement / logement : Plan maison
-Surface : 260602,00 m²
+Surface : 1089,00 m²
 Désignation                            Unité      Quantité      Prix U.        Total
 ------------------------------------------------------------------------------------
 
 Pièce : Pièce
 
-Pièce : Pièce
-
-Pièce : Pièce
-
-Pièce : Pièce
-
-Pièce : Pièce
-
 Zone restante
-Zone restante - sol - Carrelage        m²        149767,53      30,00 € 4493025,94 €
-Zone restante - murs - Bleu            m²         12187,40       6,00 €   73124,43 €
-Zone restante - plafond - Vert         m²        149767,53       5,50 €  823721,42 €
+Zone restante - sol - Carrelage        m²           979,52      30,00 €   29385,47 €
+Zone restante - murs - Bleu            m²           438,64       6,00 €    2631,87 €
+Zone restante - plafond - Blanc        m²           979,52       5,50 €    5387,34 €
 
-Sous-total logement : 5389871,79 €
+Sous-total logement : 37404,67 €
 
 ====================================================================================
-                                                    TOTAL HT : 5852021,79 €
-                                                     TVA 20% : 1170404,36 €
-                                                   TOTAL TTC : 7022426,15 €
+                                                      TOTAL HT : 63474,67 €
+                                                       TVA 20% : 12694,93 €
+                                                     TOTAL TTC : 76169,60 €
 ====================================================================================

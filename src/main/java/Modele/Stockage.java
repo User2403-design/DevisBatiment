@@ -5,6 +5,7 @@
 
 package Modele;
 
+import java.io.File;
 import java.io.FileWriter;
 import java.io.PrintWriter;
 import java.util.ArrayList;
@@ -558,20 +559,32 @@ private static double calculerSurfaceMursZoneRestante(Appartement appartement, d
                 + " €/m²";
     }
 
-    private static void sauvegarderDevis(
+private static void sauvegarderDevis(
             String texteDevis
     ) {
 
         try {
+            int compteur = 1;
+            File fichier = new File("devis_" + compteur + ".txt");
 
+            // Boucle tant qu'un fichier avec ce nom existe déjà
+            while (fichier.exists()) {
+                compteur++;
+                fichier = new File("devis_" + compteur + ".txt");
+            }
+
+            // Une fois le nom disponible trouvé, on crée le fichier
             PrintWriter writer =
                     new PrintWriter(
-                            new FileWriter("devis_batiment.txt")
+                            new FileWriter(fichier)
                     );
 
             writer.print(texteDevis);
 
             writer.close();
+            
+            // Optionnel : un petit message de confirmation en console
+            System.out.println("Devis sauvegardé sous le nom : " + fichier.getName());
 
         } catch (Exception e) {
 
@@ -582,6 +595,31 @@ private static double calculerSurfaceMursZoneRestante(Appartement appartement, d
             e.printStackTrace();
         }
     }
+    
+//    private static void sauvegarderDevis(
+//            String texteDevis
+//    ) {
+//
+//        try {
+//
+//            PrintWriter writer =
+//                    new PrintWriter(
+//                            new FileWriter("devis_batiment.txt")
+//                    );
+//
+//            writer.print(texteDevis);
+//
+//            writer.close();
+//
+//        } catch (Exception e) {
+//
+//            System.out.println(
+//                    "Erreur lors de la sauvegarde du devis."
+//            );
+//
+//            e.printStackTrace();
+//        }
+//    }
 
     private static String format(double valeur) {
         return String.format("%.2f", valeur);

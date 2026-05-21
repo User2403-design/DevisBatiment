@@ -520,24 +520,43 @@ appartement.setRevetementPlafondZoneRestante(revetementPlafondZoneRestante);
             finaliserPiece(ptClique);
         }
     }
-    private void finaliserPiece(Point p2) {
+private void finaliserPiece(Point p2) {
         if (premierPoint.getX() == p2.getX() || premierPoint.getY() == p2.getY()) {
             afficherErreur("Rectangle invalide.");
         } else {
             String usage = demanderNom();
             Piece np = new Piece(premierPoint, p2, usage);
-            for (Mur m : np.getMurs()) {
-                boolean surBordHorizontal = (m.getY1() == 0 || m.getY1() == appartement.getHauteur()) && (m.getY2() == m.getY1());
-                boolean surBordVertical = (m.getX1() == 0 || m.getX1() == appartement.getLargeur()) && (m.getX2() == m.getX1());
-                if (surBordHorizontal || surBordVertical) { m.setEstExterieur(true); }
+
+            // --- VÉRIFICATION DU CHEVAUCHEMENT ---
+            boolean chevauchement = false;
+            for (Piece existante : appartement.getPieces()) {
+                if (!(np.getXMax() <= existante.getXMin() || 
+                      np.getXMin() >= existante.getXMax() || 
+                      np.getYMax() <= existante.getYMin() || 
+                      np.getYMin() >= existante.getYMax())) {
+                    chevauchement = true;
+                    break;
+                }
             }
-            appartement.ajouterPiece(np);
-            selectionnerPiece(np);
-            mettreAJourSidebar();
+
+            if (chevauchement) {
+                afficherErreur("La pièce '" + usage + "' chevauche une pièce existante !");
+            } else {
+                // Si pas de chevauchement, on procède à l'ajout normal
+                for (Mur m : np.getMurs()) {
+                    boolean surBordHorizontal = (m.getY1() == 0 || m.getY1() == appartement.getHauteur()) && (m.getY2() == m.getY1());
+                    boolean surBordVertical = (m.getX1() == 0 || m.getX1() == appartement.getLargeur()) && (m.getX2() == m.getX1());
+                    if (surBordHorizontal || surBordVertical) { m.setEstExterieur(true); }
+                }
+                appartement.ajouterPiece(np);
+                selectionnerPiece(np);
+                mettreAJourSidebar();
+            }
         }
         premierPoint = null;
         rafraichirPlan();
     }
+
     private Piece trouverPiece(float x, float y) {
         return appartement.getPieces().stream().filter(p -> x >= p.getXMin() && x <= p.getXMax() && y >= p.getYMin() && y <= p.getYMax()).findFirst().orElse(null);
     }
