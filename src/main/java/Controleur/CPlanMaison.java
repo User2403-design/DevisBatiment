@@ -13,9 +13,8 @@ import Modele.Ouverture;
 import Modele.Piece;
 import Modele.Point;
 import Modele.Revetement;
-import Vue.VuePlanMaison; // Utilisation de la vue dédiée à la maison
+import Vue.VuePlanMaison; // vue dédiée à la maison
 import javafx.geometry.Insets;
-import javafx.geometry.Pos;
 import javafx.scene.Scene;
 import javafx.scene.control.*;
 import javafx.scene.layout.*;
@@ -28,10 +27,8 @@ import javafx.scene.text.FontWeight;
 import javafx.scene.text.Text;
 import javafx.stage.Stage;
 import java.util.List;
-/**
- *
- * @author seb12
- */
+
+
 public class CPlanMaison {
     private VuePlanMaison vue; // Correction de la classe de la vue
     private Stage fenetre;
@@ -43,12 +40,12 @@ public class CPlanMaison {
     private final double margeSecurite = 40.0;
     private int compteurOuverture = 1;
 
-    // AJOUT : revêtements de la zone restante
+    
     private Revetement revetementSolZoneRestante;
     private Revetement revetementMurZoneRestante;
     private Revetement revetementPlafondZoneRestante;
 
-    // AJOUT : hauteur utilisée pour calculer la surface des murs
+    
     private final double HAUTEUR_MURS = 2.5;
     
     private final double SEUIL_MAGNETISME_PIXELS = 20.0;
@@ -67,7 +64,7 @@ public class CPlanMaison {
         calculerEchelle();
         rafraichirPlan();
         mettreAJourSidebar();
-        // Message informatif d'accueil pour guider l'utilisateur
+       
         if (appartement.getPieces().isEmpty() && appartement.getPorteEntree() == null) {
             Alert info = new Alert(Alert.AlertType.INFORMATION);
             info.setTitle("Configuration de la Maison");
@@ -106,8 +103,7 @@ public class CPlanMaison {
             fenetreDevis.show();
         });
 
-        // AJOUT : on garde ton ancien code au-dessus, mais on redéfinit l'action du bouton
-        // pour intégrer la zone restante avant d'afficher le devis.
+        
         vue.getBoutonGenererDevis().setOnAction(e -> {
             if (calculerSurfaceZoneRestante() > 0
                     && (appartement.getRevetementSolZoneRestante() == null
@@ -121,7 +117,7 @@ public class CPlanMaison {
         });
     }
 
-    // AJOUT : calcule la surface non utilisée par les pièces
+    // calcule la surface non utilisée par les pièces
     private double calculerSurfaceZoneRestante() {
         double surfacePieces = 0;
 
@@ -138,7 +134,6 @@ public class CPlanMaison {
         return surfaceRestante;
     }
 
-    // AJOUT : calcule le périmètre de la zone restante
     private double calculerPerimetreZoneRestante() {
         double perimetreAppartement = 2 * (appartement.getLargeur() + appartement.getHauteur());
         double perimetrePieces = 0;
@@ -150,12 +145,12 @@ public class CPlanMaison {
         return perimetreAppartement + perimetrePieces;
     }
 
-    // AJOUT : calcule la surface des murs de la zone restante
+   
     private double calculerSurfaceMursZoneRestante() {
         return calculerPerimetreZoneRestante() * HAUTEUR_MURS;
     }
 
-    // AJOUT : fenêtre pour choisir les revêtements de la zone restante
+    
     private void ouvrirFenetreZoneRestante() {
         Stage popup = new Stage();
         popup.setTitle("Revêtements de la zone restante");
@@ -214,7 +209,7 @@ appartement.setRevetementPlafondZoneRestante(revetementPlafondZoneRestante);
         popup.show();
     }
 
-    // AJOUT : affiche le devis normal + la zone restante
+    // affiche le devis normal + la zone restante
     private void afficherDevisAvecZoneRestante() {
         String texteDevis = Stockage.genererTexteDevis();
 
@@ -458,7 +453,7 @@ appartement.setRevetementPlafondZoneRestante(revetementPlafondZoneRestante);
                     
                     // Si c'est une porte placée sur une façade et qu'aucune porte principale n'est définie
                     if (type.equals("Porte") && selectedMur.estExterieur() && appartement.getPorteEntree() == null) {
-                        appartement.setPorteEntree(nov); // Assigner comme porte d'entrée de la maison
+                        appartement.setPorteEntree(nov); // Assigné comme porte d'entrée de la maison
                     }
                     
                     selectedMur.ajouterOuverture(nov);
@@ -527,7 +522,7 @@ private void finaliserPiece(Point p2) {
             String usage = demanderNom();
             Piece np = new Piece(premierPoint, p2, usage);
 
-            // --- VÉRIFICATION DU CHEVAUCHEMENT ---
+            // VÉRIFICATION DU CHEVAUCHEMENT 
             boolean chevauchement = false;
             for (Piece existante : appartement.getPieces()) {
                 if (!(np.getXMax() <= existante.getXMin() || 

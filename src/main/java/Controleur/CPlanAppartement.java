@@ -9,7 +9,6 @@ import Modele.Point;
 import Modele.Revetement;
 import Vue.VuePlanAppartement;
 import javafx.geometry.Insets;
-import javafx.geometry.Pos;
 import javafx.scene.Scene;
 import javafx.scene.control.*;
 import javafx.scene.layout.*;
@@ -44,7 +43,7 @@ private Revetement revetementPlafondZoneRestante;
 private final double HAUTEUR_MURS = 2.5;
     private final double SEUIL_MAGNETISME_PIXELS = 20.0;
     
-    // Ajout d'une propriété pour retenir l'emplacement obligatoire du couloir
+    // propriété pour retenir l'emplacement obligatoire du couloir
     private String coteCouloir;
     
     public CPlanAppartement(Stage fenetre, Appartement appartement) {
@@ -61,21 +60,20 @@ private final double HAUTEUR_MURS = 2.5;
         calculerEchelle();
         rafraichirPlan();
         mettreAJourSidebar();
-        // Contrainte immédiate avant le dessin des pièces
+       
+        // on verifie le cote du couloir pour placer une porte 
         if (appartement.getPieces().isEmpty() && coteCouloir == null) {
             demanderCoteCouloir();
         }
     }
-    /**
-     * Ouvre une boîte de choix pour définir l'orientation du couloir d'accès.
-     */
+   
     private void demanderCoteCouloir() {
         ChoiceDialog<String> dialog = new ChoiceDialog<>("Nord", "Nord", "Sud", "Est", "Ouest");
         dialog.setTitle("Configuration initiale de l'appartement");
         dialog.setHeaderText("Emplacement du couloir commun");
         dialog.setContentText("De quel côté de l'appartement se trouve le couloir d'accès (requis pour la porte d'entrée) ?");
         
-        dialog.showAndWait().ifPresentOrElse(
+        dialog.showAndWait().ifPresentOrElse( // si la valeur existe on excécute le premier bloc, sinon on passe au deuxième (ex : si l'utilisateur ferme la fenetre on passe au deuxieme bloc ) 
             cote -> {
                 this.coteCouloir = cote;
                 vue.getInfoMessage().setText("Couloir configuré au " + cote + ". Créez vos pièces.");
@@ -251,6 +249,7 @@ private final double HAUTEUR_MURS = 2.5;
         popup.setScene(new Scene(layout, 400, 450));
         popup.show();
     }
+    
     private void appliquerRevetement(String surface, Revetement r, boolean estIsolant) {
         if (surface.equals("Sol")) {
             if (estIsolant) pieceSelectionnee.setIsolantSol(r);
@@ -268,6 +267,7 @@ private final double HAUTEUR_MURS = 2.5;
                 });
         }
     }
+    
     private void ouvrirFenetreOuvertures() {
         if (pieceSelectionnee == null) {
             afficherErreur("Sélectionnez d'abord une pièce sur le plan.");
@@ -297,7 +297,7 @@ private final double HAUTEUR_MURS = 2.5;
         txtL.setStyle("-fx-background-color: #EAEAEA; -fx-text-fill: #555555; -fx-font-weight: bold;");
         TextField txtH = new TextField(); txtH.setEditable(false);
         txtH.setStyle("-fx-background-color: #EAEAEA; -fx-text-fill: #555555; -fx-font-weight: bold;");
-        // Modification fondamentale de la logique des portes pour l'Appartement
+        // Modification de la logique des portes pour l'appartement
         comboMur.setOnAction(e -> {
             String murId = comboMur.getValue();
             Mur selectedMur = pieceSelectionnee.getMurs().stream()

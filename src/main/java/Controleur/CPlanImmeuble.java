@@ -34,10 +34,7 @@ import Modele.GestionCatalogue;
 import Modele.Revetement;
 import javafx.scene.control.TextArea;
 
-/**
- * Contrôleur pour la gestion du plan de l'immeuble.
- * Gère l'ancrage magnétique dynamique et l'affichage des zones avec libellés et points de saisie.
- */
+
 public class CPlanImmeuble {
 
     private VuePlanImmeuble vue;
@@ -295,7 +292,7 @@ private void ouvrirDialogRevetementsCouloir() {
 
     dialog.getDialogPane().setContent(grid);
 
-    // Attente de la validation par l'utilisateur
+    // Attente validation par utilisateur
     Optional<ButtonType> result = dialog.showAndWait();
     if (result.isPresent() && result.get() == btnValider) {
         // Enregistrement des choix dans l'immeuble
@@ -488,9 +485,9 @@ private void mettreAJourAffichage() {
         }
     }
 
-    /**
-     * Dessine les points de saisie actuels sur le plan.
-     */
+    
+     //Dessine les points de saisie actuels sur le plan.
+     
     private void dessinerPointEnCours(Pane pane, double offX, double offY) {
         // Premier point en bleu
         if (premierPoint != null) {
@@ -570,9 +567,9 @@ private void mettreAJourAffichage() {
         return !(axM < bxm || axm > bxM || ayM < bym || aym > byM);
     }
 
-    /**
-     * Vérifie si l'appartement est en contact physique avec le couloir commun.
-     */
+    
+     //Vérification si appartement en contact physique avec le couloir commun.
+     
     private boolean toucheCouloir(Appartement a) {
         if (immeuble.getPointCouloir1() == null || immeuble.getPointCouloir2() == null) {
             return false;

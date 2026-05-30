@@ -19,21 +19,18 @@ import javafx.scene.shape.Rectangle;
 import javafx.stage.Stage;
 import java.util.Optional;
 
-/**
- * Contrôleur gérant l'édition dynamique du plan.
- * Adapte l'affichage en temps réel à la taille de l'écran.
- */
+
 public class CPlanBatiment {
 
     private VuePlanBatiment vue;
     private Stage fenetre;
     private Batiment batiment;
 
-    // État de la sélection
+    
     private Point premierPoint;
     private Point deuxiemePoint;
 
-    // Paramètres d'affichage dynamiques
+    
     private double echelle;
     private final double margeSecurite = 40.0; // Espace minimal aux bords du Pane
     
@@ -49,7 +46,7 @@ public class CPlanBatiment {
         fenetre.setScene(scene);
         fenetre.setTitle("Éditeur de Plan Interactif - " + batiment.getTypeBatiment());
         
-        // 1. Passage en plein écran
+       
         fenetre.setMaximized(true);
         fenetre.show();
 
@@ -57,7 +54,6 @@ public class CPlanBatiment {
         calculerEchelle();
         rafraichirPlan();
 
-        // --- Écouteurs d'événements (Listeners) ---
 
         // Redessiner si la zone de dessin change de taille (redimensionnement fenêtre)
         vue.getPanePlan().widthProperty().addListener((obs, oldVal, newVal) -> {
@@ -70,8 +66,8 @@ public class CPlanBatiment {
         });
 
         // Gestion du clic pour le dessin
-        vue.getPanePlan().setOnMouseClicked(event -> {
-            gererClicSouris(event.getX(), event.getY());
+        vue.getPanePlan().setOnMouseClicked(event -> { 
+            gererClicSouris(event.getX(), event.getY()); // appelle la methode gererclicsouris ave cles coordonnées du clic
         });
 
         // Liaison des boutons de la sidebar
@@ -93,10 +89,10 @@ public class CPlanBatiment {
         vue.getBoutonFermer().setOnAction(e -> fenetre.close());
     }
 
-    /**
-     * Calcule l'échelle optimale pour que le bâtiment occupe le maximum d'espace
-     * sans jamais dépasser du Pane, tout en gardant ses proportions.
-     */
+    
+      //Calcule l'échelle optimale pour que le bâtiment occupe le maximum d'espace
+    // sans jamais dépasser du Pane, tout en gardant ses proportions.
+    
     private void calculerEchelle() {
         double largeurDisponible = vue.getPanePlan().getWidth() - (margeSecurite * 2);
         double hauteurDisponible = vue.getPanePlan().getHeight() - (margeSecurite * 2);
@@ -111,10 +107,10 @@ public class CPlanBatiment {
         echelle = Math.min(echelleX, echelleY);
     }
     
-    /**
-     * Ajuste les coordonnées du clic pour les "coller" aux murs proches.
-     * Le seuil visuel en pixels est converti dynamiquement en mètres.
-     */
+    
+     // Ajuste les coordonnées du clic pour les "coller" aux murs proches.
+     // Le seuil visuel en pixels est converti dynamiquement en mètres.
+     
     private Point appliquerMagnetisme(float xReel, float yReel) {
         float xSnap = xReel;
         float ySnap = yReel;
@@ -147,12 +143,12 @@ public class CPlanBatiment {
         return new Point(xSnap, ySnap);
     }
 
-    /**
-     * Convertit un clic écran en coordonnées réelles dans le bâtiment,
-     * en tenant compte du centrage dynamique.
-     */
+    
+     // Convertit un clic écran en coordonnées réelles dans le bâtiment,
+     // en tenant compte du centrage dynamique.
+     
     private void gererClicSouris(double xPixel, double yPixel) {
-        // Calcul des offsets (décalages) de centrage utilisés par rafraichirPlan
+        // Calcul des offsets (=décalages) de centrage utilisés par rafraichirPlan
         double offsetX = (vue.getPanePlan().getWidth() - (batiment.getXmax() * echelle)) / 2;
         double offsetY = (vue.getPanePlan().getHeight() - (batiment.getYmax() * echelle)) / 2;
 
@@ -209,9 +205,7 @@ public class CPlanBatiment {
         return false;
     }
 
-    /**
-     * Dessine le bâtiment et ses composants en les centrant dans le Pane.
-     */
+   
     private void rafraichirPlan() {
         Pane p = vue.getPanePlan();
         p.getChildren().clear();
@@ -220,14 +214,14 @@ public class CPlanBatiment {
         double offsetX = (p.getWidth() - (batiment.getXmax() * echelle)) / 2;
         double offsetY = (p.getHeight() - (batiment.getYmax() * echelle)) / 2;
 
-        // 1. Contour extérieur
+        //  Contour extérieur
         Rectangle contour = new Rectangle(offsetX, offsetY, batiment.getXmax() * echelle, batiment.getYmax() * echelle);
         contour.setFill(Color.TRANSPARENT);
         contour.setStroke(Color.BLACK);
         contour.setStrokeWidth(2.5);
         p.getChildren().add(contour);
 
-        // 2. Pièces validées
+        //  Pièces validées
         for (Piece piece : batiment.getPieces()) {
             Rectangle r = new Rectangle(
                 offsetX + piece.getXMin() * echelle,
@@ -241,7 +235,7 @@ public class CPlanBatiment {
             p.getChildren().add(r);
         }
 
-        // 3. Aide visuelle pour la sélection
+        // Aide visuelle pour la sélection
         if (premierPoint != null) {
             Circle c = new Circle(offsetX + premierPoint.getX() * echelle, offsetY + premierPoint.getY() * echelle, 4, Color.RED);
             p.getChildren().add(c);
