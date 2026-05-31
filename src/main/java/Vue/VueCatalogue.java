@@ -10,10 +10,7 @@ import javafx.scene.control.Label;
 import javafx.scene.layout.BorderPane;
 import javafx.scene.text.Font;
 
-/**
- *
- * @author seb12
- */
+
 public class VueCatalogue {
     private BorderPane root;
     private Accordion accordionCategories;
@@ -23,7 +20,7 @@ public class VueCatalogue {
         root.setPadding(new Insets(20));
         root.setStyle("-fx-background-color: #f7f7f7;");
 
-        // Titre de la fenêtre
+      
         Label titre = new Label("Catalogue des Matériaux");
         titre.setFont(new Font("Arial Bold", 22));
         BorderPane.setAlignment(titre, Pos.CENTER);

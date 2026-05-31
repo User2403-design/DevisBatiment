@@ -157,7 +157,7 @@ public class VuePlanImmeuble {
         root.setRight(blocDroite);
     }
 
-    // fixe le style des boutons
+    
     private void appliquerStyleBouton(Button bouton, String couleur) {
         bouton.setMaxWidth(Double.MAX_VALUE);
         bouton.setStyle(

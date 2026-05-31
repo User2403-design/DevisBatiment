@@ -132,7 +132,6 @@ public class VueBatiment {
         labelCalcSuperficie.setVisible(false); // Reste masqué jusqu'au calcul
     }
 
-    // Getters pour le contrôleur CBatiment
     public VBox getRoot() { 
         return root; 
     }

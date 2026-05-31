@@ -137,7 +137,7 @@ public class VuePlanBatiment {
         root.setRight(sidebar);
     }
 
-    //getters pour CPlanBatiment
+   
     
     public BorderPane getRoot() {
         return root;

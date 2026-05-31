@@ -12,10 +12,7 @@ import javafx.scene.control.*;
 import javafx.scene.layout.*;
 import javafx.scene.text.Font;
 
-/**
- *
- * @author seb12
- */
+
 public class VuePlanMaison {
     
     private BorderPane root;
