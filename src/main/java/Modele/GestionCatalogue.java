@@ -23,7 +23,7 @@ public class GestionCatalogue {
     
     public GestionCatalogue() {
         this.rubriques = new HashMap<>(); // créer une Map vide pour stocker les rubriques.
-        chargerDonnees(); // la on fait appel à la methode definie ci-dessous
+        chargerDonnees(); 
     }
     
     private void chargerDonnees() {
@@ -48,7 +48,7 @@ public class GestionCatalogue {
 
             while ((ligne = reader.readLine()) != null) {
                 lignesLues++;
-                ligne = ligne.trim(); // permet d'enlever les espaces au début et a la fin d'un texte 
+                ligne = ligne.trim();  
                 
                 if (ligne.isEmpty() || ligne.startsWith("//")) continue;
 

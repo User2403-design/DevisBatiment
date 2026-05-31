@@ -16,23 +16,28 @@ import javafx.scene.text.Font;
 import javafx.scene.control.ComboBox;
 import Modele.Revetement;
 
-/**
- * Vue initiale pour la configuration du bâtiment (Maison ou Immeuble).
- * Permet de saisir les dimensions et de choisir les matériaux extérieurs par défaut.
- */
+
+//Vue initiale pour la configuration du bâtiment (Maison ou Immeuble) pour saisir les dimensions et de choisir les matériaux extérieurs par défaut.
+ 
 public class VueBatiment {
     
 
     private VBox root;
-    private Label titre, question;
-    private Button maison, immeuble;
+    private Label titre;
+    private Label question;
+    private Button maison;
+    private Button immeuble;
 
-    private Label labelLongueur, labelLargeur;
-    private TextField champLongueur, champLargeur;
+    private Label labelLongueur;
+    private Label labelLargeur;
+    private TextField champLongueur;
+    private TextField champLargeur;
     
-    // Sélecteurs pour les matériaux extérieurs (Isolant et Façade)
-    private Label labelIsolant, labelFacade;
-    private ComboBox<Revetement> comboIsolant, comboFacade;
+    
+    private Label labelIsolant;
+    private Label labelFacade;
+    private ComboBox<Revetement> comboIsolant;
+    private ComboBox<Revetement> comboFacade;
     
     private Label labelCalcSuperficie;
     private Button valider;
@@ -61,7 +66,7 @@ public class VueBatiment {
         champLargeur = new TextField();
         champLargeur.setMaxWidth(200);
 
-        // Section Matériaux Extérieurs
+        
         labelIsolant = new Label("Choisir l'isolant extérieur :");
         comboIsolant = new ComboBox<>();
         comboIsolant.setPrefWidth(200);
@@ -79,16 +84,23 @@ public class VueBatiment {
         appliquerStyleBouton(maison, "#B8E0D2");
         appliquerStyleBouton(immeuble, "#FFC8DD");
         
-        // Masquage initial des champs de configuration
         setChampsVisibles(false);
        
         root.getChildren().addAll(
-                titre, question, maison, immeuble,
-                labelLongueur, champLongueur,
-                labelLargeur, champLargeur,
-                labelIsolant, comboIsolant,
-                labelFacade, comboFacade,
-                labelCalcSuperficie, valider
+                titre, 
+                question, 
+                maison, 
+                immeuble,
+                labelLongueur, 
+                champLongueur,
+                labelLargeur, 
+                champLargeur,
+                labelIsolant, 
+                comboIsolant,
+                labelFacade, 
+                comboFacade,
+                labelCalcSuperficie, 
+                valider
         );
     }
          private void appliquerStyleBouton(Button bouton, String couleur) {
@@ -104,9 +116,9 @@ public class VueBatiment {
     }
     
 
-    /**
-     * Affiche ou masque les champs de saisie une fois le type de bâtiment choisi.
-     */
+    
+    //Affiche ou masque les champs de saisie une fois le type de bâtiment choisi.
+    
     public void setChampsVisibles(boolean visible) {
         labelLongueur.setVisible(visible);
         champLongueur.setVisible(visible);
@@ -121,15 +133,47 @@ public class VueBatiment {
     }
 
     // Getters pour le contrôleur CBatiment
-    public VBox getRoot() { return root; }
-    public Button getMaison() { return maison; }
-    public Button getImmeuble() { return immeuble; }
-    public TextField getChampLongueur() { return champLongueur; }
-    public TextField getChampLargeur() { return champLargeur; }
-    public ComboBox<Revetement> getComboIsolant() { return comboIsolant; }
-    public ComboBox<Revetement> getComboFacade() { return comboFacade; }
-    public Label getLabelCalcSuperficie() { return labelCalcSuperficie; }
-    public Button getValider() { return valider; }
-    public Label getLabelLongueur() { return labelLongueur; }
-    public Label getLabelLargeur() { return labelLargeur; }
+    public VBox getRoot() { 
+        return root; 
+    }
+    
+    public Button getMaison() { 
+        return maison; 
+    }
+    
+    public Button getImmeuble() {
+        return immeuble; 
+    }
+    
+    public TextField getChampLongueur() {
+        return champLongueur; 
+    }
+    
+    public TextField getChampLargeur() { 
+        return champLargeur; 
+    }
+    
+    public ComboBox<Revetement> getComboIsolant() { 
+        return comboIsolant; 
+    }
+    
+    public ComboBox<Revetement> getComboFacade() { 
+        return comboFacade; 
+    }
+    
+    public Label getLabelCalcSuperficie() { 
+        return labelCalcSuperficie; 
+    }
+    
+    public Button getValider() { 
+        return valider; 
+    }
+    
+    public Label getLabelLongueur() { 
+        return labelLongueur; 
+    }
+    
+    public Label getLabelLargeur() { 
+        return labelLargeur; 
+    }
 }

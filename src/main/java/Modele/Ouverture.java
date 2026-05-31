@@ -6,7 +6,7 @@ public class Ouverture {
     private String type;
     private float largeur;
     private float hauteur;
-    private Revetement article; // Nouvel attribut pour associer l'article du catalogue
+    private Revetement article; // associe à un article du catalogue : fenetre ou porte
 
     public Ouverture(int id, String type, float largeur, float hauteur) {
         this.id = id;
@@ -64,6 +64,7 @@ public class Ouverture {
         this.article = article;
     }
 
+    //affchage des informations
     @Override
     public String toString() {
         String description = type + " (L: " + largeur + "m x H: " + hauteur + "m)";

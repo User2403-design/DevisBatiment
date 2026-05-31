@@ -21,32 +21,23 @@ import javafx.scene.layout.VBox;
 import javafx.scene.layout.Priority;
 import javafx.scene.text.Font;
 
-/**
- * Vue responsable de l'affichage interactif du plan.
- * Organise l'interface en zones : 
- * - Top : Titre, consignes et boutons de navigation rapide.
- * - Center : Zone d'édition graphique du plan.
- * - Right : Panneau d'information détaillé et boutons de gestion de session.
- */
+
+//interface organisée en zones : Top : Titre, consignes et boutons de navigation rapide; Center : Zone d'édition graphique du plan; Right : Panneau d'information détaillé et boutons de gestion de session.
+ 
 public class VuePlanBatiment {
 
-    // Conteneur principal
     private BorderPane root;
 
-    // Zone de dessin
     private Pane panePlan;
 
-    // Labels d'information
     private Label titre;
     private Label consigne;
     private Label infoSurface;
 
-    // Boutons de commande
     private Button boutonEffacerSelection;
     private Button boutonSupprimerDernierePiece;
     private Button boutonFermer;
     
-    // Conteneurs pour injection dynamique d'éléments par le contrôleur
     private HBox conteneurBoutonsTop;
 
     public VuePlanBatiment() {
@@ -54,10 +45,7 @@ public class VuePlanBatiment {
         root = new BorderPane();
         root.setStyle("-fx-background-color: #f0f0f0;");
 
-        // ==================== PARTIE HAUTE (TOP) ====================
-        // Regroupe le titre à gauche et les futurs boutons de navigation à droite
-        
-        // Bloc d'information (Titre + Consignes)
+       //bloc top
         titre = new Label("Plan du bâtiment");
         titre.setFont(new Font(28));
         titre.setStyle("-fx-font-weight: bold;");
@@ -70,27 +58,23 @@ public class VuePlanBatiment {
         blocInfoText.setAlignment(Pos.CENTER_LEFT);
         blocInfoText.getChildren().addAll(titre, consigne);
 
-        // Conteneur pour boutons additionnels (ex: sélecteur de niveaux)
         conteneurBoutonsTop = new HBox();
         conteneurBoutonsTop.setSpacing(15);
         conteneurBoutonsTop.setAlignment(Pos.CENTER_RIGHT);
         conteneurBoutonsTop.setPadding(new Insets(0, 20, 0, 0));
 
-        // Assemblage du bandeau supérieur
         BorderPane topContent = new BorderPane();
         topContent.setLeft(blocInfoText);
         topContent.setRight(conteneurBoutonsTop);
         topContent.setPadding(new Insets(20));
         topContent.setStyle("-fx-background-color: white; -fx-border-color: #ddd; -fx-border-width: 0 0 2 0;");
 
-        // ==================== PARTIE CENTRALE (PLAN) ====================
-        // Le plan est contenu dans un VBox pour pouvoir être centré facilement
+       //bloc central : affiche le plan
         VBox conteneurPlan = new VBox();
         conteneurPlan.setPadding(new Insets(20));
-        conteneurPlan.setAlignment(Pos.CENTER); // Centrage du plan dans l'espace restant
+        conteneurPlan.setAlignment(Pos.CENTER); 
 
         panePlan = new Pane();
-        // Taille préférentielle initiale (sera adaptée par le plein écran du contrôleur)
         panePlan.setPrefSize(800, 600);
         panePlan.setStyle(
                 "-fx-background-color: white;" +
@@ -101,14 +85,13 @@ public class VuePlanBatiment {
 
         conteneurPlan.getChildren().add(panePlan);
 
-        // ==================== PARTIE DROITE (SIDEBAR) ====================
+        //bloc droit : sidebar
         VBox sidebar = new VBox();
         sidebar.setPrefWidth(320);
         sidebar.setSpacing(15);
         sidebar.setPadding(new Insets(20));
         sidebar.setStyle("-fx-background-color: white; -fx-border-color: #ddd; -fx-border-width: 0 0 0 2;");
 
-        // Bloc d'information dynamique
         Label titreSidebar = new Label("Détails de la sélection");
         titreSidebar.setFont(new Font("Arial Bold", 16));
 
@@ -122,7 +105,7 @@ public class VuePlanBatiment {
         blocInfoSurface.setStyle("-fx-border-color: #eee; -fx-border-width: 1; -fx-padding: 15; -fx-background-color: #fafafa;");
         blocInfoSurface.getChildren().addAll(titreSidebar, new Separator(), infoSurface);
 
-        // Bloc des boutons d'action
+       
         boutonEffacerSelection = new Button("Effacer la sélection");
         boutonEffacerSelection.setPrefWidth(Double.MAX_VALUE);
         boutonEffacerSelection.setStyle("-fx-padding: 10;");
@@ -144,17 +127,17 @@ public class VuePlanBatiment {
                 boutonFermer
         );
 
-        // Organisation de la sidebar : l'info prend l'espace disponible, les boutons sont en bas
+        
         sidebar.getChildren().addAll(blocInfoSurface, blocBoutonsAction);
         VBox.setVgrow(blocInfoSurface, Priority.ALWAYS);
 
-        // ==================== ASSEMBLAGE FINAL ====================
+        
         root.setTop(topContent);
         root.setCenter(conteneurPlan);
         root.setRight(sidebar);
     }
 
-    // --- GETTERS POUR LE CONTROLEUR ---
+    //getters pour CPlanBatiment
     
     public BorderPane getRoot() {
         return root;

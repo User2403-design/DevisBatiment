@@ -26,7 +26,7 @@ public class Batiment {
         this.Ymax = largeur;
         this.superficie = longueur * largeur;
 
-        // Au départ, il n'y a aucune pièce
+        
         this.pieces = new ArrayList<>();
     }
 
@@ -114,7 +114,7 @@ public class Batiment {
     // Supprime la dernière pièce ajoutée si la liste n'est pas vide
 public void supprimerDernierePiece() {
     if (!pieces.isEmpty()) {
-        pieces.remove(pieces.size() - 1); // se sert de l'indice de la pièce pour la supprimer ( exemple : indice salon est 3 si c'est al troisième pièce à avoir été créée
+        pieces.remove(pieces.size() - 1); // se sert de l'indice de la pièce pour la supprimer ( exemple : indice salon est 3 si c'est al troisième pièce à avoir été créée )
     }
 }
 }

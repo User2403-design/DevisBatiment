@@ -64,7 +64,7 @@ public void definirCouloirCommun(Point point1, Point point2) {
     public void setNiveaux(ArrayList<Niveau> niveaux) {
         this.niveaux = niveaux;
 
-        // On remet l'escalier sur chaque niveau.
+        // postion de l'escalier identique pour chaque etage
         for (Niveau niveau : this.niveaux) {
             niveau.setPointEscalier1(pointEscalier1);
             niveau.setPointEscalier2(pointEscalier2);
@@ -153,8 +153,8 @@ public void definirCouloirCommun(Point point1, Point point2) {
 
         niveaux.add(nouveauNiveau);
         this.setNbreNiveaux(niveaux.size());
-    nouveauNiveau.setPointCouloir1(pointCouloir1);
-nouveauNiveau.setPointCouloir2(pointCouloir2);
+        nouveauNiveau.setPointCouloir1(pointCouloir1);
+        nouveauNiveau.setPointCouloir2(pointCouloir2);
     }
 
     public void supprimerDernierNiveau() {

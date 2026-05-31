@@ -30,7 +30,7 @@ public class VueCatalogue {
         BorderPane.setMargin(titre, new Insets(0, 0, 20, 0));
         root.setTop(titre);
 
-        // Composant Accordéon pour afficher les catégories déroulantes
+        // Composant accordéon pour afficher les rubriques du catalogue
         accordionCategories = new Accordion();
         root.setCenter(accordionCategories);
     }

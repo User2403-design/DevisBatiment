@@ -13,8 +13,8 @@ public class Piece {
 
     private Revetement revetementSol;
     private Revetement revetementPlafond;
-    private Revetement isolantSol;     // Ajout isolant sol
-    private Revetement isolantPlafond; // Ajout isolant plafond
+    private Revetement isolantSol;     
+    private Revetement isolantPlafond; 
 
     private ArrayList<Mur> murs;
 
@@ -31,6 +31,7 @@ public class Piece {
         genererMurs();
     }
 
+    //instancie les 4 mors d'un coup
     private void genererMurs() {
         Point hautGauche = new Point(getXMin(), getYMin());
         Point hautDroit = new Point(getXMax(), getYMin());
@@ -50,24 +51,76 @@ public class Piece {
     }
 
     
-    public ArrayList<Mur> getMurs() { return murs; }
-    public float getXMin() { return Math.min(coin1.getX(), coin2.getX()); }
-    public float getXMax() { return Math.max(coin1.getX(), coin2.getX()); }
-    public float getYMin() { return Math.min(coin1.getY(), coin2.getY()); }
-    public float getYMax() { return Math.max(coin1.getY(), coin2.getY()); }
-    public float getLargeur() { return getXMax() - getXMin(); }
-    public float getHauteur() { return getYMax() - getYMin(); }
-    public float calculerSuperficie() { return getLargeur() * getHauteur(); }
-    public float getSuperficie() { return superficie; }
-    public String getUsage() { return usage; }
+    public ArrayList<Mur> getMurs() {
+        return murs; 
+    }
+    
+    public float getXMin() { 
+        return Math.min(coin1.getX(), coin2.getX()); 
+    }
+    
+    public float getXMax() { 
+        return Math.max(coin1.getX(), coin2.getX()); 
+    }
+    
+    public float getYMin() { 
+        return Math.min(coin1.getY(), coin2.getY()); 
+    }
+    
+    public float getYMax() { 
+        return Math.max(coin1.getY(), coin2.getY()); 
+    }
+    
+    public float getLargeur() { 
+        return getXMax() - getXMin(); 
+    }
+    
+    public float getHauteur() { 
+        return getYMax() - getYMin(); 
+    }
+    
+    public float calculerSuperficie() { 
+        return getLargeur() * getHauteur(); 
+    }
+    
+    public float getSuperficie() { 
+        return superficie; 
+    }
+    
+    public String getUsage() { 
+        return usage; 
+    }
 
-    public Revetement getRevetementSol() { return revetementSol; }
-    public void setRevetementSol(Revetement revetementSol) { this.revetementSol = revetementSol; }
-    public Revetement getRevetementPlafond() { return revetementPlafond; }
-    public void setRevetementPlafond(Revetement revetementPlafond) { this.revetementPlafond = revetementPlafond; }
-    public Revetement getIsolantSol() { return isolantSol; }
-    public void setIsolantSol(Revetement isolantSol) { this.isolantSol = isolantSol; }
-    public Revetement getIsolantPlafond() { return isolantPlafond; }
-    public void setIsolantPlafond(Revetement isolantPlafond) { this.isolantPlafond = isolantPlafond; }
+    public Revetement getRevetementSol() { 
+        return revetementSol; 
+    }
+    
+    public void setRevetementSol(Revetement revetementSol) { 
+        this.revetementSol = revetementSol; 
+    }
+    
+    public Revetement getRevetementPlafond() { 
+        return revetementPlafond; 
+    }
+    
+    public void setRevetementPlafond(Revetement revetementPlafond) { 
+        this.revetementPlafond = revetementPlafond; 
+    }
+    
+    public Revetement getIsolantSol() { 
+        return isolantSol; 
+    }
+    
+    public void setIsolantSol(Revetement isolantSol) { 
+        this.isolantSol = isolantSol; 
+    }
+    
+    public Revetement getIsolantPlafond() { 
+        return isolantPlafond; 
+    }
+    
+    public void setIsolantPlafond(Revetement isolantPlafond) { 
+        this.isolantPlafond = isolantPlafond; 
+    }
 }
 

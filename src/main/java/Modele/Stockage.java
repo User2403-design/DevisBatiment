@@ -559,6 +559,7 @@ private static double calculerSurfaceMursZoneRestante(Appartement appartement, d
                 + " €/m²";
     }
 
+//sauvegarde du devis dans son propre fichier texte : un par nouveau devis
 private static void sauvegarderDevis(
             String texteDevis
     ) {
@@ -596,31 +597,8 @@ private static void sauvegarderDevis(
         }
     }
     
-//    private static void sauvegarderDevis(
-//            String texteDevis
-//    ) {
-//
-//        try {
-//
-//            PrintWriter writer =
-//                    new PrintWriter(
-//                            new FileWriter("devis_batiment.txt")
-//                    );
-//
-//            writer.print(texteDevis);
-//
-//            writer.close();
-//
-//        } catch (Exception e) {
-//
-//            System.out.println(
-//                    "Erreur lors de la sauvegarde du devis."
-//            );
-//
-//            e.printStackTrace();
-//        }
-//    }
 
+//mise en forme correcte du devis
     private static String format(double valeur) {
         return String.format("%.2f", valeur);
     }

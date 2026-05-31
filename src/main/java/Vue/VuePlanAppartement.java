@@ -25,8 +25,7 @@ public class VuePlanAppartement {
     private Label labelNbPieces;
     private Label labelDetailsPiece;
     private ListView<Mur> listeMurs;
-    private Button boutonDetailsMur; // Nouveau bouton ajouté sous la liste des murs
-
+    private Button boutonDetailsMur; 
     private Button boutonEffacerSelection;
     private Button boutonSupprimerDernierePiece;
     private Button boutonFermer;
@@ -238,7 +237,7 @@ public class VuePlanAppartement {
     }
     
     public Button getBoutonGenererDevis() {
-    return boutonGenererDevis;
-}
+        return boutonGenererDevis;
+    }
 }
 

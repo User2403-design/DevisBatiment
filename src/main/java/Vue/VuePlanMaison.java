@@ -32,8 +32,7 @@ public class VuePlanMaison {
     private Label labelNbPieces;
     private Label labelDetailsPiece;
     private ListView<Mur> listeMurs;
-    private Button boutonDetailsMur; // Nouveau bouton ajouté sous la liste des murs
-
+    private Button boutonDetailsMur; 
     private Button boutonEffacerSelection;
     private Button boutonSupprimerDernierePiece;
     private Button boutonFermer;
@@ -74,6 +73,7 @@ public class VuePlanMaison {
 
         blocBoutonsMenu.setAlignment(Pos.CENTER_RIGHT);
 
+        //organisation de la fenetre
         BorderPane topContent = new BorderPane();
         topContent.setLeft(blocTexteHaut);
         topContent.setRight(blocBoutonsMenu);
@@ -124,7 +124,7 @@ public class VuePlanMaison {
         listeMurs = new ListView<>();
         VBox.setVgrow(listeMurs, Priority.ALWAYS);
 
-        // Instanciation et stylisation du bouton "Détails du mur"
+        
         boutonDetailsMur = new Button("Détails du mur");
         appliquerStyleBouton(boutonDetailsMur, "#A2D2FF");
         boutonDetailsMur.setMaxWidth(Double.MAX_VALUE);
@@ -139,7 +139,7 @@ public class VuePlanMaison {
                 labelDetailsPiece,
                 titreMurs,
                 listeMurs,
-                boutonDetailsMur // Ajout du bouton en fin de colonne
+                boutonDetailsMur 
         );
 
         blocDroite.setPadding(new Insets(20));

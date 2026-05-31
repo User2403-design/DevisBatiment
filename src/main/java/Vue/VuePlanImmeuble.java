@@ -130,10 +130,10 @@ public class VuePlanImmeuble {
                 boutonOuvrirAppartement,
                 boutonSupprimerDernierAppartement,
       
-                new javafx.scene.control.Separator(), // Séparateur visuel
+                new javafx.scene.control.Separator(), 
                 labelTitreCouloir,
                 labelDetailsCouloir,
-                new javafx.scene.control.Separator(), // Séparateur visuel
+                new javafx.scene.control.Separator(), 
                 labelEtages,
                 boutonEtagePrecedent,
                 boutonEtageSuivant,
@@ -157,7 +157,7 @@ public class VuePlanImmeuble {
         root.setRight(blocDroite);
     }
 
-    // Méthode simple pour éviter de répéter le style des boutons.
+    // fixe le style des boutons
     private void appliquerStyleBouton(Button bouton, String couleur) {
         bouton.setMaxWidth(Double.MAX_VALUE);
         bouton.setStyle(
@@ -170,23 +170,63 @@ public class VuePlanImmeuble {
         );
     }
 
-    public BorderPane getRoot() { return root; }
-    public Pane getPanePlan() { return panePlan; }
-    public Label getInfoEtage() { return infoEtage; }
-    public Label getInfoMessage() { return infoMessage; }
-    public ListView<Appartement> getListeAppartements() { return listeAppartements; }
-    public Button getBoutonEtagePrecedent() { return boutonEtagePrecedent; }
-    public Button getBoutonEtageSuivant() { return boutonEtageSuivant; }
-    public Button getBoutonAjouterEtage() { return boutonAjouterEtage; }
-    public Button getBoutonSupprimerEtage() { return boutonSupprimerEtage; }
-    public Button getBoutonSupprimerDernierAppartement() { return boutonSupprimerDernierAppartement; }
-    public Button getBoutonOuvrirAppartement() { return boutonOuvrirAppartement; }
-    public Button getBoutonFermer() { return boutonFermer; }
-    public Button getBoutonCatalogue() { return boutonCatalogue; }
+    public BorderPane getRoot() {
+        return root; 
+    }
+    
+    public Pane getPanePlan() { 
+        return panePlan; 
+    }
+    
+    public Label getInfoEtage() { 
+        return infoEtage; 
+    }
+    
+    public Label getInfoMessage() { 
+        return infoMessage; 
+    }
+    
+    public ListView<Appartement> getListeAppartements() { 
+        return listeAppartements; 
+    }
+    
+    public Button getBoutonEtagePrecedent() { 
+        return boutonEtagePrecedent; 
+    }
+    
+    public Button getBoutonEtageSuivant() { 
+        return boutonEtageSuivant; 
+    }
+    
+    public Button getBoutonAjouterEtage() { 
+        return boutonAjouterEtage; 
+    }
+    
+    public Button getBoutonSupprimerEtage() { 
+        return boutonSupprimerEtage; 
+    }
+    
+    public Button getBoutonSupprimerDernierAppartement() { 
+        return boutonSupprimerDernierAppartement; 
+    }
+    
+    public Button getBoutonOuvrirAppartement() { 
+        return boutonOuvrirAppartement; 
+    }
+    
+    public Button getBoutonFermer() { 
+        return boutonFermer; 
+    }
+    
+    public Button getBoutonCatalogue() { 
+        return boutonCatalogue; 
+    }
+    
     public Label getLabelDetailsCouloir() {
         return labelDetailsCouloir;
     }
     public Button getBoutonGenererDevis() {
-    return boutonGenererDevis;}
+    return boutonGenererDevis;
+    }
   
 }

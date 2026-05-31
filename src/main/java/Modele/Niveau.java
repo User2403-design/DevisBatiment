@@ -17,7 +17,7 @@ public class Niveau {
     private Point pointEscalier2;
     
     private Point pointCouloir1;
-private Point pointCouloir2;
+    private Point pointCouloir2;
 
 public Point getPointCouloir1() {
     return pointCouloir1;

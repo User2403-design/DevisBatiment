@@ -15,7 +15,7 @@ public class Maison extends Batiment {
                 "Plan maison",
                 new Point(0, 0),
                 new Point(longueur, largeur),
-                TypeLogement.MAISON  // Spécifier le type MAISON ( provient d'enum dans la classe typelogement)
+                TypeLogement.MAISON  // Spécifier le type MAISON ( provient d'enum dans la classe typelogement) : differnencie de l'appartement pour la logique de fonctionnement
         );
     }
 

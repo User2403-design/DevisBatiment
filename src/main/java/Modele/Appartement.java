@@ -10,7 +10,7 @@ public class Appartement {
 
     private String nom;
 
-    // Les 2 coins du rectangle de l'appartement dans l'étage
+   
     private Point coin1;
     private Point coin2;
 
@@ -27,7 +27,7 @@ public class Appartement {
     
     private Ouverture porteEntree;
 
-     // Pour la zone vide restante pas comprise dans pièce
+     // prend en compte les zones non exploitées 
     private Revetement revetementSolZoneRestante;
     private Revetement revetementMurZoneRestante;
     private Revetement revetementPlafondZoneRestante;
@@ -42,7 +42,7 @@ public class Appartement {
         this.coin1 = coin1;
         this.coin2 = coin2;
         this.pieces = new ArrayList<>();
-        this.typeLogement = TypeLogement.APPARTEMENT; // constante de l'enum defini dans la classe TypeLogement
+        this.typeLogement = TypeLogement.APPARTEMENT; // constante de l'enum defini dans la classe TypeLogement : permet de distinguer l'appartement de la maison car fonctionnement similaire
     }
 
     public Appartement(String nom, Point coin1, Point coin2, TypeLogement typeLogement) {
@@ -150,20 +150,18 @@ public class Appartement {
         this.porteEntree = porteEntree;
     }
 
-    /**
-     * Vérifie si le plan respecte les règles du type de logement
-     */
+    //Vérifie si le plan respecte les règles du type de logement
+    
     public boolean validerPlan() {
         if (typeLogement == TypeLogement.MAISON) {
             // Pour une maison : vérifier qu'il existe une porte d'entrée
             return porteEntree != null;
         }
-        // Pour un appartement : pas de validation spécifique pour l'instant
+        
         return true;
     }
 
     
-    // Méthodes utiles pour le rectangle
 
     public float getXMin() {
         return Math.min(coin1.getX(), coin2.getX());
@@ -193,7 +191,6 @@ public class Appartement {
         return getLargeur() * getHauteur();
     }
 
-    // Gestion des pièces 
 
     public void ajouterPiece(Piece piece) {
         pieces.add(piece);
