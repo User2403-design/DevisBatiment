@@ -386,12 +386,18 @@ private final double HAUTEUR_MURS = 2.5;
         echelle = Math.min(ld / appartement.getLargeur(), hd / appartement.getHauteur());
     }
     private Point appliquerMagnetisme(float xReel, float yReel) {
-        float xSnap = xReel; float ySnap = yReel;
+        float xSnap = xReel; 
+        float ySnap = yReel;
+        
         float seuilMetres = (float) (SEUIL_MAGNETISME_PIXELS / echelle);
-        float distMinX = seuilMetres; float distMinY = seuilMetres;
-        float[] lignesX = {0, appartement.getLargeur()};
+        
+        float distMinX = seuilMetres; 
+        float distMinY = seuilMetres;
+        
+        float[] lignesX = {0, appartement.getLargeur()}; // on recupere les limites de l'appartement en basant à (o,o)
         float[] lignesY = {0, appartement.getHauteur()};
-        for (float lx : lignesX) {
+        
+        for (float lx : lignesX) { // vérifiaction sur le clic proche du bord 
             if (Math.abs(xReel - lx) < distMinX) { distMinX = Math.abs(xReel - lx); xSnap = lx; }
         }
         for (float ly : lignesY) {
@@ -406,12 +412,17 @@ private final double HAUTEUR_MURS = 2.5;
         return new Point(xSnap, ySnap);
     }
     private void gererClicSouris(double xPx, double yPx) {
+        
         double offsetX = (vue.getPanePlan().getWidth() - (appartement.getLargeur() * echelle)) / 2;
         double offsetY = (vue.getPanePlan().getHeight() - (appartement.getHauteur() * echelle)) / 2;
+        
         float xr = (float) ((xPx - offsetX) / echelle);
         float yr = (float) ((yPx - offsetY) / echelle);
+        
+        // verif si clic dans le logement 
         if (xr < 0 || xr > appartement.getLargeur() || yr < 0 || yr > appartement.getHauteur()) return;
-        Piece p = trouverPiece(xr, yr);
+        
+        Piece p = trouverPiece(xr, yr); // verif que le clic dans une pièce ou pas 
         if (p != null && premierPoint == null) {
             vue.getListePieces().getSelectionModel().select(p);
             return;
@@ -422,9 +433,10 @@ private final double HAUTEUR_MURS = 2.5;
             vue.getInfoMessage().setText("Point 1 posé. Cliquez sur le coin opposé.");
             rafraichirPlan();
         } else {
-            finaliserPiece(ptClique);
+            finaliserPiece(ptClique); // creer l'objet piece et met a jour l'affichage 
         }
     }
+    
 private void finaliserPiece(Point p2) {
         if (premierPoint.getX() == p2.getX() || premierPoint.getY() == p2.getY()) {
             afficherErreur("Rectangle invalide.");
