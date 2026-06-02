@@ -380,9 +380,16 @@ private final double HAUTEUR_MURS = 2.5;
         popup.show();
     }
     private void calculerEchelle() {
-        double lp = vue.getPanePlan().getWidth(); double hp = vue.getPanePlan().getHeight();
-        if (lp <= 0) lp = 900; if (hp <= 0) hp = 650;
-        double ld = lp - (margeSecurite * 2); double hd = hp - (margeSecurite * 2);
+        double lp = vue.getPanePlan().getWidth(); // largeur panneau 
+        double hp = vue.getPanePlan().getHeight();// hauteur panneau
+        
+        if (lp <= 0) lp = 900; // valeurs de secours sir getWidht renvoie 0 au demarrage 
+        if (hp <= 0) hp = 650;
+        
+        double ld = lp - (margeSecurite * 2); 
+        double hd = hp - (margeSecurite * 2);
+        
+        // on calcul les echelles et on prend la plus petite pour que ça passe 
         echelle = Math.min(ld / appartement.getLargeur(), hd / appartement.getHauteur());
     }
     private Point appliquerMagnetisme(float xReel, float yReel) {
