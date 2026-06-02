@@ -584,9 +584,7 @@ private static void sauvegarderDevis(
 
             writer.close();
             
-            // Optionnel : un petit message de confirmation en console
-            System.out.println("Devis sauvegardé sous le nom : " + fichier.getName());
-
+            
         } catch (Exception e) {
 
             System.out.println(
